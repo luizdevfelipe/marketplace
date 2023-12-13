@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Página de Registro</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
@@ -68,13 +68,13 @@
     <fieldset class="centralizado border border-dark rounded text-center w350">
         <legend class="mt-1 display-6">Registre-se</legend>
         <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="on">
-        <label for="user" class="mt-1 lead">Nome de Usuário:</label><br>
-        <input type="text" class="p-1" name="user" id="iuser" autocomplete="name" required minlength="4" maxlength="50" value="<?=$user?>"><br>
+        <label for="iuser" class="mt-1 lead">Nome de Usuário:</label><br>
+        <input type="text" class="p-1" name="user" id="iuser" autocomplete="username" required minlength="4" maxlength="50" value="<?=$user?>"><br>
 
-        <label for="senha" class="mt-1 lead">Insira sua Senha:</label><br>
+        <label for="isenha1" class="mt-1 lead">Insira sua Senha:</label><br>
         <input type="password" class="p-1" name="senha1" id="isenha1" autocomplete="current-password" minlength="8" required maxlength="15"><br>
 
-        <label for="senha" class="mt-1 lead">Repita a Senha:</label><br>
+        <label for="isenha2" class="mt-1 lead">Repita a Senha:</label><br>
         <input type="password" class="p-1" name="senha2" id="isenha2" autocomplete="current-password" required minlength="8" maxlength="15"><br>
 
         <input class="btn btn-success my-2" type="submit" value="Entrar">
