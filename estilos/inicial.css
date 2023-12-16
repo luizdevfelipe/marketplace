@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@import url('https://fonts.googleapis.com/css2?family=Bakbak+One&display=swap');
+
 * {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0px;
@@ -51,9 +53,10 @@ a::before {
     background-size: cover;
     height: 600px;
     width: 100%;
+    box-shadow: inset 0px 0px 8px 2px rgba(0, 0, 0, 0.466);
 }
 
-section#texto{
+section#texto{    
     position: absolute;
     top: 70px;
     left: 20px;
@@ -63,6 +66,7 @@ section#texto{
 mark{
     border-radius: 6px;
     padding: 6px;
+    font-family: 'Bakbak One', sans-serif;
 }
 
 @media screen and (max-width:740px) {
