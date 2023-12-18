@@ -48,8 +48,8 @@
             $sql = "SELECT * FROM usuarios WHERE nome = '" . $nome . "' AND senha = '" . $senha . "' ";
             $resultado = $conn->query($sql);
 
-            if ($resultado->num_rows > 0) {                
-                $p = "window.location.href = 'http://localhost/marketplace/perfil.php'";
+            if ($resultado->num_rows > 0) {
+                $p = "window.location.href = 'http://localhost/marketplace/user/perfil.php'";
             } else {
                 $erro = "Usuário ou senha inválidos";
                 $cor = "text-danger";
@@ -62,15 +62,25 @@
             if ($senha1 == $senha2) {
                 $senha = $senha1;
 
-                $sql = "INSERT INTO usuarios (nome, senha) VALUES ('" . $user . "', '" . $senha . "')";
+                $sql = "SELECT nome FROM usuarios WHERE nome = '" . $user . "'";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $p = "Registrar()";
+                    $erro = 'Usuário já cadastrado!';
+                    $cor = "text-danger";
+                    
+                } else {
+                    $sql = "INSERT INTO usuarios (nome, senha) VALUES ('" . $user . "', '" . $senha . "')";
 
-                if ($conn->query($sql)) {
-                    $erro = "Cadastro Realizado!";
-                    $cor = "text-success";
+                    if ($conn->query($sql) === TRUE) {
+                        $erro = "Cadastro Realizado!";
+                        $cor = "text-success";
+                    }
                 }
             } else {
                 $erro = 'Senhas Diferentes!';
                 $cor = "text-danger";
+                $p = "Registrar()";
             }
         }
         $conn->close();
@@ -95,7 +105,7 @@
     </fieldset>
 
     <div class="text-center lead" id="registro">
-        <p>Não tem cadastro? <br><span class="text-success text-decoration-none" onclick="Registrar()">Registre-se</span> agora</p>
+        <p>Não tem cadastro? <br><button class="btn bg-success border border-dark p-1 text-white" onclick="Registrar()">Registre-se</button> agora</p>
     </div>
 
 
@@ -105,7 +115,7 @@
         <?= $p ?>
 
         function Registrar() {
-            document.getElementById('diverro').innerHTML = ''
+            //document.getElementById('diverro').innerHTML = ''
             form = document.querySelector('form#form')
             legend = document.querySelector('legend#legenda')
             document.getElementById('registro').style.display = 'none'
