@@ -12,8 +12,6 @@
 
 <body>
   
-
-
   <header>
     <menu class="pt-1">
       <p>MarketPlace</p>
@@ -22,6 +20,7 @@
         <input type="submit" value="Buscar">
       </form>
       <a href="login.php"><i class="bi bi-person-circle"></i></a>
+      <a href="user/carrinho.php"><i class="bi bi-cart3 ms-1"></i></a>
     </menu>
   </header>
 
@@ -90,11 +89,9 @@
       </div>
     </div>
 
-
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
 
   <script>
     function Perfil(){
@@ -105,7 +102,5 @@
       }
     }
   </script>
-
 </body>
-
 </html>

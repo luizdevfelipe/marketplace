@@ -45,11 +45,15 @@
             $nome = validar($_POST["user"]);
             $senha = validar($_POST["senha"]);
 
-            $sql = "SELECT * FROM usuarios WHERE nome = '" . $nome . "' AND senha = '" . $senha . "' ";
+            $sql = "SELECT id FROM usuarios WHERE user = '" . $nome . "' AND senha = '" . $senha . "' ";
             $resultado = $conn->query($sql);
 
             if ($resultado->num_rows > 0) {
                 $p = "window.location.href = 'http://localhost/marketplace/user/perfil.php'";
+                $vet = $resultado->fetch_assoc();
+                $id = $vet["id"];
+                session_start();
+                $_SESSION['id'] = $id;
             } else {
                 $erro = "Usuário ou senha inválidos";
                 $cor = "text-danger";
@@ -62,7 +66,7 @@
             if ($senha1 == $senha2) {
                 $senha = $senha1;
 
-                $sql = "SELECT nome FROM usuarios WHERE nome = '" . $user . "'";
+                $sql = "SELECT user FROM usuarios WHERE user = '" . $user . "'";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     $p = "Registrar()";
@@ -70,7 +74,7 @@
                     $cor = "text-danger";
                     
                 } else {
-                    $sql = "INSERT INTO usuarios (nome, senha) VALUES ('" . $user . "', '" . $senha . "')";
+                    $sql = "INSERT INTO usuarios (user, senha) VALUES ('" . $user . "', '" . $senha . "')";
 
                     if ($conn->query($sql) === TRUE) {
                         $erro = "Cadastro Realizado!";
@@ -108,7 +112,6 @@
         <p>Não tem cadastro? <br><button class="btn bg-success border border-dark p-1 text-white" onclick="Registrar()">Registre-se</button> agora</p>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
     <script>
@@ -121,7 +124,7 @@
             document.getElementById('registro').style.display = 'none'
 
             legend.innerHTML = 'Registre-se'
-            form.innerHTML = "<label for='iuser' class='mt-1 lead'>Nome de Usuário:</label><br><input type='text' class='p-1' name='user' id='iuser' autocomplete='username' required minlength='4' maxlength='50'><br><label for='isenha1' class='mt-1 lead'>Insira sua Senha:</label><br><input type='password' class='p-1' name='senha1' id='isenha1' autocomplete='current-password' minlength='8' required maxlength='15'><br><label for='isenha2' class='mt-1 lead'>Repita a Senha:</label><br><input type='password' class='p-1' name='senha2' id='isenha2' autocomplete='current-password' required minlength='8' maxlength='15'><br><input class='btn btn-success my-2' type='submit' value='Entrar'>"
+            form.innerHTML = "<label for='iuser' class='mt-1 lead'>Nome de Usuário:</label><br>Este nome só será usado para acesso ao site<br><input type='text' class='p-1' name='user' id='iuser' autocomplete='username' required minlength='4' maxlength='50' placeholder=' Usuário'><br><label for='isenha1' class='mt-1 lead'>Insira sua Senha:</label><br><input type='password' class='p-1' name='senha1' id='isenha1' autocomplete='current-password' minlength='8' required maxlength='15'  placeholder=' Senha'><br><label for='isenha2' class='mt-1 lead'>Repita a Senha:</label><br><input type='password' class='p-1' name='senha2' id='isenha2' autocomplete='current-password' required minlength='8' maxlength='15' placeholder=' Repita Senha'><br><input class='btn btn-success my-2' type='submit' value='Entrar'>"
         }
     </script>
 </body>
