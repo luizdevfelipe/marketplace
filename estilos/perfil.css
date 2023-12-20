@@ -34,10 +34,6 @@ menu>form>input[type=submit] {
     border-radius: 4px;
 }
 
-a {
-    font-size: 10px;
-}
-
 @media screen and (max-width:740px) {
     menu>p {
         display: none;
