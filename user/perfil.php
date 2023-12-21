@@ -1,10 +1,125 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+<?php
+session_start();
+
+//Verifica se a sessão está estabelecida
+if (count($_SESSION) <= 0) {    
+    die('Você não está logado1');
+} else {
+    if ($_SESSION["id"] == NULL) {
+        die('Você não está logado2');
+    } else {
+        $id = $_SESSION['id'];
+    }
+}
+
+// Injeção Sql
+function validar($dado)
+{
+    $dado = trim($dado);
+    $dado = stripslashes($dado);
+    $dado = htmlspecialchars($dado);
+    return $dado;
+}
+
+// Conexão com o servidor
+$nome = $sobrenome = $estado = $cidade = $foto = $p = '';
+
+$servername = 'localhost';
+$username = 'root';
+$password = '';
+$dbname = 'marketplace';
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die('Falha de conexão com o banco de dados');
+}
+// Verifica se já tem os dados cadastrados ou precisa cadastrar
+$sql = "SELECT * FROM usuarios WHERE id = '" . $id . "'";
+$result = $conn->query($sql);
+$vet = $result->fetch_assoc();
+
+//Vê se tem foto cadastrada e pega o diretório dela
+if ($vet["foto"] != '') {
+    $local = $vet["foto"]; 
+} else {
+    $local = '';
+}
+
+if ($vet["sobrenome"] != '') {
+    $nome = $vet["nome"];
+    $sobrenome = $vet["sobrenome"];
+    $estado = $vet["estado"];
+    $cidade = $vet["cidade"];
+} else {
+    $p = "cadastrado()";
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Encerrar Sessão
+    if (isset($_POST["sair"])){
+        $_SESSION['id'] = null;
+        $p = "window.location.href = 'http://localhost/marketplace/index.php'";
+    }
+    //Verifica se foi enviado algum arquivo no POST
+    if (isset($_FILES["foto"])) {
+        if ($local != ''){
+            unlink($local);
+        }
+
+        $foto = $_FILES["foto"];
+
+        if ($foto["error"]) {
+            die("Falha ao enviar ao arquivo");
+        }
+
+        if ($foto["size"] > 2097152) {
+            die("Arquivo muito grande! Máximo de 2 MegaBytes");
+        }
+
+        $pasta = "fotos/";
+        $nomeOriginal = $foto["name"];
+        $nomeCodificado = uniqid();
+        $extensao = strtolower(pathinfo($nomeOriginal, PATHINFO_EXTENSION));
+
+        $path = $pasta . $nomeCodificado . '.' . $extensao;
+
+        if ($extensao != 'jpg' && $extensao != 'png') {
+            die("Arquivo não suportado");
+        }
+
+        $moveu = move_uploaded_file($foto["tmp_name"], $path);
+
+        if ($moveu) {
+            $sql = "UPDATE usuarios SET foto ='$path' WHERE id = '$id'";
+            $conn->query($sql);
+        } else {
+            echo "Falha ao salvar o arquivo";
+        }
+    }
+    // Altera dados de usuário
+    if (count($_POST) > 0 && !isset($_POST["sair"])) {
+        $nome = validar($_POST["nome"]);
+        $sobrenome = validar($_POST["sobrenome"]);
+        $estado = validar($_POST["estado"]);
+        $cidade = validar($_POST["cidade"]);
+
+        $sql = "UPDATE usuarios SET nome = '" . $nome . "', sobrenome = '" . $sobrenome . "', estado = '" . $estado . "', cidade = '" . $cidade . "' WHERE id = '" . $id . "' ";
+
+        $resultado = $conn->query($sql);
+    }
+}
+
+$conn->close();
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seu Perfil</title>
+    <title>Olá, <?= $vet["user"] ?> !</title>
+    <link rel="shortcut icon" href="../images/favicon_io/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../estilos/perfil.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
@@ -24,117 +139,24 @@
     </header>
 
     <main>
-        <?php
-        session_start();
-        $id = $_SESSION['id'];
-
-        function validar($dado)
-        {
-            $dado = trim($dado);
-            $dado = stripslashes($dado);
-            $dado = htmlspecialchars($dado);
-            return $dado;
-        }
-
-        $nome = $sobrenome = $estado = $cidade = $foto = $p = '';
-
-        $servername = 'localhost';
-        $username = 'root';
-        $password = '';
-        $dbname = 'marketplace';
-
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        if ($conn->connect_error) {
-            die($conn->connect_error);
-        }
-
-        $sql = "SELECT * FROM usuarios WHERE id = '" . $id . "'";
-        $result = $conn->query($sql);
-        $vet = $result->fetch_assoc();
-
-        if ($vet["foto"] != ''){
-            $local = $vet["foto"];
-        } else { $local = ''; }
-
-        if ($vet["sobrenome"] != '') {
-            $nome = $vet["nome"];
-            $sobrenome = $vet["sobrenome"];
-            $estado = $vet["estado"];
-            $cidade = $vet["cidade"];
-        } else {
-            $p = "cadastrado()";
-        }
-
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if (isset($_FILES["foto"])) {                
-                $foto = $_FILES["foto"];
-
-                if($foto["error"]){
-                    die("Falha ao enviar ao arquivo");
-                }
-
-                if($foto["size"] > 2097152){
-                    die("Arquivo muito grande! Máximo de 2 MegaBytes");                                       
-                }
-
-                $pasta = "fotos/";
-                $nomeOriginal = $foto["name"];
-                $nomeCodificado = uniqid();
-                $extensao = strtolower(pathinfo($nomeOriginal, PATHINFO_EXTENSION));
-
-                $path = $pasta . $nomeCodificado . '.' . $extensao;
-
-                if ($extensao != 'jpg' && $extensao != 'png'){
-                    die("Arquivo não suportado");
-                }
-
-                $moveu = move_uploaded_file($foto["tmp_name"], $path);
-
-                if($moveu){
-                    $sql = "UPDATE usuarios SET foto ='$path' WHERE id = '$id'";
-                    $conn->query($sql);
-                } else {
-                    echo "Falha ao salvar o arquivo";
-                }
-            }
-
-            if (count($_POST) > 0) {
-                $nome = validar($_POST["nome"]);
-                $sobrenome = validar($_POST["sobrenome"]);
-                $estado = validar($_POST["estado"]);
-                $cidade = validar($_POST["cidade"]);
-
-                $sql = "UPDATE usuarios SET nome = '" . $nome . "', sobrenome = '" . $sobrenome . "', estado = '" . $estado . "', cidade = '" . $cidade . "' WHERE id = '" . $id . "' ";
-
-                $resultado = $conn->query($sql);
-            }
-        }
-
-        $conn->close();
-        ?>
         <div class="container mt-2">
             <div class="row">
                 <div class="col-12 col-md-4 text-center text-md-start" id="foto">
-                    <img src="<?=$local?>" alt="" class="align-center" style="width: 200px; height:200px"><br>
-
+                    <img src="<?= $local ?>" alt="" class="align-center" style="width: 200px; height:200px"><br>
                 </div>
 
                 <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id="infouser">
                     Bem vindo <?php echo " $nome $sobrenome"; ?>, você mora em <?php echo " $cidade $estado"; ?>
                     <br>
-                    <button class="mt-3" onclick="cadastrado()">Alterar Dados</button>
+                    <button class="mt-3 p-1" onclick="cadastrado()">Alterar Dados</button> <br>
+                    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+                        <input type="submit" class="p-1 mt-2" value="Sair" name="sair">
+                    </form>
 
                 </div>
             </div>
         </div>
-
-
     </main>
-
-
-
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
@@ -146,7 +168,7 @@
             foto = document.getElementById('foto')
             formulario = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post' autocomplete='on'><label for='inome' class='mb-2' style='margin-right: 41px;'>Nome:*</label><input type='text' name='nome' id='inome' maxlength='20' minlength='4' required><br><label for='isobrenome' class='mb-2' style='margin-right: 1px;'>Sobrenome:*</label><input type='text' name='sobrenome' id='isobrenome' maxlength='20' minlength='4' required><br><label for='iestado' class='mb-2' style='margin-right: 34px;'>Estado:*</label><select name='estado' id='iestado' class='p-1' style='width: 199px;' required><option value='AC'>Acre</option><option value='AL'>Alagoas</option><option value='AP'>Amapá</option><option value='AM'>Amazonas</option><option value='BA'>Bahia</option><option value='CE'>Ceará</option><option value='DF'>Distrito Federal</option><option value='ES'>Espírito Santo</option><option value='GO'>Goiás</option><option value='MA'>Maranhão</option><option value='MT'>Mato Grosso</option><option value='MS'>Mato Grosso do Sul</option><option value='MG'>Minas Gerais</option><option value='PA'>Pará</option><option value='PB'>Paraíba</option><option value='PR'>Paraná</option><option value='PE'>Pernambuco</option><option value='PI'>Piauí</option><option value='RJ'>Rio de Janeiro</option><option value='RN'>Rio Grande do Norte</option><option value='RS'>Rio Grande do Sul</option><option value='RO'>Rondônia</option><option value='RR'>Roraima</option><option value='SC'>Santa Catarina</option><option value='SP'>São Paulo</option><option value='SE'>Sergipe</option><option value='TO'>Tocantins</option></select> <br><label for='icidade' style='margin-right: 33px;'>Cidade:*</label><input type='text' name='cidade' id='icidade' maxlength='20' minlength='4' required><br><input type='submit' value='Enviar' class='mt-2 p-1'></form>"
 
-            botao = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' enctype='multipart/form-data' method='post'><label for='ifoto' class='border border-dark rounded p-1 mt-1 text-center' style='width: 200px; cursor:pointer;'>Clique e envie a Imagem</label><input type='file' name='foto' id='ifoto' style='display: none;'> <input type='submit' class='border border-dark rounded p-1 mt-1 text-center' value='Salvar Imagem'></form>"
+            botao = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' enctype='multipart/form-data' method='post'><label for='ifoto' class='border border-dark rounded p-1 mt-1 text-center' style='width: 200px; cursor:pointer;'>Clique e envie a Imagem</label><input type='file' name='foto' id='ifoto' style='display: none;'> <br> <input type='submit' class='border border-dark rounded p-1 mt-1 text-center' value='Salvar Imagem'></form>"
 
             container.innerHTML = formulario
             foto.innerHTML += botao

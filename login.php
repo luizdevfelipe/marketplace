@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Login</title>
+    <link rel="shortcut icon" href="images/favicon_io/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="estilos/login.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
@@ -19,75 +20,81 @@
 
 <body>
     <?php
-    function validar($dado)
-    {
-        $dado = trim($dado);
-        $dado = stripslashes($dado);
-        $dado = htmlspecialchars($dado);
-        return $dado;
-    }
+    session_start();
+    if (isset($_SESSION["id"])) {
+        $p = "window.location.href = 'http://localhost/marketplace/user/perfil.php'";
+    } else {
 
-    $user = $senha = $senha1 = $senha2 = $erro = $cor = $p = '';
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "marketplace";
-
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        if ($conn->connect_error) {
-            die($conn->connect_error);
+        function validar($dado)
+        {
+            $dado = trim($dado);
+            $dado = stripslashes($dado);
+            $dado = htmlspecialchars($dado);
+            return $dado;
         }
 
-        if (count($_POST) == 2) {
-            $nome = validar($_POST["user"]);
-            $senha = validar($_POST["senha"]);
+        $user = $senha = $senha1 = $senha2 = $erro = $cor = $p = '';
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            $sql = "SELECT id FROM usuarios WHERE user = '" . $nome . "' AND senha = '" . $senha . "' ";
-            $resultado = $conn->query($sql);
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "marketplace";
 
-            if ($resultado->num_rows > 0) {
-                $p = "window.location.href = 'http://localhost/marketplace/user/perfil.php'";
-                $vet = $resultado->fetch_assoc();
-                $id = $vet["id"];
-                session_start();
-                $_SESSION['id'] = $id;
-            } else {
-                $erro = "Usuário ou senha inválidos";
-                $cor = "text-danger";
+            $conn = new mysqli($servername, $username, $password, $dbname);
+
+            if ($conn->connect_error) {
+                die($conn->connect_error);
             }
-        } else {
-            $user = validar($_POST["user"]);
-            $senha1 = validar($_POST["senha1"]);
-            $senha2 = validar($_POST["senha2"]);
 
-            if ($senha1 == $senha2) {
-                $senha = $senha1;
+            if (count($_POST) == 2) {
+                $nome = validar($_POST["user"]);
+                $senha = validar($_POST["senha"]);
 
-                $sql = "SELECT user FROM usuarios WHERE user = '" . $user . "'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                    $p = "Registrar()";
-                    $erro = 'Usuário já cadastrado!';
-                    $cor = "text-danger";
-                    
+                $sql = "SELECT id FROM usuarios WHERE user = '" . $nome . "' AND senha = '" . $senha . "' ";
+                $resultado = $conn->query($sql);
+
+                if ($resultado->num_rows > 0) {
+                    $p = "window.location.href = 'http://localhost/marketplace/user/perfil.php'";
+                    $vet = $resultado->fetch_assoc();
+                    $id = $vet["id"];
+                    session_start();
+                    $_SESSION['id'] = $id;
                 } else {
-                    $sql = "INSERT INTO usuarios (user, senha) VALUES ('" . $user . "', '" . $senha . "')";
-
-                    if ($conn->query($sql) === TRUE) {
-                        $erro = "Cadastro Realizado!";
-                        $cor = "text-success";
-                    }
+                    $erro = "Usuário ou senha inválidos";
+                    $cor = "text-danger";
                 }
             } else {
-                $erro = 'Senhas Diferentes!';
-                $cor = "text-danger";
-                $p = "Registrar()";
+                $user = validar($_POST["user"]);
+                $senha1 = validar($_POST["senha1"]);
+                $senha2 = validar($_POST["senha2"]);
+
+                if ($senha1 == $senha2) {
+                    $senha = $senha1;
+
+                    $sql = "SELECT user FROM usuarios WHERE user = '" . $user . "'";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        $p = "Registrar()";
+                        $erro = 'Usuário já cadastrado!';
+                        $cor = "text-danger";
+                    } else {
+                        $sql = "INSERT INTO usuarios (user, senha) VALUES ('" . $user . "', '" . $senha . "')";
+
+                        if ($conn->query($sql) === TRUE) {
+                            $erro = "Cadastro Realizado!";
+                            $cor = "text-success";
+                        }
+                    }
+                } else {
+                    $erro = 'Senhas Diferentes!';
+                    $cor = "text-danger";
+                    $p = "Registrar()";
+                }
+                $conn->close();
             }
         }
-        $conn->close();
+        
     }
     ?>
 
