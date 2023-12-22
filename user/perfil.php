@@ -25,7 +25,7 @@ function validar($dado)
 }
 
 // Conexão com o servidor
-$nome = $sobrenome = $estado = $cidade = $foto = $p = '';
+$nome = $sobrenome = $estado = $cidade = $foto = $p = $produto =  '';
 
 $servername = 'localhost';
 $username = 'root';
@@ -48,11 +48,23 @@ if ($vet["foto"] != '') {
     $local = '';
 }
 
+//vê se tem dados cadastrados
 if ($vet["sobrenome"] != '') {
     $nome = $vet["nome"];
     $sobrenome = $vet["sobrenome"];
     $estado = $vet["estado"];
     $cidade = $vet["cidade"];
+
+    $sql = "SELECT * FROM produtos WHERE vendedor = '$id'";
+    $result = $conn->query($sql) or die();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $produto = $row['descricao'] . "<br> <button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
+        }
+    } else {
+        $produto = "Você não tem produtos à venda <br> <button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
+    }
 } else {
     $p = "cadastrado()";
 }
@@ -63,10 +75,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['id'] = null;
         $p = "window.location.href = 'http://localhost/marketplace/index.php'";
     }
-    //Verifica se foi enviado algum arquivo no POST
-    if (isset($_FILES["foto"])) {
 
-        $foto = $_FILES["foto"];
+    //Verifica se um produto foi descrito
+    if (isset($_POST["descricao"])) {
+        $nome = validar($_POST["nproduto"]);
+        $desc = validar($_POST["descricao"]);
+        $preco = (float) validar($_POST["preco"]);
+        $estoque = (int) validar($_POST["estoque"]);
+    }
+
+    //Verifica se foi enviado algum arquivo no POST
+    if (isset($_FILES["foto"]) || isset($_FILES["pfoto"])) {
+        if (isset($_FILES["foto"])) {
+            $foto = $_FILES["foto"];
+            $pasta = "fotos/";
+        } else {
+            $foto = $_FILES["pfoto"];
+            $pasta = "produtos/";
+        }
 
         if ($foto["error"]) {
             die("Falha ao enviar ao arquivo");
@@ -76,7 +102,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             die("Arquivo muito grande! Máximo de 2 MegaBytes");
         }
 
-        $pasta = "fotos/";
         $nomeOriginal = $foto["name"];
         $nomeCodificado = uniqid();
         $extensao = strtolower(pathinfo($nomeOriginal, PATHINFO_EXTENSION));
@@ -91,18 +116,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             unlink($local);
         }
 
-        $moveu = move_uploaded_file($foto["tmp_name"], $path);
-
-        if ($moveu) {
-            $sql = "UPDATE usuarios SET foto ='$path' WHERE id = '$id'";
-            $conn->query($sql);
-            $p = "window.location.href = 'http://localhost/marketplace/index.php'";
+        if (move_uploaded_file($foto["tmp_name"], $path)) {
+            if (isset($_FILES['foto'])) {
+                $sql = "UPDATE usuarios SET foto ='$path' WHERE id = '$id'";
+                $conn->query($sql);
+                $p = "window.location.href = 'http://localhost/marketplace/index.php'";
+            } else {
+                $sql = "INSERT INTO produtos (nome, descricao, preco, estoque, foto, vendedor) VALUES ('$nome', '$desc', '$preco', '$estoque', '$path', '$id' )";
+                $conn->query($sql);
+            }
         } else {
-            echo "Falha ao salvar o arquivo";
+            die("Falha ao salvar o arquivo");
         }
     }
     // Altera dados de usuário
-    if (count($_POST) > 0 && !isset($_POST["sair"])) {
+    if (isset($_POST["estado"])) {
         $nome = validar($_POST["nome"]);
         $sobrenome = validar($_POST["sobrenome"]);
         $estado = validar($_POST["estado"]);
@@ -159,10 +187,21 @@ $conn->close();
 
         <div class="container mt-2">
             <div class="row">
-                <div class="col-12 col-md-4">                    
+                <div class="col-12 col-md-4">
                 </div>
                 <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id='produtos'>
-                    Produtos:
+                    Seus Produtos:<br>
+                    <?= $produto ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-2">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                </div>
+                <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id='produtos'>
+                    Compras Feitas:<br>
 
                 </div>
             </div>
@@ -175,10 +214,16 @@ $conn->close();
     <script>
         <?= $p ?>
 
+        function novo_produto() {
+            div = document.getElementById('produtos')
+            conteudo = "Seus Produtos: <br><form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post' enctype='multipart/form-data'><label for='nproduto'>Nome do produto:*</label><input type='text' name='nproduto' id='nproduto' minlength='4' maxlength='30' required class='m-1'><br><label for='descricao'>Descrição do produto:*</label><br><textarea name='descricao' id='descricao' minlength='10' maxlength='200' cols='30' rows='5' required class='m-1' style='resize: none;'></textarea><br><label for='preco'>Preço do produto:*</label><input type='number' name='preco' id='preco' step='0.01' required class='m-1'><br><label for='estoque'>Quantidade de produtos:*</label><input type='number' name='estoque' id='estoque' required class='m-1'><br><label for='pfoto' class='p-1 border border-dark mb-1'>Foto do Produto*</label><input type='file' name='pfoto' id='pfoto' style='display:none;' required><br><input type='submit' value='Publicar Produto' class='my-1 p-1'></form>"
+            div.innerHTML = conteudo
+        }
+
         function cadastrado() {
             container = document.getElementById('infouser')
             foto = document.getElementById('foto')
-            formulario = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post' autocomplete='on'><label for='inome' class='mb-2' style='margin-right: 41px;'>Nome:*</label><input type='text' name='nome' id='inome' maxlength='20' minlength='4' required><br><label for='isobrenome' class='mb-2' style='margin-right: 1px;'>Sobrenome:*</label><input type='text' name='sobrenome' id='isobrenome' maxlength='20' minlength='4' required><br><label for='iestado' class='mb-2' style='margin-right: 34px;'>Estado:*</label><select name='estado' id='iestado' class='p-1' style='width: 199px;' required><option value='AC'>Acre</option><option value='AL'>Alagoas</option><option value='AP'>Amapá</option><option value='AM'>Amazonas</option><option value='BA'>Bahia</option><option value='CE'>Ceará</option><option value='DF'>Distrito Federal</option><option value='ES'>Espírito Santo</option><option value='GO'>Goiás</option><option value='MA'>Maranhão</option><option value='MT'>Mato Grosso</option><option value='MS'>Mato Grosso do Sul</option><option value='MG'>Minas Gerais</option><option value='PA'>Pará</option><option value='PB'>Paraíba</option><option value='PR'>Paraná</option><option value='PE'>Pernambuco</option><option value='PI'>Piauí</option><option value='RJ'>Rio de Janeiro</option><option value='RN'>Rio Grande do Norte</option><option value='RS'>Rio Grande do Sul</option><option value='RO'>Rondônia</option><option value='RR'>Roraima</option><option value='SC'>Santa Catarina</option><option value='SP'>São Paulo</option><option value='SE'>Sergipe</option><option value='TO'>Tocantins</option></select> <br><label for='icidade' style='margin-right: 33px;'>Cidade:*</label><input type='text' name='cidade' id='icidade' maxlength='20' minlength='4' required><br><input type='submit' value='Enviar' class='mt-2 p-1'></form>"
+            formulario = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post' autocomplete='on'><label for='inome' class='mb-2' style='margin-right: 41px;'>Nome:*</label><input type='text' name='nome' id='inome' maxlength='20' minlength='4' required><br><label for='isobrenome' class='mb-2' style='margin-right: 1px;'>Sobrenome:*</label><input type='text' name='sobrenome' id='isobrenome' maxlength='20' minlength='4' required><br><label for='iestado' class='mb-2' style='margin-right: 34px;'>Estado:*</label><select name='estado' id='iestado' class='p-1' style='width: 199px;' required><option value='AC'>Acre</option><option value='AL'>Alagoas</option><option value='AP'>Amapá</option><option value='AM'>Amazonas</option><option value='BA'>Bahia</option><option value='CE'>Ceará</option><option value='DF'>Distrito Federal</option><option value='ES'>Espírito Santo</option><option value='GO'>Goiás</option><option value='MA'>Maranhão</option><option value='MT'>Mato Grosso</option><option value='MS'>Mato Grosso do Sul</option><option value='MG'>Minas Gerais</option><option value='PA'>Pará</option><option value='PB'>Paraíba</option><option value='PR'>Paraná</option><option value='PE'>Pernambuco</option><option value='PI'>Piauí</option><option value='RJ'>Rio de Janeiro</option><option value='RN'>Rio Grande do Norte</option><option value='RS'>Rio Grande do Sul</option><option value='RO'>Rondônia</option><option value='RR'>Roraima</option><option value='SC'>Santa Catarina</option><option value='SP'>São Paulo</option><option value='SE'>Sergipe</option><option value='TO'>Tocantins</option></select> <br><label for='icidade' style='margin-right: 33px;'>Cidade:*</label><input type='text' name='cidade' id='icidade' maxlength='20' minlength='4' required><br><input type='submit' value='Enviar' class='mt-2 p-1'></form> <br><form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post'><input type='submit' class='p-1 mt-2' value='Sair' name='sair'></form>"
 
             botao = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' enctype='multipart/form-data' method='post'><label for='ifoto' class='border border-dark rounded p-1 mt-1 text-center' style='width: 200px; cursor:pointer;'>Clique e envie a Imagem</label><input type='file' name='foto' id='ifoto' style='display: none;'> <br> <input type='submit' class='border border-dark rounded p-1 mt-1 text-center' value='Salvar Imagem'></form>"
 
