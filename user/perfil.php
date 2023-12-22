@@ -5,11 +5,11 @@
 session_start();
 
 //Verifica se a sessão está estabelecida
-if (count($_SESSION) <= 0) {    
-    die('Você não está logado1');
+if (count($_SESSION) <= 0) {
+    die('Você não está logado');
 } else {
     if ($_SESSION["id"] == NULL) {
-        die('Você não está logado2');
+        die('Você não está logado');
     } else {
         $id = $_SESSION['id'];
     }
@@ -43,7 +43,7 @@ $vet = $result->fetch_assoc();
 
 //Vê se tem foto cadastrada e pega o diretório dela
 if ($vet["foto"] != '') {
-    $local = $vet["foto"]; 
+    $local = $vet["foto"];
 } else {
     $local = '';
 }
@@ -59,15 +59,12 @@ if ($vet["sobrenome"] != '') {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Encerrar Sessão
-    if (isset($_POST["sair"])){
+    if (isset($_POST["sair"])) {
         $_SESSION['id'] = null;
         $p = "window.location.href = 'http://localhost/marketplace/index.php'";
     }
     //Verifica se foi enviado algum arquivo no POST
     if (isset($_FILES["foto"])) {
-        if ($local != ''){
-            unlink($local);
-        }
 
         $foto = $_FILES["foto"];
 
@@ -90,11 +87,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             die("Arquivo não suportado");
         }
 
+        if ($local != '' && file_exists($local)) {
+            unlink($local);
+        }
+
         $moveu = move_uploaded_file($foto["tmp_name"], $path);
 
         if ($moveu) {
             $sql = "UPDATE usuarios SET foto ='$path' WHERE id = '$id'";
             $conn->query($sql);
+            $p = "window.location.href = 'http://localhost/marketplace/index.php'";
         } else {
             echo "Falha ao salvar o arquivo";
         }
@@ -111,7 +113,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $resultado = $conn->query($sql);
     }
 }
-
 $conn->close();
 ?>
 
@@ -144,7 +145,6 @@ $conn->close();
                 <div class="col-12 col-md-4 text-center text-md-start" id="foto">
                     <img src="<?= $local ?>" alt="" class="align-center" style="width: 200px; height:200px"><br>
                 </div>
-
                 <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id="infouser">
                     Bem vindo <?php echo " $nome $sobrenome"; ?>, você mora em <?php echo " $cidade $estado"; ?>
                     <br>
@@ -156,6 +156,18 @@ $conn->close();
                 </div>
             </div>
         </div>
+
+        <div class="container mt-2">
+            <div class="row">
+                <div class="col-12 col-md-4">                    
+                </div>
+                <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id='produtos'>
+                    Produtos:
+
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
