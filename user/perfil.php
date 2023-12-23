@@ -56,12 +56,13 @@ if ($vet["sobrenome"] != '') {
     $cidade = $vet["cidade"];
 
     $sql = "SELECT * FROM produtos WHERE vendedor = '$id'";
-    $result = $conn->query($sql) or die();
+    $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $produto = $row['descricao'] . "<br> <button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
+        while ($row = $result->fetch_assoc()) {            
+            $produto .= $row['descricao'] . "<br>";
         }
+        $produto .= "<button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
     } else {
         $produto = "Você não tem produtos à venda <br> <button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
     }

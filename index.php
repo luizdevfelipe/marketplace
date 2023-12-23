@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+<?php
+$mercadorias = '';
+
+$servername = 'localhost';
+$username = 'root';
+$password = '';
+$dbname = 'marketplace';
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+  die('Erro de conexão com o servidor');
+}
+
+$sql = "SELECT * FROM produtos";
+$result = $conn->query($sql);
+if ($result->num_rows > 0){
+  while ($row = $result->fetch_assoc()) {
+  $mercadorias .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem;'><img src='user/" . $row["foto"] . "' class='card-img-top' alt='...'><div class='card-body'><h5 class='card-title'>". $row['nome'] ."</h5><p class='card-text'>". $row['descricao'] ."</p><p class='card-text'>R$".  $row['preco'] ."</p><a href='' class='btn btn-primary'>Ver Produto</a></div></div>";
+}
+}
+?>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +35,7 @@
 </head>
 
 <body>
-  
+
   <header>
     <menu class="pt-1">
       <p>MarketPlace</p>
@@ -38,55 +61,7 @@
 
     <div class="container">
       <div class="row">
-
-        <div class="card col-3 mt-3 d-block m-auto" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Bicicleta</h5>
-            <p class="card-text">Bicicleta usada aro 29 freio a disco 24 marchas</p>
-            <p class="card-text">R$ 600</p>
-            <a href="#" class="btn btn-primary">Ver Produto</a>
-          </div>
-        </div>
-
-        <div class="card col-3 mt-3 d-block m-auto" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-
-        <div class="card col-3 mt-3 d-block m-auto" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-
-        <div class="card col-3 mt-3 d-block m-auto" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-
-
-        <div class="card col-3 mt-3 d-block m-auto" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-
-
+       <?=$mercadorias?>
       </div>
     </div>
 
@@ -94,4 +69,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
+
 </html>
