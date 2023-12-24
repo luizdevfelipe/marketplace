@@ -15,11 +15,11 @@ if ($conn->connect_error) {
   die('Erro de conexão com o servidor');
 }
 
-$sql = "SELECT * FROM produtos";
+$sql = "SELECT * FROM produtos ORDER BY nome ASC";
 $result = $conn->query($sql);
 if ($result->num_rows > 0){
   while ($row = $result->fetch_assoc()) {
-  $mercadorias .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem;'><img src='user/" . $row["foto"] . "' class='card-img-top' alt='...'><div class='card-body'><h5 class='card-title'>". $row['nome'] ."</h5><p class='card-text'>". $row['descricao'] ."</p><p class='card-text'>R$".  $row['preco'] ."</p><a href='' class='btn btn-primary'>Ver Produto</a></div></div>";
+  $mercadorias .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem;'><img src='user/" . $row["foto"] . "' class='card-img-top' alt='...'><div class='card-body'><h5 class='card-title'>". $row['nome'] ."</h5><p class='card-text'>". $row['descricao'] ."</p><p class='card-text'>R$".  $row['preco'] ."</p><a href='user/produto.php?id=". $row['id'] ."' class='btn btn-primary'>Ver Produto</a></div></div>";
 }
 }
 ?>
