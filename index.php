@@ -12,7 +12,7 @@ $dbname = 'marketplace';
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-  die('Erro de conexão com o servidor');
+  die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
 }
 
 $sql = "SELECT * FROM produtos ORDER BY nome ASC";

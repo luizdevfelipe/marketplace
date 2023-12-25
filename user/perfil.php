@@ -5,14 +5,10 @@
 session_start();
 
 //Verifica se a sessão está estabelecida
-if (count($_SESSION) <= 0) {
-    die('Você não está logado');
+if (isset($_SESSION['id'])) {
+    $id = $_SESSION['id'];     
 } else {
-    if ($_SESSION["id"] == NULL) {
-        die('Você não está logado');
-    } else {
-        $id = $_SESSION['id'];
-    }
+    die("<h1><a href='http://localhost/marketplace/'>Erro você não está logado!</a></h1>");
 }
 
 // Injeção Sql
@@ -34,7 +30,7 @@ $dbname = 'marketplace';
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
-    die('Falha de conexão com o banco de dados');
+    die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
 }
 // Verifica se já tem os dados cadastrados ou precisa cadastrar
 $sql = "SELECT * FROM usuarios WHERE id = '" . $id . "'";
@@ -60,7 +56,7 @@ if ($vet["sobrenome"] != '') {
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {            
-            $produto .= $row['descricao'] . "<br>";
+            $produto .="<a href='http://localhost/marketplace/user/produto.php?id=".$row['id']."' class='text-dark'>".$row['descricao']."</a>" . "<br>";
         }
         $produto .= "<button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
     } else {
@@ -96,11 +92,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if ($foto["error"]) {
-            die("Falha ao enviar ao arquivo");
+            die("<h1><a href='http://localhost/marketplace/'>Erro ao enviar o arquivo</a></h1>");
         }
 
         if ($foto["size"] > 2097152) {
-            die("Arquivo muito grande! Máximo de 2 MegaBytes");
+            die("<h1><a href='http://localhost/marketplace/'>Erro arquivo máximo de 2Mb, tente novamente</a></h1>");
         }
 
         $nomeOriginal = $foto["name"];
@@ -110,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $path = $pasta . $nomeCodificado . '.' . $extensao;
 
         if ($extensao != 'jpg' && $extensao != 'png') {
-            die("Arquivo não suportado");
+            die("<h1><a href='http://localhost/marketplace/'>Erro arquivo não suportado</a></h1>");
         }        
 
         if (move_uploaded_file($foto["tmp_name"], $path)) {
@@ -127,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $p = "window.location.href = 'http://localhost/marketplace/index.php'";
             }
         } else {
-            die("Falha ao salvar o arquivo");
+            die("<h1><a href='http://localhost/marketplace/'>Erro ao salvar o arquivo</a></h1>");
         }
     }
     // Altera dados de usuário

@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <?php
-$id = $_GET['id'];
+$id = $_GET['id'] ?? -1;
 
 $server = 'localhost';
 $user = 'root';
@@ -12,14 +12,28 @@ $dbname = 'marketplace';
 $conn = new mysqli($server, $user, $password, $dbname);
 
 if ($conn->connect_error) {
-    die('Erro de conexão com o servidor');
+    die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
 }
 
 $sql = "SELECT * FROM produtos WHERE id = $id";
-if ($result = $conn->query($sql)) {
+
+try {
+    $result = $conn->query($sql);
+} catch (mysqli_sql_exception $e){
+    die("<h1><a href='http://localhost/marketplace/'>Erro ao solicitar produto</a></h1>");
+}
+    
+if ( $result->num_rows > 0 )  {    
     $produto = $result->fetch_assoc();
 } else {
-    die('Erro ao solicita produto');
+    die("<h1><a href='http://localhost/marketplace/'>Erro ao solicitar produto</a></h1>");
+}
+
+session_start();
+if (isset($_SESSION['id'])){
+    if ($_SESSION['id'] == $produto['vendedor']){
+        echo 'você é o vendedor desse produto!';
+    }
 }
 
 ?>
@@ -27,7 +41,7 @@ if ($result = $conn->query($sql)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $produto['nome'] ?></title>
+    <title><?= $produto['nome'] ?? 'Erro' ?></title>
     <link rel="shortcut icon" href="../images/favicon_io/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../estilos/produto.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -51,11 +65,12 @@ if ($result = $conn->query($sql)) {
         <div class="container py-2">
             <div class="row">
                 <div class="col-12 col-md-7 text-center ">
-                    <img src="<?=$produto['foto']?>" alt="produto" class="rounded" width="100%" height="400px">
+                    <img src="<?=$produto['foto']?>" alt="produto" class="rounded" width="90%" height="400px">
                 </div>
                 <div class="col-12 col-md-5 border border-dark rounded">
                     <h1 class="display-5 text-center"><?=$produto['nome']?></h1>
-                    
+                    <p class="mt-5 fs-5"><?=$produto['descricao']?></p>
+                    <p class="text-success fs-5">R$<?=$produto['preco']?></p>
                 </div>
             </div>
         </div>

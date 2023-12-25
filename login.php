@@ -44,7 +44,7 @@
             $conn = new mysqli($servername, $username, $password, $dbname);
 
             if ($conn->connect_error) {
-                die($conn->connect_error);
+                die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
             }
 
             if (count($_POST) == 2) {
