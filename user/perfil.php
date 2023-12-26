@@ -152,7 +152,6 @@ $conn->close();
 </head>
 
 <body>
-
     <header>
         <menu class="pt-1">
             <p class="p-0 m-0"><a href="../index.php" class="text-decoration-none fs-5">MarketPlace</a></p>

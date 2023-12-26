@@ -32,7 +32,24 @@ if ( $result->num_rows > 0 )  {
 session_start();
 if (isset($_SESSION['id'])){
     if ($_SESSION['id'] == $produto['vendedor']){
-        echo 'você é o vendedor desse produto!';
+        $dono = "<form action='' method='post'>
+        <input type='submit' value='Remover produto do ar' class='p-1' name='remove'></form>";
+    } else {
+        $dono = "<form action='' method='post'>
+        <input type='submit' class='btn btn-success' value='Adicionar ao carrinho' name='comprar'></form>";
+    }
+
+    if (isset($_POST['remove'])){
+        if (file_exists($produto['foto'])) {
+            unlink($produto['foto']);
+        }
+        $sql = "DELETE FROM produtos WHERE id = '".$produto['id']."'";
+        $conn->query($sql);        
+        $sair = "window.location.href = 'http://localhost/marketplace/user/perfil.php'";
+    }
+    if (isset($_POST['comprar'])){
+        $_SESSION['cart'] = $produto['id'];
+        $sair = "window.location.href = 'http://localhost/marketplace/user/carrinho.php'";
     }
 }
 
@@ -57,7 +74,7 @@ if (isset($_SESSION['id'])){
                 <input type="submit" value="Buscar">
             </form>
             <a href="../login.php"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
-            <a href="user/carrinho.php"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
+            <a href="carrinho.php"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
         </menu>
     </header>
 
@@ -70,16 +87,22 @@ if (isset($_SESSION['id'])){
                 <div class="col-12 col-md-5 border border-dark rounded">
                     <h1 class="display-5 text-center"><?=$produto['nome']?></h1>
                     <p class="mt-5 fs-5"><?=$produto['descricao']?></p>
+                    <p class="mb-0">Produtos Disponíveis: <?=$produto['estoque']?></p>
                     <p class="text-success fs-5">R$<?=$produto['preco']?></p>
+
+                    <?=$dono?>                 
                 </div>
             </div>
         </div>
-
-
     </main>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">   
+    </script>
+
+    <script>
+        <?=$sair?>
+    </script>
 </body>
 
 </html>
