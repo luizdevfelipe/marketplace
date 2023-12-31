@@ -21,7 +21,7 @@ function validar($dado)
 }
 
 // Conexão com o servidor
-$nome = $sobrenome = $estado = $cidade = $foto = $p = $produto =  '';
+$nome = $sobrenome = $estado = $cidade = $foto = $p = $produto = $comprados = '';
 
 $servername = 'localhost';
 $username = 'root';
@@ -62,6 +62,16 @@ if ($vet["sobrenome"] != '') {
     } else {
         $produto = "Você não tem produtos à venda <br> <button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
     }
+
+    $sql = "SELECT c.idproduto, p.descricao FROM produtos p JOIN compras c ON p.id = c.idproduto WHERE c.iduser = '$id'";
+    
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0){
+        while ($linha = $result->fetch_assoc()){
+            $comprados .= "<a href='http://localhost/marketplace/user/produto.php?id=".$linha['idproduto']."' class='text-dark'>".$linha['descricao']."</a>" . "<br>";
+        }       
+    }
+
 } else {
     $p = "cadastrado()";
 }
@@ -198,7 +208,7 @@ $conn->close();
                 </div>
                 <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id='produtos'>
                     Compras Feitas:<br>
-
+                    <?=$comprados?>
                 </div>
             </div>
         </div>

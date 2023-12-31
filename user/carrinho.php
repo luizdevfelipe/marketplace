@@ -15,6 +15,9 @@ if (!isset($idproduto)) {
 if(!isset($idcarrinho)){
     $idcarrinho = [];
 }
+if(!isset($estoque)){
+    $estoque = [];
+}
 
 $servername = 'localhost';
 $username = 'root';
@@ -34,6 +37,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         array_push($idproduto, $row['idproduto']);
         array_push($idcarrinho, $row['id']);
+        array_push($estoque, $row['estoque']);
         $dados .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><form action='http://localhost/marketplace/user/carrinho.php?id=" . $row['id'] . "' method='post'><input type='submit' value='Remover do carrinho' class='btn btn-primary'></form></div></div>";
     }
 
@@ -63,6 +67,12 @@ if ($result->num_rows > 0) {
                     die("<h1><a href='http://localhost/marketplace/'>Erro ao fazer a solicitação de compra</a></h1>");
                 }
                 $sql = "DELETE FROM carrinho WHERE id = '".$idcarrinho[$i]."'  ";
+                try {
+                    $query = $conn->query($sql);
+                } catch (mysqli_sql_exception $e) {
+                    die("<h1><a href='http://localhost/marketplace/'>Erro ao fazer a solicitação de compra</a></h1>");
+                }
+                $sql = "UPDATE produtos SET estoque = '".($estoque[$i] -1)."' WHERE id = '".$idproduto[$i]."'  ";
                 try {
                     $query = $conn->query($sql);
                 } catch (mysqli_sql_exception $e) {

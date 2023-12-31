@@ -15,7 +15,7 @@ if ($conn->connect_error) {
   die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
 }
 
-$sql = "SELECT * FROM produtos ORDER BY nome ASC";
+$sql = "SELECT * FROM produtos WHERE estoque > 0 ORDER BY nome ASC";
 $result = $conn->query($sql);
 if ($result->num_rows > 0){
   while ($row = $result->fetch_assoc()) {
