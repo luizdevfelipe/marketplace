@@ -5,15 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Login</title>
-    <link rel="shortcut icon" href="images/favicon_io/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="estilos/login.css">
+    <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="estilos/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        body,
-        html {
-            background-image: url("images/caixas-pc.jpg");
+        body, html {
+            height: 100vh;
+            width: 100vw;
+            background-image: url("images/site/caixas.jpg");
             background-size: cover;
             background-repeat: no-repeat;
+        }       
+        input {
+            background-color: transparent;
+        }
+        input:focus {
+            background-color: white;
+        }
+        fieldset {
+            background-color: rgba(0, 0, 0, 0.082);
+        }
+        a::before {
+            content: "\01F517";
+        }
+        .w350 {
+            width: 350px;
+        }
+        .centralizar {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
@@ -22,7 +44,7 @@
     <?php
     session_start();
     if (isset($_SESSION["id"])) {
-        $p = "window.location.href = 'http://localhost/marketplace/user/perfil.php'";
+        $p = "window.location.href = 'http://localhost/marketplace/perfil.php'";
     } else {
 
         function validar($dado)
@@ -55,7 +77,7 @@
                 $resultado = $conn->query($sql);
 
                 if ($resultado->num_rows > 0) {
-                    $p = "window.location.href = 'http://localhost/marketplace/user/perfil.php'";
+                    $p = "window.location.href = 'http://localhost/marketplace/perfil.php'";
                     $vet = $resultado->fetch_assoc();
                     $id = $vet["id"];
                     session_start();
@@ -94,11 +116,14 @@
                 $conn->close();
             }
         }
-        
     }
     ?>
 
-    <fieldset class="centralizado border border-dark rounded text-center w350">
+    <div class="text-center lead" id="registro">
+        <p>Não tem cadastro? <br><button class="btn bg-success border border-dark p-1 text-white" onclick="Registrar()">Registre-se</button> agora</p>
+    </div>
+
+    <fieldset class="centralizar border border-dark rounded text-center w350">
         <legend class="mt-1 display-6" id="legenda">Login</legend>
         <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="on" id="form">
             <label for="iuser" class="mt-1 lead">Nome de Usuário:</label><br>
@@ -114,10 +139,6 @@
             <?= $erro ?>
         </div>
     </fieldset>
-
-    <div class="text-center lead" id="registro">
-        <p>Não tem cadastro? <br><button class="btn bg-success border border-dark p-1 text-white" onclick="Registrar()">Registre-se</button> agora</p>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 

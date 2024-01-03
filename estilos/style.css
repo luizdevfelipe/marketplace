@@ -47,7 +47,7 @@ a::before {
 }
 
 #principal {
-    background-image: url('../images/principal.jpg');
+    background-image: url('../images/site/principal.jpg');
     background-repeat: no-repeat;
     background-position: center top 15%;
     background-size: cover;
@@ -85,7 +85,7 @@ mark{
     }
 
     #principal{
-        background-image: url('../images/principal-cel.jpg');
+        background-image: url('../images/site/principal-cel.jpg');
     }
 
     section#texto{        
