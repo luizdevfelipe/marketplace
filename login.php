@@ -9,28 +9,35 @@
     <link rel="stylesheet" href="estilos/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        body, html {
+        body,
+        html {
             height: 100vh;
             width: 100vw;
             background-image: url("images/site/caixas.jpg");
             background-size: cover;
             background-repeat: no-repeat;
-        }       
+        }
+
         input {
             background-color: transparent;
         }
+
         input:focus {
             background-color: white;
         }
+
         fieldset {
             background-color: rgba(0, 0, 0, 0.082);
         }
+
         a::before {
             content: "\01F517";
         }
+
         .w350 {
             width: 350px;
         }
+
         .centralizar {
             position: absolute;
             top: 50%;
@@ -46,75 +53,52 @@
     if (isset($_SESSION["id"])) {
         $p = "window.location.href = 'http://localhost/marketplace/perfil.php'";
     } else {
-
-        function validar($dado)
-        {
-            $dado = trim($dado);
-            $dado = stripslashes($dado);
-            $dado = htmlspecialchars($dado);
-            return $dado;
-        }
+        require_once "codes/BancoDados.php";
 
         $user = $senha = $senha1 = $senha2 = $erro = $cor = $p = '';
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "marketplace";
-
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            if ($conn->connect_error) {
-                die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
-            }
+            $conexao = new BancoDados('localhost', 'root', '', 'marketplace');
 
             if (count($_POST) == 2) {
-                $nome = validar($_POST["user"]);
-                $senha = validar($_POST["senha"]);
+                $nome = $conexao->validar($_POST["user"]);
+                $senha = $conexao->validar($_POST["senha"]);
 
-                $sql = "SELECT id FROM usuarios WHERE user = '" . $nome . "' AND senha = '" . $senha . "' ";
-                $resultado = $conn->query($sql);
+                $resultado = $conexao->returnSql("SELECT id FROM usuarios WHERE user = '$nome' AND senha = '$senha' ");
 
                 if ($resultado->num_rows > 0) {
                     $p = "window.location.href = 'http://localhost/marketplace/perfil.php'";
                     $vet = $resultado->fetch_assoc();
-                    $id = $vet["id"];
-                    session_start();
-                    $_SESSION['id'] = $id;
+                    $_SESSION['id'] = $vet["id"];
                 } else {
                     $erro = "Usuário ou senha inválidos";
                     $cor = "text-danger";
                 }
             } else {
-                $user = validar($_POST["user"]);
-                $senha1 = validar($_POST["senha1"]);
-                $senha2 = validar($_POST["senha2"]);
+                $user = $conexao->validar($_POST["user"]);
+                $senha1 = $conexao->validar($_POST["senha1"]);
+                $senha2 = $conexao->validar($_POST["senha2"]);
 
                 if ($senha1 == $senha2) {
                     $senha = $senha1;
 
-                    $sql = "SELECT user FROM usuarios WHERE user = '" . $user . "'";
-                    $result = $conn->query($sql);
+                    $result = $conexao->returnSql("SELECT user FROM usuarios WHERE user = '" . $user . "'");
                     if ($result->num_rows > 0) {
                         $p = "Registrar()";
                         $erro = 'Usuário já cadastrado!';
                         $cor = "text-danger";
                     } else {
-                        $sql = "INSERT INTO usuarios (user, senha) VALUES ('" . $user . "', '" . $senha . "')";
-
-                        if ($conn->query($sql) === TRUE) {
-                            $erro = "Cadastro Realizado!";
-                            $cor = "text-success";
-                        }
+                        $conexao->simpleSql("INSERT INTO usuarios (user, senha) VALUES ('" . $user . "', '" . $senha . "')");                        
+                        $erro = "Cadastro Realizado!";
+                        $cor = "text-success";
                     }
                 } else {
                     $erro = 'Senhas Diferentes!';
                     $cor = "text-danger";
                     $p = "Registrar()";
-                }
-                $conn->close();
+                }                
             }
+            $conexao->close();
         }
     }
     ?>

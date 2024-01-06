@@ -8,7 +8,7 @@ session_start();
 if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];     
 } else {
-    die("<h1><a href='http://localhost/marketplace/'>Erro você não está logado!</a></h1>");
+    die("<h1><a href='http://localhost/marketplace/'>Você não está logado!</a></h1>");
 }
 
 // Injeção Sql
@@ -56,7 +56,7 @@ if ($vet["sobrenome"] != '') {
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {            
-            $produto .="<a href='http://localhost/marketplace/user/produto.php?id=".$row['id']."' class='text-dark'>".$row['descricao']."</a>" . "<br>";
+            $produto .="<a style='font-size:20px;' href='http://localhost/marketplace/produto.php?id=".$row['id']."' class='text-dark'>".$row['nome']."</a>" . "<br>";
         }
         $produto .= "<button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
     } else {
@@ -68,7 +68,7 @@ if ($vet["sobrenome"] != '') {
     $result = $conn->query($sql);
     if ($result->num_rows > 0){
         while ($linha = $result->fetch_assoc()){
-            $comprados .= "<a href='http://localhost/marketplace/user/produto.php?id=".$linha['idproduto']."' class='text-dark'>".$linha['descricao']."</a>" . "<br>";
+            $comprados .= "<a style='font-size:20px;' href='http://localhost/marketplace/produto.php?id=".$linha['idproduto']."' class='text-dark'>".$linha['descricao']."</a>" . "<br>";
         }       
     }
 
@@ -155,7 +155,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olá, <?= $vet["user"] ?> !</title>
-    <link rel="shortcut icon" href="/images/site/favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="estilos/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">

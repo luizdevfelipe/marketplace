@@ -38,15 +38,15 @@ if ($result->num_rows > 0) {
         array_push($idproduto, $row['idproduto']);
         array_push($idcarrinho, $row['id']);
         array_push($estoque, $row['estoque']);
-        $dados .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><form action='http://localhost/marketplace/user/carrinho.php?id=" . $row['id'] . "' method='post'><input type='submit' value='Remover do carrinho' class='btn btn-primary'></form></div></div>";
+        $dados .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><form action='http://localhost/marketplace/carrinho.php?id=" . $row['id'] . "' method='post'><input type='submit' value='Remover do carrinho' class='btn btn-primary'></form></div></div>";
     }
 
     if (isset($_GET['id'])) {
         $sql = "DELETE FROM carrinho WHERE id = '" . $_GET['id'] . "'";
         if ($conn->query($sql) === TRUE) {
-            $sair = "window.location.href='http://localhost/marketplace/user/carrinho.php'";
+            $sair = "window.location.href='http://localhost/marketplace/carrinho.php'";
         } else {
-            die("<h1><a href='http://localhost/marketplace/user/carrinho.php'>Erro ao remover produto</a></h1>");
+            die("<h1><a href='http://localhost/marketplace/carrinho.php'>Erro ao remover produto</a></h1>");
         }
     }
     if (isset($_POST['comprou'])) {
@@ -80,7 +80,7 @@ if ($result->num_rows > 0) {
                 }
             }
         } else {
-            die("<h1><a href='http://localhost/marketplace/user/perfil.php'>Termine o cadastro para realizar uma compra</a></h1>");
+            die("<h1><a href='http://localhost/marketplace/perfil.php'>Termine o cadastro para realizar uma compra</a></h1>");
         }
     }
 } else {
@@ -93,8 +93,8 @@ if ($result->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compras</title>
-    <link rel="shortcut icon" href="../images/favicon_io/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../estilos/perfil.css">
+    <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="estilos/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 </head>
@@ -102,12 +102,12 @@ if ($result->num_rows > 0) {
 <body>
     <header>
         <menu class="pt-1">
-            <p class="p-0 m-0"><a href="../index.php" class="text-decoration-none fs-5">MarketPlace</a></p>
+            <p class="p-0 m-0"><a href="index.php" class="text-decoration-none fs-5">MarketPlace</a></p>
             <form action="" method="post">
                 <input type="text" name="pesquisa" id="ipesquisa" placeholder="Pesquise">
                 <input type="submit" value="Buscar">
             </form>
-            <a href="../login.php"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
+            <a href="login.php"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
             <a href="carrinho.php"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
         </menu>
     </header>

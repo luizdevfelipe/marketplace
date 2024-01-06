@@ -2,24 +2,16 @@
 <html lang="pt-br">
 
 <?php
+require_once 'codes/BancoDados.php';
 $mercadorias = '';
 
-$servername = 'localhost';
-$username = 'root';
-$password = '';
-$dbname = 'marketplace';
+$conexao = new BancoDados('localhost', 'root', '', 'marketplace');
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$result = $conexao->returnSql("SELECT * FROM produtos WHERE estoque > 0 ORDER BY nome ASC");
 
-if ($conn->connect_error) {
-  die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
-}
-
-$sql = "SELECT * FROM produtos WHERE estoque > 0 ORDER BY nome ASC";
-$result = $conn->query($sql);
 if ($result->num_rows > 0) {
   while ($row = $result->fetch_assoc()) {
-    $mercadorias .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><a href='user/produto.php?id=" . $row['id'] . "' class='btn btn-primary'>Ver Produto</a></div></div>";
+    $mercadorias .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><a href='produto.php?id=" . $row['id'] . "' class='btn btn-primary'>Ver Produto</a></div></div>";
   }
 }
 
@@ -32,7 +24,7 @@ if (isset($_POST['pesquisa'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MarketPlace</title>
-  <link rel="shortcut icon" href="images/favicon_io/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="estilos/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
