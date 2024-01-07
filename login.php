@@ -98,7 +98,6 @@
                     $p = "Registrar()";
                 }                
             }
-            $conexao->close();
         }
     }
     ?>

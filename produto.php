@@ -2,33 +2,19 @@
 <html lang="pt-br">
 
 <?php
+require_once 'codes/BancoDados.php';
 
 $sair = '';
 $id = $_GET['id'] ?? -1;
 
-$server = 'localhost';
-$user = 'root';
-$password = '';
-$dbname = 'marketplace';
+$conexao = new BancoDados('localhost', 'root', '', 'marketplace');
 
-$conn = new mysqli($server, $user, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
-}
-
-$sql = "SELECT * FROM produtos WHERE id = $id";
-
-try {
-    $result = $conn->query($sql);
-} catch (mysqli_sql_exception $e) {
-    die("<h1><a href='http://localhost/marketplace/'>Erro ao solicitar produto</a></h1>");
-}
+$result = $conexao->returnSql("SELECT * FROM produtos WHERE id = $id");
 
 if ($result->num_rows > 0) {
     $produto = $result->fetch_assoc();
 } else {
-    die("<h1><a href='http://localhost/marketplace/'>Erro ao solicitar produto</a></h1>");
+    $conexao->erroDisplay('Erro ao solicitar produto!');
 }
 
 session_start();
@@ -47,17 +33,12 @@ if (isset($_SESSION['id'])) {
     }
 
     if (isset($_POST['nproduto'])) {
-        $sql = "UPDATE produtos SET nome = '" . $_POST["nproduto"] . "', descricao = '" . $_POST["descricao"] . "', preco ='" . $_POST["preco"] . "', estoque = '" . $_POST['estoque'] . "' WHERE id = '$id' ";
-        try {
-            $conn->query($sql);
-        } catch (mysqli_sql_exception $e) {
-            die("<h1><a href='http://localhost/marketplace/'>Erro ao atualizar produto</a></h1>");
-        }
+        $conexao->simpleSql("UPDATE produtos SET nome = '" . $_POST["nproduto"] . "', descricao = '" . $_POST["descricao"] . "', preco ='" . $_POST["preco"] . "', estoque = '" . $_POST['estoque'] . "' WHERE id = '$id' ");        
+        
         $sair = "window.location.href = 'http://localhost/marketplace/'";
     }
     if (isset($_POST['comprar'])) {
-        $sql = "INSERT INTO carrinho (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '$id')";
-        $conn->query($sql);
+        $conexao->simpleSql("INSERT INTO carrinho (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '$id')");
         $sair = "window.location.href = 'http://localhost/marketplace/carrinho.php'";
     }
 } else {

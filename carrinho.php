@@ -2,36 +2,32 @@
 <html lang="pt-br">
 
 <?php
+require_once "codes/BancoDados.php";
+$conexao = new BancoDados('localhost', 'root', '', 'marketplace');
+
 session_start();
-if (!isset($_SESSION['id'])) {
-    die("<h1><a href='http://localhost/marketplace/login.php'>Usuário não cadastrado</a></h1>");
+if (empty($_SESSION['id'])) {
+    $conexao->erroDisplay('Usuário não cadastrado!');
 }
 
 // Conexão com o servidor
 $dados = $produto = $sair = $enviar = '';
-if (!isset($idproduto)) {
+if (empty($idproduto)) {
     $idproduto = array();
 }
-if(!isset($idcarrinho)){
+if (empty($idcarrinho)) {
     $idcarrinho = [];
 }
-if(!isset($estoque)){
+if (empty($estoque)) {
     $estoque = [];
 }
 
-$servername = 'localhost';
-$username = 'root';
-$password = '';
-$dbname = 'marketplace';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
-}
 
 // Seleciona os produtos
-$sql = "SELECT * FROM produtos p JOIN carrinho c ON p.id = c.idproduto WHERE c.iduser = '" . $_SESSION['id'] . "'; ";
-$result = $conn->query($sql);
+
+$result = $conexao->returnSql("SELECT * FROM produtos p JOIN carrinho c ON p.id = c.idproduto WHERE c.iduser = '" . $_SESSION['id'] . "'; ");
+
 if ($result->num_rows > 0) {
     $enviar = " <form action='' method='post'><input type='submit' class='p-1 my-3' value='Finalizar Compra' name='comprou'></form>";
     while ($row = $result->fetch_assoc()) {
@@ -41,52 +37,35 @@ if ($result->num_rows > 0) {
         $dados .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><form action='http://localhost/marketplace/carrinho.php?id=" . $row['id'] . "' method='post'><input type='submit' value='Remover do carrinho' class='btn btn-primary'></form></div></div>";
     }
 
+    // Verificar qual a condição de erro que me fez usar isso
     if (isset($_GET['id'])) {
-        $sql = "DELETE FROM carrinho WHERE id = '" . $_GET['id'] . "'";
-        if ($conn->query($sql) === TRUE) {
+        if ($conexao->simpleSql("DELETE FROM carrinho WHERE id = '" . $_GET['id'] . "'") == true) {
             $sair = "window.location.href='http://localhost/marketplace/carrinho.php'";
         } else {
-            die("<h1><a href='http://localhost/marketplace/carrinho.php'>Erro ao remover produto</a></h1>");
+            $conexao->erroDisplay('Erro ao remover produto do carrinho!');
         }
     }
     if (isset($_POST['comprou'])) {
-        $sql = "SELECT sobrenome FROM usuarios WHERE id = '" . $_SESSION['id'] . "'";
-        try {
-            $resultado = $conn->query($sql);
-            $sobrenome = $resultado->fetch_assoc();
-        } catch (mysqli_sql_exception $e) {
-            die("<h1><a href='http://localhost/marketplace/'>Erro ao solicitar dados de usuário</a></h1>");
-        }
-        if (isset($sobrenome['sobrenome'])) {
+        $resultado = $conexao->returnSql("SELECT sobrenome FROM usuarios WHERE id = '" . $_SESSION['id'] . "'");
+        $user = $resultado->fetch_assoc();
+
+        if (isset($user['sobrenome'])) {
             $dados = '<div class="text-center fs-5"><i class="bi bi-check-circle text-success display-1"></i><br>Compra Realizada!</div>';
             for ($i = 0; $i < count($idproduto); $i++) {
-                $sql = "INSERT INTO compras (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '".$idproduto[$i]."')";
-                try {
-                    $query = $conn->query($sql);
-                } catch (mysqli_sql_exception $e) {
-                    die("<h1><a href='http://localhost/marketplace/'>Erro ao fazer a solicitação de compra</a></h1>");
-                }
-                $sql = "DELETE FROM carrinho WHERE id = '".$idcarrinho[$i]."'  ";
-                try {
-                    $query = $conn->query($sql);
-                } catch (mysqli_sql_exception $e) {
-                    die("<h1><a href='http://localhost/marketplace/'>Erro ao fazer a solicitação de compra</a></h1>");
-                }
-                $sql = "UPDATE produtos SET estoque = '".($estoque[$i] -1)."' WHERE id = '".$idproduto[$i]."'  ";
-                try {
-                    $query = $conn->query($sql);
-                } catch (mysqli_sql_exception $e) {
-                    die("<h1><a href='http://localhost/marketplace/'>Erro ao fazer a solicitação de compra</a></h1>");
-                }
+                $conexao->simpleSql("INSERT INTO compras (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '" . $idproduto[$i] . "')");                    
+                
+                $conexao->simpleSql("DELETE FROM carrinho WHERE id = '" . $idcarrinho[$i] . "'");
+
+                $conexao->simpleSql("UPDATE produtos SET estoque = '" . ($estoque[$i] - 1) . "' WHERE id = '" . $idproduto[$i] . "'  ");
+                
             }
         } else {
-            die("<h1><a href='http://localhost/marketplace/perfil.php'>Termine o cadastro para realizar uma compra</a></h1>");
+            $conexao->erroDisplay('Termine o cadastro para realizar uma compra!');
         }
     }
 } else {
     $dados = "Nenhum produto adicionado ainda.";
 }
-
 ?>
 
 <head>
@@ -117,7 +96,7 @@ if ($result->num_rows > 0) {
             <div class="row">
                 <div class="col-12 col-md border p-1 text-center ">
                     <?= $dados ?>
-                    
+
                 </div>
             </div>
         </div>

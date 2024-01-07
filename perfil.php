@@ -3,38 +3,23 @@
 
 <?php
 session_start();
+require_once "codes/BancoDados.php";
+$conexao = new BancoDados('localhost', 'root', '', 'marketplace');
 
 //Verifica se a sessão está estabelecida
 if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];     
 } else {
-    die("<h1><a href='http://localhost/marketplace/'>Você não está logado!</a></h1>");
-}
-
-// Injeção Sql
-function validar($dado)
-{
-    $dado = trim($dado);
-    $dado = stripslashes($dado);
-    $dado = htmlspecialchars($dado);
-    return $dado;
+    $conexao->erroDisplay('Você não está logado!');
 }
 
 // Conexão com o servidor
 $nome = $sobrenome = $estado = $cidade = $foto = $p = $produto = $comprados = '';
 
-$servername = 'localhost';
-$username = 'root';
-$password = '';
-$dbname = 'marketplace';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("<h1><a href='http://localhost/marketplace/'>Erro de conexão</a></h1>");
-}
+
 // Verifica se já tem os dados cadastrados ou precisa cadastrar
-$sql = "SELECT * FROM usuarios WHERE id = '" . $id . "'";
-$result = $conn->query($sql);
+$result = $conexao->returnSql("SELECT * FROM usuarios WHERE id = '" . $id . "'");
 $vet = $result->fetch_assoc();
 
 //Vê se tem foto cadastrada e pega o diretório dela
@@ -51,8 +36,7 @@ if ($vet["sobrenome"] != '') {
     $estado = $vet["estado"];
     $cidade = $vet["cidade"];
 
-    $sql = "SELECT * FROM produtos WHERE vendedor = '$id'";
-    $result = $conn->query($sql);
+    $result = $conexao->returnSql("SELECT * FROM produtos WHERE vendedor = '$id'");
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {            
@@ -62,10 +46,8 @@ if ($vet["sobrenome"] != '') {
     } else {
         $produto = "Você não tem produtos à venda <br> <button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
     }
-
-    $sql = "SELECT c.idproduto, p.descricao FROM produtos p JOIN compras c ON p.id = c.idproduto WHERE c.iduser = '$id'";
-    
-    $result = $conn->query($sql);
+   
+    $result = $conexao->returnSql("SELECT c.idproduto, p.descricao FROM produtos p JOIN compras c ON p.id = c.idproduto WHERE c.iduser = '$id'");
     if ($result->num_rows > 0){
         while ($linha = $result->fetch_assoc()){
             $comprados .= "<a style='font-size:20px;' href='http://localhost/marketplace/produto.php?id=".$linha['idproduto']."' class='text-dark'>".$linha['descricao']."</a>" . "<br>";
@@ -85,10 +67,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //Verifica se um produto foi descrito
     if (isset($_POST["descricao"])) {
-        $nome = validar($_POST["nproduto"]);
-        $desc = validar($_POST["descricao"]);
-        $preco = (float) validar($_POST["preco"]);
-        $estoque = (int) validar($_POST["estoque"]);
+        $nome = $conexao->validar($_POST["nproduto"]);
+        $desc = $conexao->validar($_POST["descricao"]);
+        $preco = (float) $conexao->validar($_POST["preco"]);
+        $estoque = (int) $conexao->validar($_POST["estoque"]);
     }
 
     //Verifica se foi enviado algum arquivo no POST
@@ -102,11 +84,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if ($foto["error"]) {
-            die("<h1><a href='http://localhost/marketplace/'>Erro ao enviar o arquivo</a></h1>");
+            $conexao->erroDisplay('Erro ao enviar o arquivo!');
         }
 
         if ($foto["size"] > 2097152) {
-            die("<h1><a href='http://localhost/marketplace/'>Erro arquivo máximo de 2Mb, tente novamente</a></h1>");
+            $conexao->erroDisplay('Arquivo máximo de 2Mb, tente novamente');
         }
 
         $nomeOriginal = $foto["name"];
@@ -116,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $path = $pasta . $nomeCodificado . '.' . $extensao;
 
         if ($extensao != 'jpg' && $extensao != 'png') {
-            die("<h1><a href='http://localhost/marketplace/'>Erro arquivo não suportado</a></h1>");
+            $conexao->erroDisplay('Arquivo não suportado!');
         }        
 
         if (move_uploaded_file($foto["tmp_name"], $path)) {
@@ -124,31 +106,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($local != '' && file_exists($local)) {
                     unlink($local);
                 }
-                $sql = "UPDATE usuarios SET foto ='$path' WHERE id = '$id'";
-                $conn->query($sql);
+                $conexao->simpleSql("UPDATE usuarios SET foto ='$path' WHERE id = '$id'");
                 $p = "window.location.href = 'http://localhost/marketplace/index.php'";
-            } else {
-                $sql = "INSERT INTO produtos (nome, descricao, preco, estoque, foto, vendedor) VALUES ('$nome', '$desc', '$preco', '$estoque', '$path', '$id' )";
-                $conn->query($sql);
+            } else {                
+                $conexao->simpleSql("INSERT INTO produtos (nome, descricao, preco, estoque, foto, vendedor) VALUES ('$nome', '$desc', '$preco', '$estoque', '$path', '$id' )");
                 $p = "window.location.href = 'http://localhost/marketplace/index.php'";
             }
         } else {
-            die("<h1><a href='http://localhost/marketplace/'>Erro ao salvar o arquivo</a></h1>");
+            $conexao->erroDisplay('Erro ao salvar o arquivo!');
         }
     }
     // Altera dados de usuário
     if (isset($_POST["estado"])) {
-        $nome = validar($_POST["nome"]);
-        $sobrenome = validar($_POST["sobrenome"]);
-        $estado = validar($_POST["estado"]);
-        $cidade = validar($_POST["cidade"]);
+        $nome = $conexao->validar($_POST["nome"]);
+        $sobrenome = $conexao->validar($_POST["sobrenome"]);
+        $estado = $conexao->validar($_POST["estado"]);
+        $cidade = $conexao->validar($_POST["cidade"]);
 
-        $sql = "UPDATE usuarios SET nome = '" . $nome . "', sobrenome = '" . $sobrenome . "', estado = '" . $estado . "', cidade = '" . $cidade . "' WHERE id = '" . $id . "' ";
-
-        $resultado = $conn->query($sql);
+        $conexao->simpleSql("UPDATE usuarios SET nome = '" . $nome . "', sobrenome = '" . $sobrenome . "', estado = '" . $estado . "', cidade = '" . $cidade . "' WHERE id = '" . $id . "' ");
     }
 }
-$conn->close();
 ?>
 
 <head>
