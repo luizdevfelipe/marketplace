@@ -11,7 +11,7 @@ $result = $conexao->returnSql("SELECT * FROM produtos WHERE estoque > 0 ORDER BY
 
 if ($result->num_rows > 0) {
   while ($row = $result->fetch_assoc()) {
-    $mercadorias .= "<div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><a href='produto.php?id=" . $row['id'] . "' class='btn btn-primary'>Ver Produto</a></div></div>";
+    $mercadorias .= "<div class='card mt-3 p-2' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><a href='produto.php?id=" . $row['id'] . "' class='btn btn-primary'>Ver Produto</a></div></div>";
   }
 }
 
@@ -56,7 +56,7 @@ if (isset($_POST['pesquisa'])) {
     </div>
 
     <div class="container">
-      <div class="row">
+      <div class="d-flex justify-content-evenly flex-wrap">
         <?= $mercadorias ?>
       </div>
     </div>
