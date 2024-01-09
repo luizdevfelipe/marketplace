@@ -33,8 +33,8 @@ if (isset($_SESSION['id'])) {
     }
 
     if (isset($_POST['nproduto'])) {
-        $conexao->simpleSql("UPDATE produtos SET nome = '" . $_POST["nproduto"] . "', descricao = '" . $_POST["descricao"] . "', preco ='" . $_POST["preco"] . "', estoque = '" . $_POST['estoque'] . "' WHERE id = '$id' ");        
-        
+        $conexao->simpleSql("UPDATE produtos SET nome = '" . $_POST["nproduto"] . "', descricao = '" . $_POST["descricao"] . "', preco ='" . $_POST["preco"] . "', estoque = '" . $_POST['estoque'] . "' WHERE id = '$id' ");
+
         $sair = "window.location.href = 'http://localhost/marketplace/'";
     }
     if (isset($_POST['comprar'])) {
@@ -64,8 +64,8 @@ if (isset($_SESSION['id'])) {
     <header>
         <menu class="pt-1">
             <p class="p-0 m-0"><a href="index.php" class="text-decoration-none fs-5">MarketPlace</a></p>
-            <form action="" method="post">
-                <input type="text" name="pesquisa" id="ipesquisa" placeholder="Pesquise">
+            <form action="http://localhost/marketplace/pesquisa.php" method="get" autocomplete="on">
+                <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise">
                 <input type="submit" value="Buscar">
             </form>
             <a href="login.php"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
@@ -100,7 +100,7 @@ if (isset($_SESSION['id'])) {
 
         function editaProduto() {
             div = document.getElementById('edita')
-            form = "<br><form class='border border-success mb-3 m-1 p-2' action='<? echo htmlspecialchars($_SERVER['PHP_SELF']) . '?id=' . $id ?>' method='post' enctype='multipart/form-data'><label for='nproduto'>Nome do produto:*</label><input type='text' pattern='([A-Z]{1}[a-zçàá-ü]{2,})' title='Somente primeira letra maiúscula mínimo de 3 caracteres' name='nproduto' id='nproduto' minlength='4' maxlength='30' required class='m-1'><br><label for='descricao'>Descrição do produto:*</label><br><textarea name='descricao' id='descricao' minlength='10' maxlength='200' cols='28' rows='5' required class='m-1' style='resize: none;'></textarea><br><label for='preco'>Preço do produto:*</label><input type='number' name='preco' id='preco' step='0.01' required class='m-1'><br><label for='estoque'>Quantidade de produtos:*</label><input type='number' name='estoque' id='estoque' min='1' required class='m-1'><br><input type='submit' value='Alterar Produto' class='my-1 p-1'></form>";
+            form = "<br><form class='border border-success mb-3 m-1 p-2' action='<? echo htmlspecialchars($_SERVER['PHP_SELF']) . '?id=' . $id ?>' method='post' enctype='multipart/form-data'><label for='nproduto'>Nome do produto:*</label><input type='text' name='nproduto' id='nproduto' minlength='4' maxlength='30' required class='m-1'><br><label for='descricao'>Descrição do produto:*</label><br><textarea name='descricao' id='descricao' minlength='10' maxlength='200' cols='28' rows='5' required class='m-1' style='resize: none;'></textarea><br><label for='preco'>Preço do produto:*</label><input type='number' name='preco' id='preco' step='0.01' required class='m-1'><br><label for='estoque'>Quantidade de produtos:*</label><input type='number' name='estoque' id='estoque' min='1' required class='m-1'><br><input type='submit' value='Alterar Produto' class='my-1 p-1'></form>";
 
             div.innerHTML += form;
 

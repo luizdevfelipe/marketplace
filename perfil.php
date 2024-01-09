@@ -8,15 +8,13 @@ $conexao = new BancoDados('localhost', 'root', '', 'marketplace');
 
 //Verifica se a sessão está estabelecida
 if (isset($_SESSION['id'])) {
-    $id = $_SESSION['id'];     
+    $id = $_SESSION['id'];
 } else {
     $conexao->erroDisplay('Você não está logado!');
 }
 
 // Conexão com o servidor
 $nome = $sobrenome = $estado = $cidade = $foto = $p = $produto = $comprados = '';
-
-
 
 // Verifica se já tem os dados cadastrados ou precisa cadastrar
 $result = $conexao->returnSql("SELECT * FROM usuarios WHERE id = '" . $id . "'");
@@ -39,21 +37,20 @@ if ($vet["sobrenome"] != '') {
     $result = $conexao->returnSql("SELECT * FROM produtos WHERE vendedor = '$id'");
 
     if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {            
-            $produto .="<a style='font-size:20px;' href='http://localhost/marketplace/produto.php?id=".$row['id']."' class='text-dark'>".$row['nome']."</a>" . "<br>";
+        while ($row = $result->fetch_assoc()) {
+            $produto .= "<a style='font-size:20px;' href='http://localhost/marketplace/produto.php?id=" . $row['id'] . "' class='text-dark'>" . $row['nome'] . "</a>" . "<br>";
         }
         $produto .= "<button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
     } else {
         $produto = "Você não tem produtos à venda <br> <button class='my-1 p-1' onclick='novo_produto()'>Adicione um produto</button>";
     }
-   
-    $result = $conexao->returnSql("SELECT c.idproduto, p.descricao FROM produtos p JOIN compras c ON p.id = c.idproduto WHERE c.iduser = '$id'");
-    if ($result->num_rows > 0){
-        while ($linha = $result->fetch_assoc()){
-            $comprados .= "<a style='font-size:20px;' href='http://localhost/marketplace/produto.php?id=".$linha['idproduto']."' class='text-dark'>".$linha['descricao']."</a>" . "<br>";
-        }       
-    }
 
+    $result = $conexao->returnSql("SELECT c.idproduto, p.nome FROM produtos p JOIN compras c ON p.id = c.idproduto WHERE c.iduser = '$id'");
+    if ($result->num_rows > 0) {
+        while ($linha = $result->fetch_assoc()) {
+            $comprados .= "<a style='font-size:20px;' href='http://localhost/marketplace/produto.php?id=" . $linha['idproduto'] . "' class='text-dark'>" . $linha['nome'] . "</a>" . "<br>";
+        }
+    }
 } else {
     $p = "cadastrado()";
 }
@@ -99,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($extensao != 'jpg' && $extensao != 'png') {
             $conexao->erroDisplay('Arquivo não suportado!');
-        }        
+        }
 
         if (move_uploaded_file($foto["tmp_name"], $path)) {
             if (isset($_FILES['foto'])) {
@@ -108,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 $conexao->simpleSql("UPDATE usuarios SET foto ='$path' WHERE id = '$id'");
                 $p = "window.location.href = 'http://localhost/marketplace/index.php'";
-            } else {                
+            } else {
                 $conexao->simpleSql("INSERT INTO produtos (nome, descricao, preco, estoque, foto, vendedor) VALUES ('$nome', '$desc', '$preco', '$estoque', '$path', '$id' )");
                 $p = "window.location.href = 'http://localhost/marketplace/index.php'";
             }
@@ -142,10 +139,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <header>
         <menu class="pt-1">
             <p class="p-0 m-0"><a href="index.php" class="text-decoration-none fs-5">MarketPlace</a></p>
-            <form action="" method="post">
-                <input type="text" name="pesquisa" id="ipesquisa" placeholder="Pesquise">
+            <form action="http://localhost/marketplace/pesquisa.php" method="get" autocomplete="on">
+                <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise">
                 <input type="submit" value="Buscar">
-            </form>
+            </form>            
             <a href="carrinho.php"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
         </menu>
     </header>
@@ -185,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id='produtos'>
                     Compras Feitas:<br>
-                    <?=$comprados?>
+                    <?= $comprados ?>
                 </div>
             </div>
         </div>

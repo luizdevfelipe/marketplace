@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compras</title>
+    <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="estilos/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+</head>
 
 <?php
 require_once "codes/BancoDados.php";
@@ -52,12 +61,11 @@ if ($result->num_rows > 0) {
         if (isset($user['sobrenome'])) {
             $dados = '<div class="text-center fs-5"><i class="bi bi-check-circle text-success display-1"></i><br>Compra Realizada!</div>';
             for ($i = 0; $i < count($idproduto); $i++) {
-                $conexao->simpleSql("INSERT INTO compras (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '" . $idproduto[$i] . "')");                    
-                
+                $conexao->simpleSql("INSERT INTO compras (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '" . $idproduto[$i] . "')");
+
                 $conexao->simpleSql("DELETE FROM carrinho WHERE id = '" . $idcarrinho[$i] . "'");
 
                 $conexao->simpleSql("UPDATE produtos SET estoque = '" . ($estoque[$i] - 1) . "' WHERE id = '" . $idproduto[$i] . "'  ");
-                
             }
         } else {
             $conexao->erroDisplay('Termine o cadastro para realizar uma compra!');
@@ -68,26 +76,15 @@ if ($result->num_rows > 0) {
 }
 ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compras</title>
-    <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="estilos/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-</head>
-
 <body>
     <header>
         <menu class="pt-1">
             <p class="p-0 m-0"><a href="index.php" class="text-decoration-none fs-5">MarketPlace</a></p>
-            <form action="" method="post">
-                <input type="text" name="pesquisa" id="ipesquisa" placeholder="Pesquise">
+            <form action="http://localhost/marketplace/pesquisa.php" method="get" autocomplete="on">
+                <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise">
                 <input type="submit" value="Buscar">
             </form>
             <a href="login.php"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
-            <a href="carrinho.php"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
         </menu>
     </header>
 

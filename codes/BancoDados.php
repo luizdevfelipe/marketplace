@@ -48,7 +48,7 @@ class BancoDados
         }
 
     public function erroDisplay(string $msg){
-        die("<div style='position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font:normal 2em Arial;text-align:center;border:2px solid black;padding:10px;border-radius: 5px;' id='errorDisplay'>$msg<br>volte para a página inicial<br><a href='http://localhost/marketplace/index.php' style='text-decoration:none; color:white; background-color:green;border-radius: 5px;padding:2px'>Clicando Aqui</a></div>");
+        die("<div style='position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font:normal 2em Arial;text-align:center;border:2px solid black;padding:10px;border-radius: 5px;' id='errorDisplay'>$msg<br><br>Volte para a página inicial<br><a href='http://localhost/marketplace/index.php' style='text-decoration:none; color:white; background-color:green;border-radius: 5px;padding:2px'>Clicando Aqui</a></div>");
     }
 }
 

@@ -35,8 +35,8 @@ if (isset($_POST['pesquisa'])) {
   <header>
     <menu class="pt-1">
       <p class="p-0 m-0"><a href="index.php" class="text-decoration-none fs-5">MarketPlace</a></p>
-      <form action="http://localhost/marketplace/pesquisa.php" method="post">
-        <input type="text" name="pesquisa" id="ipesquisa" placeholder="Pesquise">
+      <form action="http://localhost/marketplace/pesquisa.php" method="get" autocomplete="on">
+        <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise">
         <input type="submit" value="Buscar">
       </form>
       <a href="login.php"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
