@@ -31,10 +31,7 @@ if (empty($estoque)) {
     $estoque = [];
 }
 
-
-
 // Seleciona os produtos
-
 $result = $conexao->returnSql("SELECT * FROM produtos p JOIN carrinho c ON p.id = c.idproduto WHERE c.iduser = '" . $_SESSION['id'] . "'; ");
 
 if ($result->num_rows > 0) {

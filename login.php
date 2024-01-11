@@ -37,13 +37,6 @@
         .w350 {
             width: 350px;
         }
-
-        .centralizar {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
     </style>
 </head>
 
@@ -102,26 +95,24 @@
     }
     ?>
 
-    <div class="text-center lead" id="registro">
-        <p>Não tem cadastro? <br><button class="btn bg-success border border-dark p-1 text-white" onclick="Registrar()">Registre-se</button> agora</p>
-    </div>
-
-    <fieldset class="centralizar border border-dark rounded text-center w350">
-        <legend class="mt-1 display-6" id="legenda">Login</legend>
-        <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="on" id="form">
-            <label for="iuser" class="mt-1 lead">Nome de Usuário:</label><br>
-            <input type="text" class="p-1" name="user" id="iuser" autocomplete="username" required minlength="4" maxlength="50"><br>
-
-            <label for="isenha" class="mt-1 lead">Insira sua Senha:</label><br>
-            <input type="password" class="p-1" name="senha" id="isenha" autocomplete="current-password" minlength="8" required maxlength="15"><br>
-
-            <input class="btn btn-success my-2" type="submit" value="Entrar">
-        </form>
-
-        <div id="diverro" class="erro bg-white <?= $cor ?> rounded m-2 fs-5">
-            <?= $erro ?>
+    <div class="container-fluid d-grid justify-content-center" style="height: 100vh;">
+        <div class="lead text-center" id="registro">
+            <p>Não tem cadastro? <br><button class="btn bg-success border border-dark p-1 text-white" onclick="Registrar()">Registre-se</button> agora</p>
         </div>
-    </fieldset>
+        <fieldset class="border border-dark rounded text-center w350" style="height: 300px;">
+            <legend class="mt-1 display-6" id="legenda">Login</legend>
+            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="on" id="form">
+                <label for="iuser" class="mt-1 lead">Nome de Usuário:</label><br>
+                <input type="text" class="p-1" name="user" id="iuser" autocomplete="username" required minlength="4" maxlength="50"><br>
+                <label for="isenha" class="mt-1 lead">Insira sua Senha:</label><br>
+                <input type="password" class="p-1" name="senha" id="isenha" autocomplete="current-password" minlength="8" required maxlength="15"><br>
+                <input class="btn btn-success my-2" type="submit" value="Entrar">
+            </form>
+            <div id="diverro" class="erro bg-white <?= $cor ?> rounded m-2 fs-5">
+                <?= $erro ?>
+            </div>
+        </fieldset>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 

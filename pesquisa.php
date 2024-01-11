@@ -21,7 +21,7 @@ if (isset($_GET['produto']) && $_GET['produto'] != '') {
     $result = $conexao->returnSql("SELECT * FROM produtos WHERE nome LIKE '$pesquisa'");
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $resultados .= "<div class='card mt-3 p-2' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><a href='produto.php?id=" . $row['id'] . "' class='btn btn-primary'>Ver Produto</a></div></div>";
+            $resultados .= "<div class='card d-block m-auto mt-3 p-2' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><a href='produto.php?id=" . $row['id'] . "' class='btn btn-primary'>Ver Produto</a></div></div>";
         }
     } else {
         $conexao->erroDisplay('Produto não encontrado :(<br>Tente utilizar palavras mais curtas como: pipoca, prato ou panela.');        
@@ -45,10 +45,9 @@ if (isset($_GET['produto']) && $_GET['produto'] != '') {
     </header>
 
     <main>
-        <div class="container ">
+        <div class="container text-center">
             <?= $resultados ?>
         </div>
-
     </main>
 
 </body>
