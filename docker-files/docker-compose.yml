@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  marketplace:  
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    container_name: MarketPlace
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ../src:/var/www
+  nginx-server:
+    image: nginx:1.19-alpine
+    container_name: MarketPlace-nginx
+    restart: always
+    ports:
+      - "8001:80"
+    volumes:
+      - ../src:/var/www
+      - ./nginx:/etc/nginx/conf.d
+  db-storage:
+    container_name: MarketPlace-db
+    image: mysql:8.0
+    volumes:
+      - ./storage/mysql:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: senhabanco
+    ports:
+      - 3307:3306
