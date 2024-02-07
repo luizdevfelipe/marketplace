@@ -1,4 +1,6 @@
 <?php
+namespace Code;
+
 class BancoDados
 {
     private $conn;
@@ -9,7 +11,7 @@ class BancoDados
         $this->username = $username;
         $this->password = $password;
         $this->dbname = $dbname;
-        $this->conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        $this->conn = new \mysqli($this->servername, $this->username, $this->password, $this->dbname);
         if ($this->conn->connect_error) {
             $this->erroDisplay('Erro Inesperado!');
         }
@@ -23,7 +25,7 @@ class BancoDados
     {
         try {
             $this->conn->query($sql);
-        } catch (mysqli_sql_exception) {
+        } catch (\mysqli_sql_exception) {
             $this->erroDisplay('Erro Inesperado!');
         }
         return true;
@@ -33,7 +35,7 @@ class BancoDados
     {
         try {
             $query = $this->conn->query($sql);
-        } catch (mysqli_sql_exception) {
+        } catch (\mysqli_sql_exception) {
             $this->erroDisplay('Erro Inesperado!');
         }
         return $query;

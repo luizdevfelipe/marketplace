@@ -1,29 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
-<?php
-require_once 'codes/BancoDados.php';
-$mercadorias = '';
-
-$conexao = new BancoDados('localhost', 'root', '', 'marketplace');
-
-$result = $conexao->returnSql("SELECT * FROM produtos WHERE estoque > 0 ORDER BY nome ASC");
-
-if ($result->num_rows > 0) {
-  $c = 0;
-  while (($row = $result->fetch_assoc()) && $c < 6) {
-    $mercadorias .= "<div class='card mt-3 p-2' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><a href='produto.php?id=" . $row['id'] . "' class='btn btn-primary'>Ver Produto</a></div></div>";
-    $c++;
-  }
-}
-?>
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MarketPlace</title>
   <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="estilos/style.css">
+  <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 </head>
@@ -37,9 +20,108 @@ if ($result->num_rows > 0) {
         <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise">
         <input type="submit" value="Buscar">
       </form>
-      <a href="login.php"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
+      <a href="/"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
       <a href="carrinho.php"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
     </menu>
+
+    <style>
+      @charset "UTF-8";
+
+      @import url('https://fonts.googleapis.com/css2?family=Bakbak+One&display=swap');
+
+      * {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+
+      header {
+        background-color: yellow;
+        padding: 4px;
+      }
+
+      menu>p {
+        margin-top: 6px;
+        width: 10%;
+        float: left;
+      }
+
+      menu>form {
+        width: 80%;
+        float: left;
+        text-align: center;
+        margin-top: 5px;
+      }
+
+      menu>form>input[type=submit] {
+        border-radius: 4px;
+        padding: 1px;
+      }
+
+      #ipesquisa {
+        width: 60%;
+        background-color: white;
+        border-radius: 4px;
+      }
+
+      a {
+        font-size: 30px;
+      }
+
+      a::before {
+        content: '';
+      }
+
+      #principal {
+        background-image: url('../images/site/principal.jpg');
+        background-repeat: no-repeat;
+        background-position: center top 15%;
+        background-size: cover;
+        height: 600px;
+        width: 100%;
+        box-shadow: inset 0px 0px 8px 2px rgba(0, 0, 0, 0.466);
+      }
+
+      section#texto {
+        position: absolute;
+        top: 70px;
+        left: 20px;
+        font-size: 3em;
+      }
+
+      mark {
+        border-radius: 6px;
+        padding: 6px;
+        font-family: 'Bakbak One', sans-serif;
+      }
+
+      @media screen and (max-width:740px) {
+        menu>p {
+          display: none;
+        }
+
+        menu>form {
+          width: 80%;
+          float: left;
+          text-align: center;
+        }
+
+        #ipesquisa {
+          width: 60%;
+        }
+
+        #principal {
+          background-image: url('../images/site/principal-cel.jpg');
+        }
+
+        section#texto {
+          top: 80px;
+          left: 20px;
+          font-size: 2em;
+        }
+      }
+    </style>
   </header>
 
   <main>
@@ -55,7 +137,7 @@ if ($result->num_rows > 0) {
 
     <div class="container">
       <div class="d-flex justify-content-evenly flex-wrap">
-        <?= $mercadorias ?>
+
       </div>
     </div>
 
