@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace Code;
 
 use Exception;
@@ -6,7 +7,7 @@ use Exception;
 class View
 {
     public function __construct(protected string $view, protected array $params = [])
-    {        
+    {
     }
 
     public static function make(string $view, array $params = [])
@@ -14,20 +15,20 @@ class View
         return new static($view, $params);
     }
 
-    public function render():bool|string
+    public function render(): bool|string
     {
         $viewPath = VIEW_PATH . '/' . $this->view . '.php';
 
-        if (! file_exists($viewPath)){
+        if (!file_exists($viewPath)) {
             throw new Exception();
         }
 
-        foreach($this->params as $key => $value){
+        foreach ($this->params as $key => $value) {
             $$key = $value;
         }
 
         ob_start();
-        include $viewPath;
+        include $viewPath;        
         return (string) ob_get_clean();
     }
 
@@ -36,7 +37,8 @@ class View
         return $this->render();
     }
 
-    public function __get(string $name){
+    public function __get(string $name)
+    {
         return $this->params[$name] ?? null;
     }
 }

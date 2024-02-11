@@ -15,13 +15,13 @@
 
   <header>
     <menu class="pt-1">
-      <p class="p-0 m-0"><a href="index.php" class="text-decoration-none fs-5">MarketPlace</a></p>
-      <form action="http://localhost/marketplace/pesquisa.php" method="get" autocomplete="on">
-        <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise">
+      <p class="p-0 m-0"><a href="/" class="text-decoration-none fs-5">MarketPlace</a></p>
+      <form action="/pesquisa" method="get" autocomplete="on">
+        <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise" required>
         <input type="submit" value="Buscar">
       </form>
-      <a href="/"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
-      <a href="carrinho.php"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
+      <a href="/registro"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
+      <a href="/carrinho"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
     </menu>
 
     <style>
@@ -29,98 +29,11 @@
 
       @import url('https://fonts.googleapis.com/css2?family=Bakbak+One&display=swap');
 
-      * {
-        font-family: Arial, Helvetica, sans-serif;
-        margin: 0px;
-        padding: 0px;
-        box-sizing: border-box;
-      }
-
-      header {
-        background-color: yellow;
-        padding: 4px;
-      }
-
-      menu>p {
-        margin-top: 6px;
-        width: 10%;
-        float: left;
-      }
-
-      menu>form {
-        width: 80%;
-        float: left;
-        text-align: center;
-        margin-top: 5px;
-      }
-
-      menu>form>input[type=submit] {
-        border-radius: 4px;
-        padding: 1px;
-      }
-
-      #ipesquisa {
-        width: 60%;
-        background-color: white;
-        border-radius: 4px;
-      }
-
-      a {
-        font-size: 30px;
-      }
-
-      a::before {
-        content: '';
-      }
-
-      #principal {
-        background-image: url('../images/site/principal.jpg');
-        background-repeat: no-repeat;
-        background-position: center top 15%;
-        background-size: cover;
-        height: 600px;
-        width: 100%;
-        box-shadow: inset 0px 0px 8px 2px rgba(0, 0, 0, 0.466);
-      }
-
-      section#texto {
-        position: absolute;
-        top: 70px;
-        left: 20px;
-        font-size: 3em;
-      }
-
-      mark {
-        border-radius: 6px;
-        padding: 6px;
-        font-family: 'Bakbak One', sans-serif;
-      }
-
-      @media screen and (max-width:740px) {
-        menu>p {
-          display: none;
-        }
-
-        menu>form {
-          width: 80%;
-          float: left;
-          text-align: center;
-        }
-
-        #ipesquisa {
-          width: 60%;
-        }
-
-        #principal {
-          background-image: url('../images/site/principal-cel.jpg');
-        }
-
-        section#texto {
-          top: 80px;
-          left: 20px;
-          font-size: 2em;
-        }
-      }
+      <?php
+      ob_start();
+      include VIEW_PATH . '/' . 'style.css';
+      echo (string) ob_get_clean();
+      ?>
     </style>
   </header>
 

@@ -6,7 +6,7 @@ class HomeController
 
 {
     public function index(){
-        return View::make('index', []);
+        return View::make('index');
     }
 }
 
