@@ -26,7 +26,7 @@ class View
         foreach ($this->params as $key => $value) {
             $$key = $value;
         }
-
+        
         ob_start();
         include $viewPath;        
         return (string) ob_get_clean();

@@ -51,12 +51,25 @@
     <div class="container">
       <div class="d-flex justify-content-evenly flex-wrap">
 
+        <?php foreach($$key as $row) : ?>
+
+          <div class='card mt-3 p-2' style='width: 18rem; height:450px'>
+            <img src='' class='card-img-top rounded' style='height: 220px' alt='...'>
+            <div class='card-body'>
+              <h5 class='card-title'> <?=$row['nome']?> </h5>
+              <p class='card-text'><?=$row['descricao']?></p>
+              <p class='card-text'>R$ <?=$row['preco']?></p>
+              <a href='/produto?id=<?=$row['id']?>' class='btn btn-primary'>Ver Produto</a>
+            </div>
+          </div>
+
+        <?php endforeach; ?>
       </div>
     </div>
 
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 
 </html>

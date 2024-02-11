@@ -4,9 +4,10 @@ namespace Code;
 class App
 
 {
-    public function __construct(protected Router $router, protected array $request)
-    {
-        
+    protected static DB $connection;
+    public function __construct(protected Router $router, protected array $request, DB $conn)
+    {        
+        static::$connection = $conn;
     }
 
     public function run()
@@ -17,5 +18,10 @@ class App
             http_response_code(404);
             echo View::make('error/404');
         }        
+    }
+
+    public static function DB(): DB
+    {
+        return static::$connection;
     }
 }
