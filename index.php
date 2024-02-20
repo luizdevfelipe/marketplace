@@ -7,13 +7,11 @@ $mercadorias = '';
 
 $conexao = new BancoDados('localhost', 'root', '', 'marketplace');
 
-$result = $conexao->returnSql("SELECT * FROM produtos WHERE estoque > 0 ORDER BY nome ASC");
+$result = $conexao->returnSql("SELECT * FROM produtos WHERE estoque > 0  ORDER BY nome ASC LIMIT 6");
 
 if ($result->num_rows > 0) {
-  $c = 0;
-  while (($row = $result->fetch_assoc()) && $c < 6) {
+  while ($row = $result->fetch_assoc()) {
     $mercadorias .= "<div class='card mt-3 p-2' style='width: 18rem; height:450px'><img src='" . $row["foto"] . "' class='card-img-top rounded' style='height: 220px' alt='...'><div class='card-body'><h5 class='card-title'>" . $row['nome'] . "</h5><p class='card-text'>" . $row['descricao'] . "</p><p class='card-text'>R$" .  $row['preco'] . "</p><a href='produto.php?id=" . $row['id'] . "' class='btn btn-primary'>Ver Produto</a></div></div>";
-    $c++;
   }
 }
 ?>
