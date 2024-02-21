@@ -19,6 +19,7 @@ $router = new Router();
 
 $router->get('/', [HomeController::class, 'index'])
     ->get('/perfil', [ProfileController::class, 'index'])
+    ->get('/login', [ProfileController::class, 'login'])
     ->get('/registro', [ProfileController::class, 'register'])
     ->get('/produto', [ProductController::class, 'index']);
 
