@@ -7,6 +7,8 @@ use \Code\Controller\HomeController;
 use \Code\Controller\ProfileController;
 use \Code\Controller\ProductController;
 
+session_start();
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
@@ -18,9 +20,11 @@ define('STORAGE_PATH', __DIR__ . '/../storage');
 $router = new Router();
 
 $router->get('/', [HomeController::class, 'index'])
-    ->get('/perfil', [ProfileController::class, 'index'])
-    ->get('/login', [ProfileController::class, 'login'])
-    ->get('/registro', [ProfileController::class, 'register'])
+    ->get('/perfil', [ProfileController::class, 'perfil'])
+    ->get('/login', [ProfileController::class, 'loginPage'])
+    ->post('/login', [ProfileController::class, 'loginValid'])
+    ->get('/registro', [ProfileController::class, 'registerPage'])
+    ->post('/registro', [ProfileController::class, 'registerValid'])
     ->get('/produto', [ProductController::class, 'index']);
 
 (new App($router, [

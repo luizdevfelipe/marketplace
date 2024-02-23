@@ -13,6 +13,6 @@ class HomeController
         $mysql = new Queries();
         $result =  $mysql->returnSql("SELECT * FROM produtos WHERE estoque > 0  ORDER BY nome ASC LIMIT 6");
 
-        return View::make('index', [$result]);
+        return View::make('index', ['rows' => $result]);
     }
 }

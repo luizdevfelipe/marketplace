@@ -41,26 +41,24 @@
 </head>
 
 <body>
-    <?php
-    session_start();  
-    ?>
-
     <div class="container-fluid d-grid justify-content-center" style="height: 100vh;">
         <div class="lead text-center" id="registro">
             <p>Não tem cadastro? <br><a class="btn bg-success border border-dark p-1 text-white" href="/registro">Registre-se</a> agora</p>
         </div>
-        <fieldset class="border border-dark rounded text-center w350" style="height: 300px;">
+        <fieldset class="border border-dark rounded text-center w350" style="height: 310px;">
             <legend class="mt-1 display-6" id="legenda">Login</legend>
-            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="on" id="form">
+            <form action="<?= htmlspecialchars('/login') ?>" method="post" autocomplete="on" id="form">
                 <label for="iuser" class="mt-1 lead">Nome de Usuário:</label><br>
                 <input type="text" class="p-1" name="user" id="iuser" autocomplete="username" required minlength="4" maxlength="50"><br>
                 <label for="isenha" class="mt-1 lead">Insira sua Senha:</label><br>
                 <input type="password" class="p-1" name="senha" id="isenha" autocomplete="current-password" minlength="8" required maxlength="15"><br>
-                <input class="btn btn-success my-2" type="submit" value="Entrar">
+                <input class="btn btn-success mt-3" type="submit" value="Entrar">
             </form>
-            <div id="diverro" class="erro bg-white <?= $cor ?> rounded m-2 fs-5">
-               erro
-            </div>
+            <?php if (isset($erro)) : ?>
+                <div id="diverro" class="erro bg-white text-danger rounded m-2 fs-5">
+                    <?= $erro ?>
+                </div>
+            <?php endif; ?>
         </fieldset>
     </div>
 

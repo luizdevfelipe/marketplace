@@ -41,19 +41,17 @@
 </head>
 
 <body>
-    <?php
-    session_start();
-    ?>
-
     <div class="container-fluid d-grid justify-content-center align-content-center" style="height: 100vh;">
         <fieldset class="border border-dark rounded text-center w350">
             <legend class="mt-1 display-6" id="legenda">Registro</legend>
-            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="on" id="form">
+            <form action="<?= htmlspecialchars('/registro') ?>" method="post" autocomplete="on" id="form">
                 <label for='iuser' class='mt-1 lead'>Nome de Usuário:</label><br>Este nome só será usado para acesso ao site<br><input type='text' class='p-1' name='user' id='iuser' autocomplete='username' required minlength='4' maxlength='50' placeholder=' Usuário'><br><label for='isenha1' class='mt-1 lead'>Insira sua Senha:</label><br><input type='password' class='p-1' name='senha1' id='isenha1' autocomplete='current-password' minlength='8' required maxlength='15' placeholder=' Senha'><br><label for='isenha2' class='mt-1 lead'>Repita a Senha:</label><br><input type='password' class='p-1' name='senha2' id='isenha2' autocomplete='current-password' required minlength='8' maxlength='15' placeholder=' Repita Senha'><br> <input class='btn btn-success my-2' type='submit' value='Entrar'>
             </form>
-            <div id="diverro" class="erro bg-white <?= $cor ?> rounded m-2 fs-5">
-                erro
-            </div>
+            <?php if (isset($erro)) : ?>
+                <div id="diverro" class="erro bg-white text-danger rounded m-2 fs-5">
+                    <?= $erro ?>
+                </div>
+            <?php endif; ?>
         </fieldset>
     </div>
 

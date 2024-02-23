@@ -39,7 +39,7 @@
     <div class="container">
       <div class="d-flex justify-content-evenly flex-wrap">
 
-        <?php foreach($$key as $row) : ?>
+        <?php foreach($rows as $row) : ?>
 
           <div class='card mt-3 p-2' style='width: 18rem; height:450px'>
             <img src='<?=$row['foto']?>' class='card-img-top rounded' style='height: 220px' alt='...'>
