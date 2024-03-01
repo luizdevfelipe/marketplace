@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+<head>
+    <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="estilos/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+</head>
+
 <?php
 session_start();
 require_once "codes/BancoDados.php";
@@ -10,6 +17,7 @@ $conexao = new BancoDados('localhost', 'root', '', 'marketplace');
 if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
 } else {
+    echo '<head><title>Erro</title></head>';
     $conexao->erroDisplay('Você não está logado!');
 }
 
@@ -106,6 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $conexao->simpleSql("UPDATE usuarios SET foto ='$path' WHERE id = '$id'");
                 $p = "window.location.href = 'http://localhost/marketplace/index.php'";
             } else {
+                if(!empty($nome) && !empty($desc) && !empty($preco) && !empty($estoque))
                 $conexao->simpleSql("INSERT INTO produtos (nome, descricao, preco, estoque, foto, vendedor) VALUES ('$nome', '$desc', '$preco', '$estoque', '$path', '$id' )");
                 $p = "window.location.href = 'http://localhost/marketplace/index.php'";
             }
@@ -120,7 +129,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $estado = $conexao->validar($_POST["estado"]);
         $cidade = $conexao->validar($_POST["cidade"]);
 
-        $conexao->simpleSql("UPDATE usuarios SET nome = '" . $nome . "', sobrenome = '" . $sobrenome . "', estado = '" . $estado . "', cidade = '" . $cidade . "' WHERE id = '" . $id . "' ");
+        if ($estado !== 'Selecione o Estado' && !empty($nome) && !empty($sobrenome) && !empty($estado) && !empty($cidade)) {
+            $conexao->simpleSql("UPDATE usuarios SET nome = '" . $nome . "', sobrenome = '" . $sobrenome . "', estado = '" . $estado . "', cidade = '" . $cidade . "' WHERE id = '" . $id . "' ");
+        }
     }
 }
 ?>
@@ -129,10 +140,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olá, <?= $vet["user"] ?> !</title>
-    <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="estilos/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 </head>
 
 <body>
@@ -142,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form action="http://localhost/marketplace/pesquisa.php" method="get" autocomplete="on">
                 <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise">
                 <input type="submit" value="Buscar">
-            </form>            
+            </form>
             <a href="carrinho.php"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
         </menu>
     </header>
@@ -203,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         function cadastrado() {
             container = document.getElementById('infouser')
             foto = document.getElementById('foto')
-            formulario = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post' autocomplete='on'><label for='inome' class='mb-2' style='margin-right: 41px;'>Nome:*</label><input type='text' name='nome' id='inome' maxlength='20' minlength='4' required><br><label for='isobrenome' class='mb-2' style='margin-right: 1px;'>Sobrenome:*</label><input type='text' name='sobrenome' id='isobrenome' maxlength='20' minlength='4' required><br><label for='iestado' class='mb-2' style='margin-right: 34px;'>Estado:*</label><select name='estado' id='iestado' class='p-1' style='width: 199px;' required><option value='AC'>Acre</option><option value='AL'>Alagoas</option><option value='AP'>Amapá</option><option value='AM'>Amazonas</option><option value='BA'>Bahia</option><option value='CE'>Ceará</option><option value='DF'>Distrito Federal</option><option value='ES'>Espírito Santo</option><option value='GO'>Goiás</option><option value='MA'>Maranhão</option><option value='MT'>Mato Grosso</option><option value='MS'>Mato Grosso do Sul</option><option value='MG'>Minas Gerais</option><option value='PA'>Pará</option><option value='PB'>Paraíba</option><option value='PR'>Paraná</option><option value='PE'>Pernambuco</option><option value='PI'>Piauí</option><option value='RJ'>Rio de Janeiro</option><option value='RN'>Rio Grande do Norte</option><option value='RS'>Rio Grande do Sul</option><option value='RO'>Rondônia</option><option value='RR'>Roraima</option><option value='SC'>Santa Catarina</option><option value='SP'>São Paulo</option><option value='SE'>Sergipe</option><option value='TO'>Tocantins</option></select> <br><label for='icidade' style='margin-right: 33px;'>Cidade:*</label><input type='text' name='cidade' id='icidade' pattern='([A-Z]{1}[a-zçàá-ü]{2,})' title='Somente primeira letra maiúscula mínimo de 3 caracteres' maxlength='20' required><br><input type='submit' value='Enviar' class='mt-2 p-1'></form> <br><form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post'><input type='submit' class='p-1 mt-2' value='Sair' name='sair'></form>"
+            formulario = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post' autocomplete='on'><label for='inome' class='mb-2' style='margin-right: 41px;'>Nome:*</label><input type='text' name='nome' id='inome' maxlength='20' minlength='4' required><br><label for='isobrenome' class='mb-2' style='margin-right: 1px;'>Sobrenome:*</label><input type='text' name='sobrenome' id='isobrenome' maxlength='20' minlength='4' required><br><label for='iestado' class='mb-2' style='margin-right: 34px;'>Estado:*</label><select name='estado' id='iestado' class='p-1' style='width: 199px;' required><option selected disabled>Selecione o Estado</option><option value='AC'>Acre</option><option value='AL'>Alagoas</option><option value='AP'>Amapá</option><option value='AM'>Amazonas</option><option value='BA'>Bahia</option><option value='CE'>Ceará</option><option value='DF'>Distrito Federal</option><option value='ES'>Espírito Santo</option><option value='GO'>Goiás</option><option value='MA'>Maranhão</option><option value='MT'>Mato Grosso</option><option value='MS'>Mato Grosso do Sul</option><option value='MG'>Minas Gerais</option><option value='PA'>Pará</option><option value='PB'>Paraíba</option><option value='PR'>Paraná</option><option value='PE'>Pernambuco</option><option value='PI'>Piauí</option><option value='RJ'>Rio de Janeiro</option><option value='RN'>Rio Grande do Norte</option><option value='RS'>Rio Grande do Sul</option><option value='RO'>Rondônia</option><option value='RR'>Roraima</option><option value='SC'>Santa Catarina</option><option value='SP'>São Paulo</option><option value='SE'>Sergipe</option><option value='TO'>Tocantins</option></select> <br><label for='icidade' style='margin-right: 33px;'>Cidade:*</label><input type='text' name='cidade' id='icidade' pattern='([A-Z]{1}[a-zçàá-ü]{2,})' title='Somente primeira letra maiúscula mínimo de 3 caracteres' maxlength='20' required><br><input type='submit' value='Enviar' class='mt-2 p-1'></form> <br><form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post'><input type='submit' class='p-1 mt-2' value='Sair' name='sair'></form>"
 
             botao = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' enctype='multipart/form-data' method='post'><label for='ifoto' class='border border-dark rounded p-1 mt-1 text-center' style='width: 200px; cursor:pointer;'>Clique e envie a Imagem</label><input type='file' name='foto' id='ifoto' style='display: none;'> <br> <input type='submit' class='border border-dark rounded p-1 mt-1 text-center' value='Salvar Imagem'></form>"
 

@@ -73,7 +73,6 @@
                 $senha2 = $conexao->validar($_POST["senha2"]);
 
                 if ($senha1 == $senha2) {
-                    $senha = $senha1;
 
                     $result = $conexao->returnSql("SELECT user FROM usuarios WHERE user = '" . $user . "'");
                     if ($result->num_rows > 0) {
@@ -81,25 +80,33 @@
                         $erro = 'Usuário já cadastrado!';
                         $cor = "text-danger";
                     } else {
-                        $conexao->simpleSql("INSERT INTO usuarios (user, senha) VALUES ('" . $user . "', '" . $senha . "')");                        
-                        $erro = "Cadastro Realizado!";
-                        $cor = "text-success";
+                        $lenNome = strlen($user);
+                        $lenSenha = strlen($senha);
+                        if (!empty($senha1) && !empty($user) && $lenNome <= 50 && $lenSenha <= 15) {
+                            $conexao->simpleSql("INSERT INTO usuarios (user, senha) VALUES ('" . $user . "', '" . $senha1 . "')");
+                            $erro = "Cadastro Realizado!";
+                            $cor = "text-success";
+                        } else {
+                            $erro = 'Insira dados Válidos!';
+                            $cor = "text-danger";
+                            $p = "Registrar()";
+                        }
                     }
                 } else {
                     $erro = 'Senhas Diferentes!';
                     $cor = "text-danger";
                     $p = "Registrar()";
-                }                
+                }
             }
         }
     }
     ?>
 
-    <div class="container-fluid d-grid justify-content-center" style="height: 100vh;">
+    <div class="container-fluid d-grid justify-content-center align-content-center" style="height: 100vh;">
         <div class="lead text-center" id="registro">
             <p>Não tem cadastro? <br><button class="btn bg-success border border-dark p-1 text-white" onclick="Registrar()">Registre-se</button> agora</p>
         </div>
-        <fieldset class="border border-dark rounded text-center w350" style="height: 300px;">
+        <fieldset class="border border-dark rounded text-center w350">
             <legend class="mt-1 display-6" id="legenda">Login</legend>
             <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="on" id="form">
                 <label for="iuser" class="mt-1 lead">Nome de Usuário:</label><br>

@@ -33,13 +33,18 @@ if (isset($_SESSION['id'])) {
     }
 
     if (isset($_POST['nproduto'])) {
-        $conexao->simpleSql("UPDATE produtos SET nome = '" . $_POST["nproduto"] . "', descricao = '" . $_POST["descricao"] . "', preco ='" . $_POST["preco"] . "', estoque = '" . $_POST['estoque'] . "' WHERE id = '$id' ");
+        if (!empty($_POST['descricao']) && !empty($_POST["preco"]) && !empty($_POST['estoque']) && !empty($id)) {
+            $conexao->simpleSql("UPDATE produtos SET nome = '" . $_POST["nproduto"] . "', descricao = '" . $_POST["descricao"] . "', preco ='" . $_POST["preco"] . "', estoque = '" . $_POST['estoque'] . "' WHERE id = '$id' ");
+        }
+
 
         $sair = "window.location.href = 'http://localhost/marketplace/'";
     }
     if (isset($_POST['comprar'])) {
-        $conexao->simpleSql("INSERT INTO carrinho (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '$id')");
-        $sair = "window.location.href = 'http://localhost/marketplace/carrinho.php'";
+        if (!empty($id) && isset($_SESSION['id'])) {
+            $conexao->simpleSql("INSERT INTO carrinho (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '$id')");
+            $sair = "window.location.href = 'http://localhost/marketplace/carrinho.php'";
+        }
     }
 } else {
     $dono = "<form action='' method='post'><input type='submit' class='btn btn-success' value='Adicionar ao carrinho' name='comprar'></form>";

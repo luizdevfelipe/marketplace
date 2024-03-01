@@ -19,7 +19,7 @@ if (empty($_SESSION['id'])) {
     $conexao->erroDisplay('Usuário não cadastrado!');
 }
 
-// Conexão com o servidor
+// 
 $dados = $produto = $sair = $enviar = '';
 if (empty($idproduto)) {
     $idproduto = array();
@@ -57,7 +57,8 @@ if ($result->num_rows > 0) {
 
         if (isset($user['sobrenome'])) {
             $dados = '<div class="text-center fs-5"><i class="bi bi-check-circle text-success display-1"></i><br>Compra Realizada!</div>';
-            for ($i = 0; $i < count($idproduto); $i++) {
+            $qprodutos = count($idproduto);
+            for ($i = 0; $i < $qprodutos; $i++) {
                 $conexao->simpleSql("INSERT INTO compras (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '" . $idproduto[$i] . "')");
 
                 $conexao->simpleSql("DELETE FROM carrinho WHERE id = '" . $idcarrinho[$i] . "'");
