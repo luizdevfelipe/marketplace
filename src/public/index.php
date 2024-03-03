@@ -25,7 +25,8 @@ $router->get('/', [HomeController::class, 'index'])
     ->post('/login', [ProfileController::class, 'loginValid'])
     ->get('/registro', [ProfileController::class, 'registerPage'])
     ->post('/registro', [ProfileController::class, 'registerValid'])
-    ->get('/produto', [ProductController::class, 'index']);
+    ->get('/produto', [ProductController::class, 'index'])
+    ->post('/sair', [ProfileController::class, 'sair']);
 
 (new App($router, [
     'uri' => $_SERVER['REQUEST_URI'],
