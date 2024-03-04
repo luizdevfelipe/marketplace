@@ -63,13 +63,13 @@ if (isset($_SESSION['id'])) {
 <body>
     <header>
         <menu class="pt-1">
-            <p class="p-0 m-0"><a href="index.php" class="text-decoration-none fs-5">MarketPlace</a></p>
-            <form action="http://localhost/marketplace/pesquisa.php" method="get" autocomplete="on">
-                <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise">
+            <p class="p-0 m-0"><a href="/" class="text-decoration-none fs-5">MarketPlace</a></p>
+            <form action="/pesquisa" method="get" autocomplete="on">
+                <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise" required>
                 <input type="submit" value="Buscar">
             </form>
-            <a href="login.php"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
-            <a href="carrinho.php"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
+            <a href="/login"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
+            <a href="/carrinho"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
         </menu>
     </header>
 

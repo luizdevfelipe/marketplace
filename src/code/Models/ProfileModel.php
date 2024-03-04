@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Code\Models;
 
-use \Code\Models\Queries;
-
 class ProfileModel
 {
     protected $id;
