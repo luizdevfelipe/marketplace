@@ -2,11 +2,14 @@
 namespace Code\Controller;
 
 use Code\Models\ProductModel;
-use Code\Models\Queries;
 use Code\View;
 
 class ProductController
 {
+    public function __construct(private ProductModel $productModel)
+    {        
+    }
+
     public function index()
     {
         return View::make('products/product');
@@ -14,7 +17,7 @@ class ProductController
 
     public function search()
     {
-        $results = (new ProductModel(new Queries))->searchProduct();
+        $results = $this->productModel->searchProduct();
         return View::make('products/search', ['results' => $results]);
     }
 

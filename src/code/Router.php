@@ -8,6 +8,10 @@ use \Code\Exeption\RouteNotFoundExeption;
 
 class Router
 {
+    public function __construct(private Container $container)
+    {
+        
+    }
     private array $routes;
 
     public function register(string $method, string $route, array $action)
@@ -38,7 +42,7 @@ class Router
         [$class, $method] = $action;
 
         if (class_exists($class)) {
-            $class = new $class();
+            $class = $this->container->get($class);
         }
 
         if (method_exists($class, $method)) {

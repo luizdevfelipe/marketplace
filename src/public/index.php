@@ -1,6 +1,7 @@
 <?php
 
 use Code\App;
+use Code\Container;
 use Code\DB;
 use \Code\Router;
 use \Code\Controller\HomeController;
@@ -17,7 +18,7 @@ $dotenv->load();
 define('VIEW_PATH', __DIR__ . '/../view');
 define('STORAGE_PATH', __DIR__ . '/../storage');
 
-$router = new Router();
+$router = new Router(new Container());
 
 $router->get('/', [HomeController::class, 'index'])
     ->get('/perfil', [ProfileController::class, 'perfil'])
