@@ -4,7 +4,7 @@ class BancoDados
     private $conn;
 
     public function __construct(private string $servername, private string $username, private string $password, private string $dbname)
-    {
+    {        
         $this->servername = $servername;
         $this->username = $username;
         $this->password = $password;

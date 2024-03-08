@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Encerrar Sessão
     if (isset($_POST["sair"])) {
         $_SESSION['id'] = null;
-        $p = "window.location.href = 'http://localhost/marketplace/index.php'";
+        header('Location: http://localhost/marketplace/index.php');
     }
 
     //Verifica se um produto foi descrito
@@ -112,11 +112,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     unlink($local);
                 }
                 $conexao->simpleSql("UPDATE usuarios SET foto ='$path' WHERE id = '$id'");
-                $p = "window.location.href = 'http://localhost/marketplace/index.php'";
+                header('Location: http://localhost/marketplace/perfil.php');
             } else {
                 if(!empty($nome) && !empty($desc) && !empty($preco) && !empty($estoque))
                 $conexao->simpleSql("INSERT INTO produtos (nome, descricao, preco, estoque, foto, vendedor) VALUES ('$nome', '$desc', '$preco', '$estoque', '$path', '$id' )");
-                $p = "window.location.href = 'http://localhost/marketplace/index.php'";
+                header('Location: http://localhost/marketplace/perfil.php');
             }
         } else {
             $conexao->erroDisplay('Erro ao salvar o arquivo!');
@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olá, <?= $vet["user"] ?> !</title>
+    <title>Olá, <?= $vet["nome"] ?> !</title>
 </head>
 
 <body>
@@ -200,6 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script>
         <?= $p ?>
+        count = 0;
 
         function novo_produto() {
             div = document.getElementById('produtos')
@@ -208,14 +209,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         function cadastrado() {
-            container = document.getElementById('infouser')
-            foto = document.getElementById('foto')
-            formulario = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post' autocomplete='on'><label for='inome' class='mb-2' style='margin-right: 41px;'>Nome:*</label><input type='text' name='nome' id='inome' maxlength='20' minlength='4' required><br><label for='isobrenome' class='mb-2' style='margin-right: 1px;'>Sobrenome:*</label><input type='text' name='sobrenome' id='isobrenome' maxlength='20' minlength='4' required><br><label for='iestado' class='mb-2' style='margin-right: 34px;'>Estado:*</label><select name='estado' id='iestado' class='p-1' style='width: 199px;' required><option selected disabled>Selecione o Estado</option><option value='AC'>Acre</option><option value='AL'>Alagoas</option><option value='AP'>Amapá</option><option value='AM'>Amazonas</option><option value='BA'>Bahia</option><option value='CE'>Ceará</option><option value='DF'>Distrito Federal</option><option value='ES'>Espírito Santo</option><option value='GO'>Goiás</option><option value='MA'>Maranhão</option><option value='MT'>Mato Grosso</option><option value='MS'>Mato Grosso do Sul</option><option value='MG'>Minas Gerais</option><option value='PA'>Pará</option><option value='PB'>Paraíba</option><option value='PR'>Paraná</option><option value='PE'>Pernambuco</option><option value='PI'>Piauí</option><option value='RJ'>Rio de Janeiro</option><option value='RN'>Rio Grande do Norte</option><option value='RS'>Rio Grande do Sul</option><option value='RO'>Rondônia</option><option value='RR'>Roraima</option><option value='SC'>Santa Catarina</option><option value='SP'>São Paulo</option><option value='SE'>Sergipe</option><option value='TO'>Tocantins</option></select> <br><label for='icidade' style='margin-right: 33px;'>Cidade:*</label><input type='text' name='cidade' id='icidade' pattern='([A-Z]{1}[a-zçàá-ü]{2,})' title='Somente primeira letra maiúscula mínimo de 3 caracteres' maxlength='20' required><br><input type='submit' value='Enviar' class='mt-2 p-1'></form> <br><form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post'><input type='submit' class='p-1 mt-2' value='Sair' name='sair'></form>"
+            container = document.getElementById('infouser');
+            foto = document.getElementById('foto');              
 
             botao = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' enctype='multipart/form-data' method='post'><label for='ifoto' class='border border-dark rounded p-1 mt-1 text-center' style='width: 200px; cursor:pointer;'>Clique e envie a Imagem</label><input type='file' name='foto' id='ifoto' style='display: none;'> <br> <input type='submit' class='border border-dark rounded p-1 mt-1 text-center' value='Salvar Imagem'></form>"
-
-            container.innerHTML = formulario
-            foto.innerHTML += botao
+            if (count == 0){
+                foto.innerHTML += botao;
+                count++;
+            }
+            
         }
     </script>
 </body>

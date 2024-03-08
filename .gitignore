@@ -1,3 +1,2 @@
-/src/.env
-/docker-files/docker-compose.yml
-/docker-files/storage/mysql/
+/images/users/produtos/
+/images/users/perfil/

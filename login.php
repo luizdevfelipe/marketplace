@@ -42,6 +42,7 @@
 
 <body>
     <?php
+    date_default_timezone_set('America/Sao_Paulo');
     session_start();
     if (isset($_SESSION["id"])) {
         $p = "window.location.href = 'http://localhost/marketplace/perfil.php'";
@@ -54,36 +55,40 @@
             $conexao = new BancoDados('localhost', 'root', '', 'marketplace');
 
             if (count($_POST) == 2) {
-                $nome = $conexao->validar($_POST["user"]);
+                $email = $conexao->validar($_POST["email"]);
                 $senha = $conexao->validar($_POST["senha"]);
 
-                $resultado = $conexao->returnSql("SELECT id FROM usuarios WHERE user = '$nome' AND senha = '$senha' ");
+                $resultado = $conexao->returnSql("SELECT id FROM usuarios WHERE email = '$email' AND senha = '$senha' ");
 
                 if ($resultado->num_rows > 0) {
                     $p = "window.location.href = 'http://localhost/marketplace/perfil.php'";
                     $vet = $resultado->fetch_assoc();
                     $_SESSION['id'] = $vet["id"];
                 } else {
-                    $erro = "Usuário ou senha inválidos";
+                    $erro = "Email ou senha inválidos";
                     $cor = "text-danger";
                 }
             } else {
-                $user = $conexao->validar($_POST["user"]);
+                $email = $conexao->validar($_POST["email"]);
+                $nome = $conexao->validar($_POST["nome"]);
+                $sobrenome = $conexao->validar($_POST["sobrenome"]);
+                $cidade = $conexao->validar($_POST["cidade"]);
+                $estado = $conexao->validar($_POST["estado"]);
                 $senha1 = $conexao->validar($_POST["senha1"]);
                 $senha2 = $conexao->validar($_POST["senha2"]);
 
                 if ($senha1 == $senha2) {
 
-                    $result = $conexao->returnSql("SELECT user FROM usuarios WHERE user = '" . $user . "'");
+                    $result = $conexao->returnSql("SELECT email FROM usuarios WHERE email = '" . $email . "'");
                     if ($result->num_rows > 0) {
                         $p = "Registrar()";
                         $erro = 'Usuário já cadastrado!';
                         $cor = "text-danger";
                     } else {
-                        $lenNome = strlen($user);
+                        $lenNome = strlen($email);
                         $lenSenha = strlen($senha);
-                        if (!empty($senha1) && !empty($user) && $lenNome <= 50 && $lenSenha <= 15) {
-                            $conexao->simpleSql("INSERT INTO usuarios (user, senha) VALUES ('" . $user . "', '" . $senha1 . "')");
+                        if (!empty($senha1) && !empty($email) && $lenNome <= 50 && $lenSenha <= 15) {
+                            $conexao->simpleSql("INSERT INTO usuarios (email, senha, nome, sobrenome, estado, cidade, datacadastro) VALUES ('$email', '$senha1', '$nome', '$sobrenome', '$estado', '$cidade', '".date('Y-m-d H:i:s')."')");
                             $erro = "Cadastro Realizado!";
                             $cor = "text-success";
                         } else {
@@ -108,9 +113,9 @@
         </div>
         <fieldset class="border border-dark rounded text-center w350">
             <legend class="mt-1 display-6" id="legenda">Login</legend>
-            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="on" id="form">
-                <label for="iuser" class="mt-1 lead">Nome de Usuário:</label><br>
-                <input type="text" class="p-1" name="user" id="iuser" autocomplete="username" required minlength="4" maxlength="50"><br>
+            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="on" id="form" style="text-shadow: 0px 0px 0px black;">
+                <label for="iuser" class="mt-1 lead">Email:</label><br>
+                <input type="text" class="p-1" name="email" id="iemail" autocomplete="email" required minlength="4" maxlength="50"><br>
                 <label for="isenha" class="mt-1 lead">Insira sua Senha:</label><br>
                 <input type="password" class="p-1" name="senha" id="isenha" autocomplete="current-password" minlength="8" required maxlength="15"><br>
                 <input class="btn btn-success my-2" type="submit" value="Entrar">
@@ -133,8 +138,10 @@
             document.getElementById('registro').style.display = 'none'
 
             legend.innerHTML = 'Registre-se'
-            form.innerHTML = "<label for='iuser' class='mt-1 lead'>Nome de Usuário:</label><br>Este nome só será usado para acesso ao site<br><input type='text' class='p-1' name='user' id='iuser' autocomplete='username' required minlength='4' maxlength='50' placeholder=' Usuário'><br><label for='isenha1' class='mt-1 lead'>Insira sua Senha:</label><br><input type='password' class='p-1' name='senha1' id='isenha1' autocomplete='current-password' minlength='8' required maxlength='15'  placeholder=' Senha'><br><label for='isenha2' class='mt-1 lead'>Repita a Senha:</label><br><input type='password' class='p-1' name='senha2' id='isenha2' autocomplete='current-password' required minlength='8' maxlength='15' placeholder=' Repita Senha'><br><input class='btn btn-success my-2' type='submit' value='Entrar'>"
+            form.innerHTML = "<label for='inome' class='mt-1 lead'>Nome:</label><br><input type='text' class='p-1' name='nome' id='inome' required minlength='2' maxlength='25' placeholder=' Seu nome'><br><label for='isobrenome' class='mt-1 lead'>Sobrenome:</label><br><input type='text' class='p-1' name='sobrenome' id='isobrenome' required minlength='2' maxlength='25' placeholder=' Seu Sobrenome'><br><label for='iemail' class='mt-1 lead'>Email:</label><br><input type='text' class='p-1' name='email' id='iemail' autocomplete='email' required minlength='4' maxlength='50' placeholder=' Email'><br><label for='isenha1' class='mt-1 lead'>Insira sua Senha:</label><br><input type='password' class='p-1' name='senha1' id='isenha1' autocomplete='current-password' minlength='8' required maxlength='15'  placeholder=' Senha'><br><label for='isenha2' class='mt-1 lead'>Repita a Senha:</label><br><input type='password' class='p-1' name='senha2' id='isenha2' autocomplete='current-password' required minlength='8' maxlength='15' placeholder=' Repita Senha'> <br><label for='icidade' class='mt-1 lead'>Cidade:</label><br><input type='text' class='p-1' name='cidade' id='icidade' required maxlength='30' placeholder=' Sua Cidade'><br>   <label for='iestado' class='mt-1 lead' >Estado:</label><br><select name='estado' id='iestado' class='p-1' style='width: 199px;' required><option selected disabled>Selecione o Estado</option><option value='AC'>Acre</option><option value='AL'>Alagoas</option><option value='AP'>Amapá</option><option value='AM'>Amazonas</option><option value='BA'>Bahia</option><option value='CE'>Ceará</option><option value='DF'>Distrito Federal</option><option value='ES'>Espírito Santo</option><option value='GO'>Goiás</option><option value='MA'>Maranhão</option><option value='MT'>Mato Grosso</option><option value='MS'>Mato Grosso do Sul</option><option value='MG'>Minas Gerais</option><option value='PA'>Pará</option><option value='PB'>Paraíba</option><option value='PR'>Paraná</option><option value='PE'>Pernambuco</option><option value='PI'>Piauí</option><option value='RJ'>Rio de Janeiro</option><option value='RN'>Rio Grande do Norte</option><option value='RS'>Rio Grande do Sul</option><option value='RO'>Rondônia</option><option value='RR'>Roraima</option><option value='SC'>Santa Catarina</option><option value='SP'>São Paulo</option><option value='SE'>Sergipe</option><option value='TO'>Tocantins</option></select><br>     <input class='btn btn-success my-2' type='submit' value='Entrar'>"
         }
+
+       
     </script>
 </body>
 
