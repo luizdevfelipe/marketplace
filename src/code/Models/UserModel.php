@@ -34,10 +34,10 @@ class UserModel
         $senha2 = $_POST["senha2"];
 
         if ($senha1 === $senha2) {
-            $user = strlen($user);
-            $senha1 = strlen(($senha1));
+            $userLen = strlen($user);
+            $senhaLen = strlen(($senha1));
 
-            if(1 > $user && $user < 50 && $senha1 > 1 && $senha1 < 15){
+            if($userLen > 1 && $userLen < 50 && $senhaLen > 1 && $senhaLen < 15){
                 $result = $this->query->returnSql("SELECT user FROM usuarios WHERE user = ?", [$user]);
             } else {
                 return 'Dados Inválidos';

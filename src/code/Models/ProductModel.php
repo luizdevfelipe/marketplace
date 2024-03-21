@@ -23,4 +23,41 @@ class ProductModel
 
         return $results;
     }
+
+    public function insertProduct()
+    {
+        $nome = $_POST['nproduto'];
+        $desc = $_POST['descricao'];
+        $preco = $_POST['preco'];
+        $estoque = $_POST['estoque'];
+
+        if (!empty($nome) && !empty($desc) && !empty($preco) && !empty($estoque) && isset($_FILES["pfoto"])) {
+            $foto = $_FILES["pfoto"];
+            $pasta = "storage/users/produtos/";
+
+            if ($foto["error"]) {
+                echo 'Erro ao enviar o arquivo!';
+            }
+
+            if ($foto["size"] > 2097152) {
+                echo 'Arquivo máximo de 2Mb, tente novamente';
+            }
+
+            $nomeOriginal = $foto["name"];
+            $nomeCodificado = uniqid();
+            $extensao = strtolower(pathinfo($nomeOriginal, PATHINFO_EXTENSION));
+
+            $path = $pasta . $nomeCodificado . '.' . $extensao;
+
+            if ($extensao != 'jpg' && $extensao != 'png') {
+                echo 'Arquivo não suportado!';
+            }
+
+            if (move_uploaded_file($foto["tmp_name"], $path)) {
+                $this->query->simpleSql("INSERT INTO produtos (nome, descricao, preco, estoque, foto, vendedor) VALUES (?, ?, ?, ?, ?, ?)", [$nome, $desc, $preco, $estoque, $path, $_SESSION['id']]);
+            } else {
+                echo 'Erro ao salvar o arquivo!';
+            }
+        }
+    }
 }

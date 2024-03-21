@@ -21,5 +21,11 @@ class ProductController
         return View::make('products/search', ['results' => $results]);
     }
 
+    public function newProduct()
+    {
+        $this->productModel->insertProduct();
+        header('Location: /perfil');
+    }
+
 
 }
