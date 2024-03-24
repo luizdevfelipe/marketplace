@@ -11,8 +11,14 @@ class ProductController
     }
 
     public function index()
-    {
-        return View::make('products/product');
+    {        
+        $produto = $this->productModel->productData();
+        if (isset($_SESSION['id']) && $_SESSION['id'] == $produto['vendedor']){
+            return View::make('products/productOwner');
+        } else {
+            $_SESSION['p_id'] = $_GET['id'];
+            return View::make('products/productView', ['produto' => $produto]);
+        }        
     }
 
     public function search()
@@ -27,5 +33,14 @@ class ProductController
         header('Location: /perfil');
     }
 
-
+    public function buying()
+    {
+        $produto = $this->productModel->productData();
+        if (isset($_SESSION['id']) && $_SESSION['id'] != $produto['vendedor']){
+            $this->productModel->addToCard($produto['id']);
+            header('Location: /carrinho');
+        } else{
+            header('Location: /login');
+        }
+    }
 }

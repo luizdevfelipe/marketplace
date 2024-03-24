@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olá, <?= $user[0]["user"] ?> !</title>
+    <title>Olá, <?= $user["user"] ?> !</title>
     <link rel="shortcut icon" href="storage/site/favicon_io/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="storage/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -30,8 +30,8 @@
                     <img src="<?= $local ?>" alt="" class="align-center" style="width: 200px; height:200px"><br>
                 </div>
                 <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id="infouser">
-                    <?php if (isset($user[0]['sobrenome'])) : ?>
-                        Bem vindo <?= $user[0]['nome'] . ' ' . $user[0]['sobrenome'] ?>, você mora em <?= $user[0]['cidade'] . ' ' . $user[0]['estado'] ?>
+                    <?php if (isset($user['sobrenome'])) : ?>
+                        Bem vindo <?= $user['nome'] . ' ' . $user['sobrenome'] ?>, você mora em <?= $user['cidade'] . ' ' . $user['estado'] ?>
                         <br>
                         <button class="mt-3 p-1" onclick="cadastrado()">Alterar Dados</button> <br>
 
@@ -39,8 +39,7 @@
                             <input type="submit" class="p-1 mt-2" value="Sair" name="sair">
                         </form>
 
-                    <?php else : ?>
-                        <button class="btn btn-success" onclick="cadastrado()">Terminar cadastro</button>
+                    <?php else : ?>                       
                         <form action="<?= htmlspecialchars('/sair') ?>" method="post">
                             <input type="submit" class="p-1 mt-2" value="Sair" name="sair">
                         </form>
@@ -99,13 +98,10 @@
         }
 
         function cadastrado() {
-            container = document.getElementById('infouser')
-            foto = document.getElementById('foto')
-            formulario = "<form action='<?= htmlspecialchars('/novocad') ?>' method='post' autocomplete='on'><label for='inome' class='mb-2' style='margin-right: 41px;'>Nome:*</label><input type='text' name='nome' id='inome' maxlength='20' minlength='4' required><br><label for='isobrenome' class='mb-2' style='margin-right: 1px;'>Sobrenome:*</label><input type='text' name='sobrenome' id='isobrenome' maxlength='20' minlength='4' required><br><label for='iestado' class='mb-2' style='margin-right: 34px;'>Estado:*</label><select name='estado' id='iestado' class='p-1' style='width: 199px;' required><option value='AC'>Acre</option><option value='AL'>Alagoas</option><option value='AP'>Amapá</option><option value='AM'>Amazonas</option><option value='BA'>Bahia</option><option value='CE'>Ceará</option><option value='DF'>Distrito Federal</option><option value='ES'>Espírito Santo</option><option value='GO'>Goiás</option><option value='MA'>Maranhão</option><option value='MT'>Mato Grosso</option><option value='MS'>Mato Grosso do Sul</option><option value='MG'>Minas Gerais</option><option value='PA'>Pará</option><option value='PB'>Paraíba</option><option value='PR'>Paraná</option><option value='PE'>Pernambuco</option><option value='PI'>Piauí</option><option value='RJ'>Rio de Janeiro</option><option value='RN'>Rio Grande do Norte</option><option value='RS'>Rio Grande do Sul</option><option value='RO'>Rondônia</option><option value='RR'>Roraima</option><option value='SC'>Santa Catarina</option><option value='SP'>São Paulo</option><option value='SE'>Sergipe</option><option value='TO'>Tocantins</option></select> <br><label for='icidade' style='margin-right: 33px;'>Cidade:*</label><input type='text' name='cidade' id='icidade' title='Somente primeira letra maiúscula mínimo de 3 caracteres' maxlength='20' required><br><input type='submit' value='Enviar' class='mt-2 p-1'></form> <br><form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' method='post'><input type='submit' class='p-1 mt-2' value='Sair' name='sair'></form>"
+            foto = document.getElementById('foto')            
 
             botao = "<form action='<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>' enctype='multipart/form-data' method='post'><label for='ifoto' class='border border-dark rounded p-1 mt-1 text-center' style='width: 200px; cursor:pointer;'>Clique e envie a Imagem</label><input type='file' name='foto' id='ifoto' style='display: none;'> <br> <input type='submit' class='border border-dark rounded p-1 mt-1 text-center' value='Salvar Imagem'></form>"
 
-            container.innerHTML = formulario
             foto.innerHTML += botao
         }
     </script>

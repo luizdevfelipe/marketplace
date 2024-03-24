@@ -66,10 +66,4 @@ class ProfileController
         unset($_SESSION['id']);
         header('Location: /');
     }
-
-    public function novosDados()
-    {
-        //insere os dados quando um user termina o cadastro através da url /novocad
-        //ou atualizar a página de registro para que os dados sejam colocados de uma vez
-    }
 }

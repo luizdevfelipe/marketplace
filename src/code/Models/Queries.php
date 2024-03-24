@@ -22,16 +22,21 @@ class Queries extends Model
         }        
     }
 
-    public function returnSql(string $query, array $data = []): array
+    public function returnSql(string $query, array $data = [], bool $fetchAll = false): array|bool
     {
         try{
             $stmt = $this->db->prepare($query);
             $stmt->execute($data);
-            $result = $stmt->fetchAll();
+            if($fetchAll){
+                $result = $stmt->fetchAll();
+            } else {
+                $result = $stmt->fetch();
+            }
+           
         } catch (\PDOException $e){
             echo $e->getMessage();
         }    
 
-        return $result ?? null;
+        return $result;
     }
 }

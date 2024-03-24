@@ -27,6 +27,7 @@ $router->get('/', [HomeController::class, 'index'])
     ->get('/registro', [ProfileController::class, 'registerPage'])
     ->post('/registro', [ProfileController::class, 'registerValid'])
     ->get('/produto', [ProductController::class, 'index'])
+    ->post('/produto', [ProductController::class, 'buying'])
     ->get('/pesquisa', [ProductController::class, 'search'])
     ->post('/novoproduto', [ProductController::class, 'newProduct'])
     ->post('/sair', [ProfileController::class, 'sair']);

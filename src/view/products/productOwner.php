@@ -2,22 +2,6 @@
 <html lang="pt-br">
 
 <?php
-require_once 'codes/BancoDados.php';
-
-$sair = '';
-$id = $_GET['id'] ?? -1;
-
-$conexao = new BancoDados('localhost', 'root', '', 'marketplace');
-
-$result = $conexao->returnSql("SELECT * FROM produtos WHERE id = $id");
-
-if ($result->num_rows > 0) {
-    $produto = $result->fetch_assoc();
-} else {
-    $conexao->erroDisplay('Erro ao solicitar produto!');
-}
-
-session_start();
 
 if (isset($_SESSION['id'])) {
     if ($_SESSION['id'] == $produto['vendedor']) {

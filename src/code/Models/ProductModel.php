@@ -19,7 +19,7 @@ class ProductModel
     {
         $product = '%' . str_replace(' ', '%', $this->name) . '%';
 
-        $results = $this->query->returnSql("SELECT * FROM produtos WHERE nome LIKE ? ORDER BY nome ASC LIMIT 6", [$product]);
+        $results = $this->query->returnSql("SELECT * FROM produtos WHERE nome LIKE ? ORDER BY nome ASC LIMIT 6", [$product], true);
 
         return $results;
     }
@@ -59,5 +59,16 @@ class ProductModel
                 echo 'Erro ao salvar o arquivo!';
             }
         }
+    }
+
+    public function productData()
+    {
+        $id = $_SESSION['p_id'];
+        return $this->query->returnSql("SELECT * FROM produtos WHERE id = ?", [$id]);
+    }
+
+    public function addToCard(int $id)
+    {        
+        $this->query->simpleSql("INSERT INTO carrinho (iduser, idproduto) VALUES (?, ?)", [$_SESSION['id'], $id]);       
     }
 }

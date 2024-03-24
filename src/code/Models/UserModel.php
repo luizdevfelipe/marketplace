@@ -20,7 +20,7 @@ class UserModel
         $result = $this->query->returnSql("SELECT id FROM usuarios WHERE user = ? AND senha = ? ", [$nome, $senha]);
 
         if (!empty($result)) {
-            $_SESSION['id'] = $result[0]['id'];
+            $_SESSION['id'] = $result['id'];
             header('Location: /perfil');
         } else {
             return "Usuário ou senha inválidos";
