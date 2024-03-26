@@ -12,11 +12,11 @@ class ProductController
 
     public function index()
     {        
+        $_SESSION['p_id'] = $_GET['id'];
         $produto = $this->productModel->productData();
         if (isset($_SESSION['id']) && $_SESSION['id'] == $produto['vendedor']){
-            return View::make('products/productOwner');
-        } else {
-            $_SESSION['p_id'] = $_GET['id'];
+            return View::make('products/productOwner', ['produto' => $produto]);
+        } else {            
             return View::make('products/productView', ['produto' => $produto]);
         }        
     }

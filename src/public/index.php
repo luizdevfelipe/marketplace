@@ -2,6 +2,7 @@
 
 use Code\App;
 use Code\Container;
+use Code\Controller\CardController;
 use Code\DB;
 use \Code\Router;
 use \Code\Controller\HomeController;
@@ -30,7 +31,10 @@ $router->get('/', [HomeController::class, 'index'])
     ->post('/produto', [ProductController::class, 'buying'])
     ->get('/pesquisa', [ProductController::class, 'search'])
     ->post('/novoproduto', [ProductController::class, 'newProduct'])
-    ->post('/sair', [ProfileController::class, 'sair']);
+    ->post('/sair', [ProfileController::class, 'sair'])
+    ->get('/carrinho', [CardController::class, 'index'])
+    ->get('/remover', [CardController::class, 'remove'])
+    ;
 
 (new App($router, [
     'uri' => $_SERVER['REQUEST_URI'],

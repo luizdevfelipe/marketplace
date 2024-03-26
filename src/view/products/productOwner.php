@@ -2,44 +2,18 @@
 <html lang="pt-br">
 
 <?php
-
-if (isset($_SESSION['id'])) {
-    if ($_SESSION['id'] == $produto['vendedor']) {
-        $dono = "<form action='' method='post'>
-        <input type='submit' value='Editar dados do produto' class='p-1' name='edita'></form>";
-    } else {
-        $dono = "<form action='' method='post'>
-        <input type='submit' class='btn btn-success' value='Adicionar ao carrinho' name='comprar'></form>";
-    }
-
-    if (isset($_POST['edita'])) {
-        $sair = "editaProduto()";
-    }
-
     if (isset($_POST['nproduto'])) {
         $conexao->simpleSql("UPDATE produtos SET nome = '" . $_POST["nproduto"] . "', descricao = '" . $_POST["descricao"] . "', preco ='" . $_POST["preco"] . "', estoque = '" . $_POST['estoque'] . "' WHERE id = '$id' ");
-
         $sair = "window.location.href = 'http://localhost/marketplace/'";
     }
-    if (isset($_POST['comprar'])) {
-        $conexao->simpleSql("INSERT INTO carrinho (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '$id')");
-        $sair = "window.location.href = 'http://localhost/marketplace/carrinho.php'";
-    }
-} else {
-    $dono = "<form action='' method='post'><input type='submit' class='btn btn-success' value='Adicionar ao carrinho' name='comprar'></form>";
-    if (isset($_POST['comprar'])) {
-        $sair = "window.location.href = 'http://localhost/marketplace/login.php'";
-    }
-}
-
 ?>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $produto['nome'] ?? 'Erro' ?></title>
-    <link rel="shortcut icon" href="images/site/favicon_io/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="estilos/style.css">
+    <link rel="shortcut icon" href="storage/site/favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="storage/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 </head>
@@ -69,7 +43,7 @@ if (isset($_SESSION['id'])) {
                     <p class="mb-0">Produtos Disponíveis: <?= $produto['estoque'] ?></p>
                     <p class="text-success fs-5">R$<?= $produto['preco'] ?></p>
 
-                    <?= $dono ?>
+                    <button class='btn btn-primary' onclick="editaProduto()">Editar dados do Produto</button>
                 </div>
             </div>
         </div>
@@ -80,14 +54,11 @@ if (isset($_SESSION['id'])) {
     </script>
 
     <script>
-        <?= $sair ?>
-
         function editaProduto() {
             div = document.getElementById('edita')
             form = "<br><form class='border border-success mb-3 m-1 p-2' action='<? echo htmlspecialchars($_SERVER['PHP_SELF']) . '?id=' . $id ?>' method='post' enctype='multipart/form-data'><label for='nproduto'>Nome do produto:*</label><input type='text' name='nproduto' id='nproduto' minlength='4' maxlength='30' required class='m-1'><br><label for='descricao'>Descrição do produto:*</label><br><textarea name='descricao' id='descricao' minlength='10' maxlength='200' cols='28' rows='5' required class='m-1' style='resize: none;'></textarea><br><label for='preco'>Preço do produto:*</label><input type='number' name='preco' id='preco' step='0.01' required class='m-1'><br><label for='estoque'>Quantidade de produtos:*</label><input type='number' name='estoque' id='estoque' min='1' required class='m-1'><br><input type='submit' value='Alterar Produto' class='my-1 p-1'></form>";
 
             div.innerHTML += form;
-
         }
     </script>
 </body>
