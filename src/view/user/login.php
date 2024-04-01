@@ -48,8 +48,8 @@
         <fieldset class="border border-dark rounded text-center w350" style="height: 310px;">
             <legend class="mt-1 display-6" id="legenda">Login</legend>
             <form action="<?= htmlspecialchars('/login') ?>" method="post" autocomplete="on" id="form">
-                <label for="iuser" class="mt-1 lead">Nome de Usuário:</label><br>
-                <input type="text" class="p-1" name="user" id="iuser" autocomplete="username" required minlength="4" maxlength="50"><br>
+                <label for="iuser" class="mt-1 lead">Email:</label><br>
+                <input type="text" class="p-1" name="email" id="iemail" autocomplete="email" required minlength="4" maxlength="50"><br>
                 <label for="isenha" class="mt-1 lead">Insira sua Senha:</label><br>
                 <input type="password" class="p-1" name="senha" id="isenha" autocomplete="current-password" minlength="8" required maxlength="15"><br>
                 <input class="btn btn-success mt-3" type="submit" value="Entrar">

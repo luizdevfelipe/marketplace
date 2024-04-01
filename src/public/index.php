@@ -23,6 +23,7 @@ $router = new Router(new Container());
 
 $router->get('/', [HomeController::class, 'index'])
     ->get('/perfil', [ProfileController::class, 'perfil'])
+    ->post('/perfil', [ProfileController::class, 'newInsert'])
     ->get('/login', [ProfileController::class, 'loginPage'])
     ->post('/login', [ProfileController::class, 'loginValid'])
     ->get('/registro', [ProfileController::class, 'registerPage'])

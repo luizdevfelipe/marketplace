@@ -14,10 +14,10 @@ class UserModel
 
     public function loginUser()
     {
-        $nome = $_POST["user"];
+        $nome = $_POST["email"];
         $senha = $_POST["senha"];
 
-        $result = $this->query->returnSql("SELECT id FROM usuarios WHERE user = ? AND senha = ? ", [$nome, $senha]);
+        $result = $this->query->returnSql("SELECT id FROM usuarios WHERE email = ? AND senha = ? ", [$nome, $senha]);
 
         if (!empty($result)) {
             $_SESSION['id'] = $result['id'];
@@ -29,24 +29,39 @@ class UserModel
 
     public function registerUser()
     {
-        $user = $_POST["user"];
+        $email = $_POST['email'];
+        $nome = $_POST["nome"];
         $senha1 = $_POST["senha1"];
         $senha2 = $_POST["senha2"];
+        $sobrenome = $_POST['sobrenome'];
+        $estado = $_POST['estado'];
+        $cidade = $_POST['cidade'];
 
         if ($senha1 === $senha2) {
-            $userLen = strlen($user);
+            $nomeLen = strlen($nome);
             $senhaLen = strlen(($senha1));
+            $emailLen = strlen(($email));
+            $sobrenomeLen = strlen(($sobrenome));
+            $estadoLen = strlen(($estado));
+            $cidadeLen = strlen(($cidade));
 
-            if($userLen > 1 && $userLen < 50 && $senhaLen > 1 && $senhaLen < 15){
-                $result = $this->query->returnSql("SELECT user FROM usuarios WHERE user = ?", [$user]);
+            $testNome = $nomeLen > 1 && $nomeLen <= 50;
+            $testSenha = $senhaLen > 1 && $senhaLen <= 50;
+            $testEmail = $emailLen > 1 && $emailLen <= 50;
+            $testSobrenome = $sobrenomeLen > 1 && $sobrenomeLen <= 50;
+            $testEstado = $estadoLen > 1 && $estadoLen <= 50;
+            $testCidade = $cidadeLen > 1 && $nomeLen <= 50;
+
+            if ($testNome && $testSenha && $testEmail && $testSobrenome && $testEstado && $testCidade) {
+                $result = $this->query->returnSql("SELECT email FROM usuarios WHERE email = ?", [$email]);
             } else {
                 return 'Dados Inválidos';
-            }           
+            }
 
             if (!empty($result)) {
                 return 'Usuário já cadastrado';
             } else {
-                $_SESSION['id'] = $this->query->simpleSql("INSERT INTO usuarios (user, senha) VALUES (?, ?)", [$user, $senha1], true);
+                $_SESSION['id'] = $this->query->simpleSql("INSERT INTO usuarios (email, senha, nome, sobrenome, estado, cidade) VALUES (?, ?, ?, ?, ?, ?)", [$email, $senha1, $nome, $sobrenome, $estado, $cidade], true);
                 header('Location: /perfil');
             }
         } else {

@@ -56,9 +56,7 @@
     <script>
         function editaProduto() {
             div = document.getElementById('edita')
-            form = "<br><form class='border border-success mb-3 m-1 p-2' action='<? echo htmlspecialchars($_SERVER['PHP_SELF']) . '?id=' . $id ?>' method='post' enctype='multipart/form-data'><label for='nproduto'>Nome do produto:*</label><input type='text' name='nproduto' id='nproduto' minlength='4' maxlength='30' required class='m-1'><br><label for='descricao'>Descrição do produto:*</label><br><textarea name='descricao' id='descricao' minlength='10' maxlength='200' cols='28' rows='5' required class='m-1' style='resize: none;'></textarea><br><label for='preco'>Preço do produto:*</label><input type='number' name='preco' id='preco' step='0.01' required class='m-1'><br><label for='estoque'>Quantidade de produtos:*</label><input type='number' name='estoque' id='estoque' min='1' required class='m-1'><br><input type='submit' value='Alterar Produto' class='my-1 p-1'></form>";
-
-            div.innerHTML += form;
+            form = "<br><form class='border border-success mb-3 m-1 p-2' action='<? echo htmlspecialchars($_SERVER['PHP_SELF']) . '?id=' . $id ?>' method='post' enctype='multipart/form-data'><label for='nproduto'>Nome do produto:*</label><input type='text' name='nproduto' id='nproduto' minlength='4' maxlength='30' required class='m-1'><br><label for='descricao'>Descrição do produto:*</label><br><textarea name='descricao' id='descricao' minlength='10' maxlength='200' cols='28' rows='5' required class='m-1' style='resize: none;'></textarea><br><label for='preco'>Preço do produto:*</label><input type='number' name='preco' id='preco' step='0.01' required class='m-1'><br><label for='estoque'>Quantidade de produtos:*</label><input type='number' name='estoque' id='estoque' min='1' required class='m-1'><br><input type='submit' value='Alterar Produto' class='my-1 p-1'></form>";            div.innerHTML += form;
         }
     </script>
 </body>
