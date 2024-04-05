@@ -23,6 +23,8 @@
 ```cmd
 docker compose up
 ```
+<p><strong>5º</strong> Dentro da pasta <strong>/src/</strong> há um arquivo <strong>.env.exemple</strong> que deve ser renomedo para <strong>.env</strong> dentro dele há configurações básicas para a conexão com o banco de dados que podem ser alteradas conforme suas necessidades</p>
+<p><strong>6º</strong> No diretório raiz há um arquivo <strong>marketplace-schema.sql</strong> é a estrutura do banco de dados. Esse arquivo deve ser usado por um programa como o <a href='https://www.phpmyadmin.net/'>PHPMyAdmin</a> ou <a href='https://www.mysql.com/products/workbench/'>MySQL WorkBench</a> sendo importado para a criação do banco de dados</p>
 
 </p>
 
