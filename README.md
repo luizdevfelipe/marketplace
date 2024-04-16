@@ -1,6 +1,6 @@
 <h1 align="center">MarketPlace</h1>
 
-<h2 align="center"><a href='#Sobre'>Sobre</a> <a href='#Motivo'>Motivação</a> <a href='#Experimente'>Experimente</a></h2>
+<h2 align="center">🔸 <a href='#Sobre'>Sobre</a> 🔸 <a href='#Motivo'>Motivação</a> 🔸 <a href='#Experimente'>Experimente</a></h2>
 
 <h2 id='Sobre' align="center">Um site onde um usúario pode se cadastrar e comprar ou vender produtos 💳</h2>
 <p>Aqui é possível cadastrar um novo produto, adicioná-lo ao carrinho e finalizar a comprar (apenas visualmente)</p>
@@ -14,18 +14,18 @@
 
 <hr>
 
-<h3 id='Experimente'>Experimente:</h3>
-<p><strong>1º</strong> Faça download do <a href='https://www.docker.com/products/docker-desktop/'>Docker 🐋</a>, pois é ele o responsável por rodar toda a aplicação em um <strong>Container</strong></p>
-<p><strong>2º</strong> Instale também esse respositório, através do botão <i>Download Zip</i> ou clonando na sua máquina</p>
-<p><strong>3º</strong> Certifique-se que as portas 8001 e 3307 não estão sendo usadas pelo seu computador, caso contrário abra o arquivo <strong>docker-compose.yml</strong> dentro da pasta <strong>marketplace-docker</strong> e altere as portas conforme necessidade</p>
-<p><strong>4º</strong> Para que o Container seja criado é necessário, através do terminal rodando no diretório da pasta <strong>marketplace-docker</strong>, digitar o comando: <br>
+<h3 id='Experimente'>Teste na sua máquina:</h3>
+<p><strong>1º</strong> Faça download do <a href='https://www.docker.com/products/docker-desktop/'>Docker 🐋</a>, pois é ele o responsável por rodar toda a aplicação em um <strong>Container</strong>.</p>
+<p><strong>2º</strong> Instale também esse respositório, através do botão <i>Download Zip</i> ou clonando na sua máquina.</p>
+<p><strong>3º</strong> Certifique-se que as portas 8001 e 3307 não estão sendo usadas pelo seu computador, caso contrário abra o arquivo <strong>docker-compose.yml</strong> dentro da pasta <strong>marketplace-docker</strong> e altere as portas conforme necessidade.</p>
+<p><strong>4º</strong> Para que o Container seja criado, é necessário, através do terminal rodando no diretório da pasta <strong>marketplace-docker</strong>, digitar o comando: <br>
   
 ```cmd
 docker compose up
 ```
-<p><strong>5º</strong> Dentro da pasta <strong>/src/</strong> há um arquivo <strong>.env.exemple</strong> que deve ser renomedo para <strong>.env</strong> dentro dele há configurações básicas para a conexão com o banco de dados que podem ser alteradas conforme suas necessidades</p>
-<p><strong>6º</strong> No diretório raiz há um arquivo <strong>marketplace-schema.sql</strong> é a estrutura do banco de dados. Esse arquivo deve ser usado por um programa como o <a href='https://www.phpmyadmin.net/'>PHPMyAdmin</a> ou <a href='https://www.mysql.com/products/workbench/'>MySQL WorkBench</a> sendo importado para a criação do banco de dados</p>
+<p><strong>5º</strong> Dentro da pasta <strong>/src/</strong> há um arquivo <strong>.env.exemple</strong> que deve ser renomedo para <strong>.env</strong> dentro dele há configurações básicas para a conexão com o banco de dados que podem ser alteradas conforme suas necessidades.</p>
+<p><strong>6º</strong> No diretório raiz há um arquivo <strong>marketplace-schema.sql</strong> é a estrutura do banco de dados. Esse arquivo deve ser usado por um programa como o <a href='https://www.phpmyadmin.net/'>PHPMyAdmin</a> ou <a href='https://www.mysql.com/products/workbench/'>MySQL WorkBench</a> sendo importado para a criação do banco de dados.</p>
+<p><strong>7º</strong> Tudo Certo! Basta acessar <strong>http://localhost:8001/</strong> para que você possa visualizar o projeto em funcionamento.</p>
 
-</p>
 
 
