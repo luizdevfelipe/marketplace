@@ -35,6 +35,7 @@ $router->get('/', [HomeController::class, 'index'])
     ->post('/sair', [ProfileController::class, 'sair'])
     ->get('/carrinho', [CardController::class, 'index'])
     ->get('/remover', [CardController::class, 'remove'])
+    ->post('/alteraproduto', [ProductController::class, 'chageData'])
     ;
 
 (new App($router, [

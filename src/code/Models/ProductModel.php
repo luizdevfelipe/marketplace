@@ -68,7 +68,13 @@ class ProductModel
     }
 
     public function addToCard(int $id)
-    {        
-        $this->query->simpleSql("INSERT INTO carrinho (iduser, idproduto) VALUES (?, ?)", [$_SESSION['id'], $id]);       
+    {
+        $this->query->simpleSql("INSERT INTO carrinho (iduser, idproduto) VALUES (?, ?)", [$_SESSION['id'], $id]);
+    }
+
+    public function changeData()
+    {
+        $this->query->simpleSql("UPDATE produtos SET nome = ?, descricao = ?, preco = ?, estoque = ? WHERE id = ?", [$_POST["nproduto"], $_POST["descricao"], $_POST["preco"], $_POST['estoque'], $_SESSION['p_id']]);
+        $sair = "window.location.href = 'http://localhost/marketplace/'";
     }
 }

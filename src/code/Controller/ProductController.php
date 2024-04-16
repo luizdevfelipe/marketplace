@@ -43,4 +43,12 @@ class ProductController
             header('Location: /login');
         }
     }
+
+    public function chageData()
+    {
+        if(isset($_POST['nproduto']) && isset($_SESSION['p_id'])){
+            $this->productModel->changeData();            
+        } 
+        header('Location: /produto?id=' . $_SESSION['p_id']);
+    }
 }
