@@ -2,22 +2,25 @@
 
 namespace Code\Controller;
 
+use Code\Attributes\Get;
+use Code\Attributes\Post;
 use Code\Models\ProfileModel;
 use Code\Models\UserModel;
 use Code\View;
 
 class ProfileController
-
 {
     public function __construct(private UserModel $userModel, private ProfileModel $profileModel)
     {
     }
 
+    #[Get('/registro')]
     public function registerPage(): View
     {
         return View::make('user/register');
     }
 
+    #[Post('/registro')]
     public function registerValid()
     {
         $erro = $this->userModel->registerUser();
@@ -28,6 +31,7 @@ class ProfileController
         }
     }
 
+    #[Get('/login')]
     public function loginPage()
     {
         if (isset($_SESSION['id'])) {
@@ -37,6 +41,7 @@ class ProfileController
         }
     }
 
+    #[Post('/login')]
     public function loginValid(): View
     {
         $erro = $this->userModel->loginUser();
@@ -47,6 +52,7 @@ class ProfileController
         }
     }
 
+    #[Get('/perfil')]
     public function perfil(): View
     {
         if (isset($_SESSION['id'])) {
@@ -59,6 +65,7 @@ class ProfileController
         }
     }
 
+    #[Post('/perfil')]
     public function newInsert()
     {
         // inserir a foto ou novo produto e recarregar a página
@@ -71,6 +78,7 @@ class ProfileController
         }
     }
 
+    #[Post('/sair')]
     public function sair()
     {
         unset($_SESSION['id']);

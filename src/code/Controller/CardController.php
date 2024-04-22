@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Code\Controller;
 
+use Code\Attributes\Get;
 use Code\Models\CardModel;
 use Code\View;
 
@@ -12,6 +13,7 @@ class CardController
     {        
     }
 
+    #[Get('/carrinho')]
     public function index()
     {
         if (empty($_SESSION['id'])) {
@@ -22,6 +24,7 @@ class CardController
         return View::make('user/carrinho', ['products' => $products]);
     }
 
+    #[Get('/remover')]
     public function remove(){
         if(!empty($_GET['id'])){
             $this->cardModel->removeProduct();

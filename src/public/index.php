@@ -21,22 +21,12 @@ define('STORAGE_PATH', __DIR__ . '/../storage');
 
 $router = new Router(new Container());
 
-$router->get('/', [HomeController::class, 'index'])
-    ->get('/perfil', [ProfileController::class, 'perfil'])
-    ->post('/perfil', [ProfileController::class, 'newInsert'])
-    ->get('/login', [ProfileController::class, 'loginPage'])
-    ->post('/login', [ProfileController::class, 'loginValid'])
-    ->get('/registro', [ProfileController::class, 'registerPage'])
-    ->post('/registro', [ProfileController::class, 'registerValid'])
-    ->get('/produto', [ProductController::class, 'index'])
-    ->post('/produto', [ProductController::class, 'buying'])
-    ->get('/pesquisa', [ProductController::class, 'search'])
-    ->post('/novoproduto', [ProductController::class, 'newProduct'])
-    ->post('/sair', [ProfileController::class, 'sair'])
-    ->get('/carrinho', [CardController::class, 'index'])
-    ->get('/remover', [CardController::class, 'remove'])
-    ->post('/alteraproduto', [ProductController::class, 'chageData'])
-    ;
+$router->registerRoutesFromAttributes([
+    HomeController::class,
+    ProfileController::class,
+    ProductController::class,
+    CardController::class
+]);
 
 (new App($router, [
     'uri' => $_SERVER['REQUEST_URI'],

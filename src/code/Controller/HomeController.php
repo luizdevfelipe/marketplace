@@ -2,12 +2,14 @@
 
 namespace Code\Controller;
 
+use Code\Attributes\Get;
 use \Code\View;
 use \Code\Models\Queries;
 
 class HomeController
 
 {
+    #[Get('/')]
     public function index()
     {
         $mysql = new Queries();
