@@ -1,13 +1,14 @@
 <?php
 
 use Code\App;
-use Code\Container;
+
 use Code\Controller\CardController;
 use Code\DB;
 use \Code\Router;
 use \Code\Controller\HomeController;
 use \Code\Controller\ProfileController;
 use \Code\Controller\ProductController;
+use Illuminate\Container\Container;
 
 session_start();
 
@@ -19,7 +20,8 @@ $dotenv->load();
 define('VIEW_PATH', __DIR__ . '/../view');
 define('STORAGE_PATH', __DIR__ . '/../storage');
 
-$router = new Router(new Container());
+$container = new Container();
+$router = new Router($container);
 
 $router->registerRoutesFromAttributes([
     HomeController::class,
@@ -28,7 +30,11 @@ $router->registerRoutesFromAttributes([
     CardController::class
 ]);
 
-(new App($router, [
-    'uri' => $_SERVER['REQUEST_URI'],
-    'method' => $_SERVER['REQUEST_METHOD']
-], new DB($_ENV)))->run();
+(new App(
+    $router,
+    $container,
+    [
+        'uri' => $_SERVER['REQUEST_URI'],
+        'method' => $_SERVER['REQUEST_METHOD']
+    ]
+))->run();

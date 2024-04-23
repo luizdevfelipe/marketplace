@@ -1,27 +1,39 @@
-<?php 
+<?php
 namespace Code;
 
-class App
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
 
-{
-    protected static DB $connection;
-    public function __construct(protected Router $router, protected array $request, DB $conn)
-    {        
-        static::$connection = $conn;
+class App
+{    
+    protected Config $config;
+
+    public function __construct(
+        protected Router $router,
+        protected Container $container,
+        protected array $request
+    ) {
+        $this->config = new Config($_ENV);
     }
 
     public function run()
     {
-        try{
+        try {
             echo $this->router->resolve($this->request['uri'], $this->request['method']);
-        } catch (\Code\Exeption\RouteNotFoundExeption) {            
+            $this->initDb();
+        } catch (\Code\Exeption\RouteNotFoundExeption) {
             http_response_code(404);
             echo View::make('error/404');
-        }        
+        }
     }
 
-    public static function DB(): DB
+    public function initDb()
     {
-        return static::$connection;
+        $capsule = new Capsule;
+        $capsule->addConnection([$this->config->db]);
+        $capsule->setEventDispatcher(new Dispatcher($this->container));
+        $capsule->setAsGlobal();
+        $capsule->bootEloquent();
     }
 }

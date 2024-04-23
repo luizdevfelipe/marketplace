@@ -6,6 +6,7 @@ namespace Code;
 
 use Code\Attributes\Route;
 use \Code\Exeption\RouteNotFoundExeption;
+use Illuminate\Container\Container;
 
 class Router
 {
