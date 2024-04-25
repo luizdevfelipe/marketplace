@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Code\Models;
 
-class ProfileModel
+use Illuminate\Database\Eloquent\Model;
+
+class ProfileModel extends Model
 {
-    public function __construct(private Queries $query)
-    {
-    }
+    protected $table = 'usuarios';
 
     public function requestData(): array
     {

@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Code\Models;
 
-use Code\Models\Queries;
+use Illuminate\Database\Eloquent\Model;
 
-class UserModel
+class UserModel extends Model
 {
-    public function __construct(private Queries $query)
-    {
-    }
 
     public function loginUser()
     {

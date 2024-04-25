@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Code\Models;
 
-class ProductModel
+use Illuminate\Database\Eloquent\Model;
+
+class ProductModel extends Model
 {
+    protected $table = 'produtos';
     protected string $name = '!*****!';
 
-    public function __construct(private Queries $query)
+    public function __construct()
     {
         if (isset($_GET['produto']) && $_GET['produto'] != '') {
             $this->name = $_GET['produto'];

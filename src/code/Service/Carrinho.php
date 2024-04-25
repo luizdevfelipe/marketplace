@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Code\Models;
 
-class CardModel
+use Illuminate\Database\Eloquent\Model;
+
+class CardModel extends Model
 {
-    public function __construct(private Queries $query)
-    {
-    }
+    protected $table = 'carrinho';
 
     public function getProducts()
     {
