@@ -2,14 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Code\Models;
+namespace Code\Service;
 
-use Illuminate\Database\Eloquent\Model;
-
-class ProfileModel extends Model
+class ProfileService
 {
-    protected $table = 'usuarios';
-
     public function requestData(): array
     {
         $user = $this->query->returnSql("SELECT * FROM usuarios WHERE id = ?", [$_SESSION['id']]);

@@ -3,6 +3,7 @@
 namespace Code\Controller;
 
 use Code\Attributes\Get;
+use Code\Models\Produtos;
 use \Code\View;
 
 class HomeController
@@ -10,8 +11,12 @@ class HomeController
 {
     #[Get('/')]
     public function index()
-    {        
-        $result =  $mysql->returnSql("SELECT * FROM produtos WHERE estoque > 0  ORDER BY nome ASC LIMIT 6", fetchAll: true);
+    {
+        $result = Produtos::select('*')
+            ->where('estoque', '>', 0)
+            ->orderBy('nome', 'asc')
+            ->limit(6)
+            ->get()->toArray();        
 
         return View::make('index', ['rows' => $result]);
     }

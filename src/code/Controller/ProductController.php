@@ -3,12 +3,13 @@ namespace Code\Controller;
 
 use Code\Attributes\Get;
 use Code\Attributes\Post;
-use Code\Models\ProductModel;
+
+use Code\Service\ProductService;
 use Code\View;
 
 class ProductController
 {
-    public function __construct(private ProductModel $productModel)
+    public function __construct(private ProductService $productService)
     {        
     }
 
@@ -16,7 +17,7 @@ class ProductController
     public function index()
     {        
         $_SESSION['p_id'] = $_GET['id'];
-        $produto = $this->productModel->productData();
+        $produto = $this->productService->productData();
         if (isset($_SESSION['id']) && $_SESSION['id'] == $produto['vendedor']){
             return View::make('products/productOwner', ['produto' => $produto]);
         } else {            
@@ -27,23 +28,23 @@ class ProductController
     #[Get('/pesquisa')]
     public function search()
     {
-        $results = $this->productModel->searchProduct();
+        $results = $this->productService->searchProduct();
         return View::make('products/search', ['results' => $results]);
     }
 
     #[Post('/novoproduto')]
     public function newProduct()
     {
-        $this->productModel->insertProduct();
+        $this->productService->insertProduct();
         header('Location: /perfil');
     }
 
     #[Post('/produto')]
     public function buying()
     {
-        $produto = $this->productModel->productData();
+        $produto = $this->productService->productData();
         if (isset($_SESSION['id']) && $_SESSION['id'] != $produto['vendedor']){
-            $this->productModel->addToCard($produto['id']);
+            $this->productService->addToCard($produto['id']);
             header('Location: /carrinho');
         } else{
             header('Location: /login');
@@ -54,7 +55,7 @@ class ProductController
     public function chageData()
     {
         if(isset($_POST['nproduto']) && isset($_SESSION['p_id'])){
-            $this->productModel->changeData();            
+            $this->productService->changeData();            
         } 
         header('Location: /produto?id=' . $_SESSION['p_id']);
     }

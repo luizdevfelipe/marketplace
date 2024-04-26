@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Code\Models;
+namespace Code\Service;
 
-use Illuminate\Database\Eloquent\Model;
 
-class CardModel extends Model
+class CardService
 {
     protected $table = 'carrinho';
 

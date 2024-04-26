@@ -20,8 +20,8 @@ class App
     public function run()
     {
         try {
-            echo $this->router->resolve($this->request['uri'], $this->request['method']);
             $this->initDb();
+            echo $this->router->resolve($this->request['uri'], $this->request['method']);           
         } catch (\Code\Exeption\RouteNotFoundExeption) {
             http_response_code(404);
             echo View::make('error/404');
@@ -31,7 +31,7 @@ class App
     public function initDb()
     {
         $capsule = new Capsule;
-        $capsule->addConnection([$this->config->db]);
+        $capsule->addConnection($this->config->db);
         $capsule->setEventDispatcher(new Dispatcher($this->container));
         $capsule->setAsGlobal();
         $capsule->bootEloquent();

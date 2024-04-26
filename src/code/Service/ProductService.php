@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Code\Models;
+namespace Code\Service;
 
-use Illuminate\Database\Eloquent\Model;
+use Code\Models\Produtos;
 
-class ProductModel extends Model
+class ProductService
 {
     protected $table = 'produtos';
     protected string $name = '!*****!';
@@ -22,7 +22,11 @@ class ProductModel extends Model
     {
         $product = '%' . str_replace(' ', '%', $this->name) . '%';
 
-        $results = $this->query->returnSql("SELECT * FROM produtos WHERE nome LIKE ? ORDER BY nome ASC LIMIT 6", [$product], true);
+        $results = Produtos::select('*')
+            ->where('nome', 'like', $product)
+            ->orderBy('nome', 'asc')
+            ->limit(6)
+            ->get()->toArray();
 
         return $results;
     }
@@ -57,7 +61,14 @@ class ProductModel extends Model
             }
 
             if (move_uploaded_file($foto["tmp_name"], $path)) {
-                $this->query->simpleSql("INSERT INTO produtos (nome, descricao, preco, estoque, foto, vendedor) VALUES (?, ?, ?, ?, ?, ?)", [$nome, $desc, $preco, $estoque, $path, $_SESSION['id']]);
+                Produtos::insert([
+                    'nome' => $nome,
+                    'descricao' => $desc,
+                    'preco' => $preco,
+                    'estoque' => $estoque,
+                    'foto' => $path,
+                    'vendedor' => $_SESSION['id']
+                ]);
             } else {
                 echo 'Erro ao salvar o arquivo!';
             }
@@ -67,17 +78,26 @@ class ProductModel extends Model
     public function productData()
     {
         $id = $_SESSION['p_id'];
-        return $this->query->returnSql("SELECT * FROM produtos WHERE id = ?", [$id]);
+        return Produtos::select('*')
+            ->where('id', $id)
+            ->get()->toArray();
     }
 
     public function addToCard(int $id)
     {
-        $this->query->simpleSql("INSERT INTO carrinho (iduser, idproduto) VALUES (?, ?)", [$_SESSION['id'], $id]);
+        // ("INSERT INTO carrinho (iduser, idproduto) VALUES (?, ?)", [$_SESSION['id'], $id]);
     }
 
     public function changeData()
     {
-        $this->query->simpleSql("UPDATE produtos SET nome = ?, descricao = ?, preco = ?, estoque = ? WHERE id = ?", [$_POST["nproduto"], $_POST["descricao"], $_POST["preco"], $_POST['estoque'], $_SESSION['p_id']]);
+        Produtos::where('id', $_SESSION['p_id'])
+            ->update([
+                'nome' =>  $_POST["nproduto"],
+                'descricao' => $_POST["descricao"],
+                'preco' => $_POST["preco"],
+                'estoque' => $_POST['estoque'],
+            ]);
+
         $sair = "window.location.href = 'http://localhost/marketplace/'";
     }
 }

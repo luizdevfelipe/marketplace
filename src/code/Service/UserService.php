@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Code\Models;
+namespace Code\Service;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UserModel extends Model
+class UserService
 {
 
     public function loginUser()
