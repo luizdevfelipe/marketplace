@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace Code\Service;
 
+use Code\Models\Usuarios;
+
 class UserService
 {
 
     public function loginUser()
     {
-        $nome = $_POST["email"];
+        $email = $_POST["email"];
         $senha = $_POST["senha"];
 
-        $result = $this->query->returnSql("SELECT id FROM usuarios WHERE email = ? AND senha = ? ", [$nome, $senha]);
+        $result = Usuarios::select('id')
+            ->where('email', $email)
+            ->where('senha', $senha)
+            ->get()->toArray();   
 
         if (!empty($result)) {
-            $_SESSION['id'] = $result['id'];
+            $_SESSION['id'] = $result[0]['id'];
             header('Location: /perfil');
         } else {
             return "Usuário ou senha inválidos";
@@ -48,7 +53,9 @@ class UserService
             $testCidade = $cidadeLen > 1 && $nomeLen <= 50;
 
             if ($testNome && $testSenha && $testEmail && $testSobrenome && $testEstado && $testCidade) {
-                $result = $this->query->returnSql("SELECT email FROM usuarios WHERE email = ?", [$email]);
+                Usuarios::select('email')
+                    ->where('email', $email)
+                    ->get()->toArray();
             } else {
                 return 'Dados Inválidos';
             }
@@ -56,7 +63,14 @@ class UserService
             if (!empty($result)) {
                 return 'Usuário já cadastrado';
             } else {
-                $_SESSION['id'] = $this->query->simpleSql("INSERT INTO usuarios (email, senha, nome, sobrenome, estado, cidade) VALUES (?, ?, ?, ?, ?, ?)", [$email, $senha1, $nome, $sobrenome, $estado, $cidade], true);
+                $_SESSION['id'] = Usuarios::insertGetId([
+                    'email' => $email,
+                    'senha' => $senha1,
+                    'nome' => $nome,
+                    'sobrenome' => $sobrenome,
+                    'estado' => $estado,
+                    'cidade' => $cidade,
+                ]);             
                 header('Location: /perfil');
             }
         } else {

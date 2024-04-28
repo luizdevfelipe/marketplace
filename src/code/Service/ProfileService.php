@@ -4,16 +4,26 @@ declare(strict_types=1);
 
 namespace Code\Service;
 
+use Code\Models\Produtos;
+use Code\Models\Usuarios;
+
 class ProfileService
 {
     public function requestData(): array
     {
-        $user = $this->query->returnSql("SELECT * FROM usuarios WHERE id = ?", [$_SESSION['id']]);
+        $user = Usuarios::select('*')
+            ->where('id', $_SESSION['id'])
+            ->get()->toArray();
 
-        $product = $this->query->returnSql("SELECT * FROM produtos WHERE vendedor = ?", [$_SESSION['id']] , true);
+        $product = Produtos::select('*')
+            ->where('vendedor', $_SESSION['id'])
+            ->get()->toArray();
 
-        $purchases = $this->query->returnSql("SELECT c.idproduto, p.nome FROM produtos p JOIN compras c ON p.id = c.idproduto WHERE c.iduser = ?", [$_SESSION['id']], true);
-
+        $purchases = Produtos::select('compras.idproduto', 'produtos.nome')
+        ->join('compras', 'produtos.id', 'compras.idproduto')
+        ->where('compras.iduser', $_SESSION['id'])
+        ->get()->toArray();
+        
         return [$user, $product, $purchases];
     }
 
@@ -42,7 +52,10 @@ class ProfileService
             }
 
             if (move_uploaded_file($foto["tmp_name"], $path)) {
-                $this->query->simpleSql("UPDATE usuarios SET foto = (?) WHERE id = ?", [$path, $_SESSION['id']]);
+                Usuarios::where('id', $_SESSION['id'])
+                ->update([
+                    'foto' => $path
+                ]);
             } else {
                 echo 'Erro ao salvar o arquivo!';
             }

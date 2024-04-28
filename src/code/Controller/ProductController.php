@@ -18,7 +18,7 @@ class ProductController
     {        
         $_SESSION['p_id'] = $_GET['id'];
         $produto = $this->productService->productData();
-        if (isset($_SESSION['id']) && $_SESSION['id'] == $produto['vendedor']){
+        if (isset($_SESSION['id']) && $_SESSION['id'] == $produto[0]['vendedor']){
             return View::make('products/productOwner', ['produto' => $produto]);
         } else {            
             return View::make('products/productView', ['produto' => $produto]);
@@ -43,8 +43,8 @@ class ProductController
     public function buying()
     {
         $produto = $this->productService->productData();
-        if (isset($_SESSION['id']) && $_SESSION['id'] != $produto['vendedor']){
-            $this->productService->addToCard($produto['id']);
+        if (isset($_SESSION['id']) && $_SESSION['id'] != $produto[0]['vendedor']){
+            $this->productService->addToCard($produto[0]['id']);
             header('Location: /carrinho');
         } else{
             header('Location: /login');
