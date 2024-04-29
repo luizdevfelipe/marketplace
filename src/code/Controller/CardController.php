@@ -5,11 +5,12 @@ namespace Code\Controller;
 
 use Code\Attributes\Get;
 use Code\Models\CardModel;
+use Code\Service\CardService;
 use Code\View;
 
 class CardController 
 {
-    public function __construct(private CardModel $cardModel)
+    public function __construct(private CardService $cardService)
     {        
     }
 
@@ -20,14 +21,14 @@ class CardController
             return View::make('error/perfil');
         }
         
-        $products = $this->cardModel->getProducts();
+        $products = $this->cardService->getProducts();
         return View::make('user/carrinho', ['products' => $products]);
     }
 
     #[Get('/remover')]
     public function remove(){
         if(!empty($_GET['id'])){
-            $this->cardModel->removeProduct();
+            $this->cardService->removeProduct();
         } else {
             return View::make('error/404');
         }

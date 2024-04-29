@@ -13,31 +13,13 @@
 
 <?php
 if (empty($idproduto)) {
-    $idproduto = array();
+    $idproduto = [];
 }
 if (empty($idcarrinho)) {
     $idcarrinho = [];
 }
 if (empty($estoque)) {
     $estoque = [];
-}
-
-if (isset($_POST['comprou'])) {
-    $resultado = $conexao->returnSql("SELECT sobrenome FROM usuarios WHERE id = '" . $_SESSION['id'] . "'");
-    $user = $resultado->fetch_assoc();
-
-    if (isset($user['sobrenome'])) {
-        $dados = '<div class="text-center fs-5"><i class="bi bi-check-circle text-success display-1"></i><br>Compra Realizada!</div>';
-        for ($i = 0; $i < count($idproduto); $i++) {
-            $conexao->simpleSql("INSERT INTO compras (iduser, idproduto) VALUES ('" . $_SESSION['id'] . "', '" . $idproduto[$i] . "')");
-
-            $conexao->simpleSql("DELETE FROM carrinho WHERE id = '" . $idcarrinho[$i] . "'");
-
-            $conexao->simpleSql("UPDATE produtos SET estoque = '" . ($estoque[$i] - 1) . "' WHERE id = '" . $idproduto[$i] . "'  ");
-        }
-    } else {
-        $conexao->erroDisplay('Termine o cadastro para realizar uma compra!');
-    }
 }
 ?>
 

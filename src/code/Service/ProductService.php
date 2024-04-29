@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Code\Service;
 
+use Code\Models\Carrinho;
 use Code\Models\Produtos;
 
 class ProductService
@@ -85,7 +86,10 @@ class ProductService
 
     public function addToCard(int $id)
     {
-        // ("INSERT INTO carrinho (iduser, idproduto) VALUES (?, ?)", [$_SESSION['id'], $id]);
+        Carrinho::insert([
+            'iduser' => $_SESSION['id'],
+            'idproduto' => $id
+        ]);
     }
 
     public function changeData()
@@ -97,7 +101,6 @@ class ProductService
                 'preco' => $_POST["preco"],
                 'estoque' => $_POST['estoque'],
             ]);
-
-        $sair = "window.location.href = 'http://localhost/marketplace/'";
+       header('location: /');
     }
 }

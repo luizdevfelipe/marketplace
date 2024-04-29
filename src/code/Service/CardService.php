@@ -14,11 +14,9 @@ class CardService
     public function getProducts()
     {
         return Produtos::select('*')
-            ->join('carrinho', 'produto.id', 'carrinho.idproduto')
-            ->where('carrinho.iduser', $_SESSION['id'])
-            ->get()->toArray();
-        
-        //"SELECT * FROM produtos p JOIN carrinho c ON p.id = c.idproduto WHERE c.iduser = ?"
+            ->join('carrinho', 'produtos.id', '=', 'carrinho.idproduto')
+            ->where('carrinho.iduser', '=', $_SESSION['id'])
+            ->get()->toArray();    
     }
 
     public function removeProduct()
