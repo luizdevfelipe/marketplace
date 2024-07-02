@@ -64,7 +64,7 @@ class ProfileController
     #[Post('/perfil')]
     public function newInsert()
     {       
-        if (isset($_POST['foto'])) {           
+        if (isset($_FILES['foto'])) {           
             $this->profileService->newPhoto();
             header('Location: /perfil');
         }
