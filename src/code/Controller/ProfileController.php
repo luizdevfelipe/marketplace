@@ -26,9 +26,8 @@ class ProfileController
         $erro = $this->userService->registerUser();
         if (!$erro) {
             return $this->perfil();
-        } else {
-            return View::make('user/register', ['erro' => $erro]);
         }
+        return View::make('user/register', ['erro' => $erro]);
     }
 
     #[Get('/login')]
@@ -36,9 +35,8 @@ class ProfileController
     {
         if (isset($_SESSION['id'])) {
             header('Location: /perfil');
-        } else {
-            return View::make('user/login');
         }
+        return View::make('user/login');
     }
 
     #[Post('/login')]
@@ -47,9 +45,8 @@ class ProfileController
         $erro = $this->userService->loginUser();
         if (!$erro) {
             $this->perfil();
-        } else {
-            return View::make('user/login', ['erro' => $erro]);
         }
+        return View::make('user/login', ['erro' => $erro]);
     }
 
     #[Get('/perfil')]
@@ -60,19 +57,14 @@ class ProfileController
             [$user, $products, $purchases] = $data;
 
             return View::make('user/perfil', ['user' => $user, 'products' => $products, 'purchases' => $purchases]);
-        } else {
-            return View::make('error/perfil');
         }
+        return View::make('error/perfil');
     }
 
     #[Post('/perfil')]
     public function newInsert()
-    {
-        // inserir a foto ou novo produto e recarregar a página
-        if(isset($_POST['descricao'])){
-            // insere um novo produto
-        } else {
-            // insere uma foto de usuário
+    {       
+        if (isset($_POST['foto'])) {           
             $this->profileService->newPhoto();
             header('Location: /perfil');
         }
