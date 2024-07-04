@@ -1,17 +1,19 @@
-<?php 
+<?php
+
 declare(strict_types=1);
 
 namespace Code\Controller;
 
 use Code\Attributes\Get;
+use Code\Attributes\Post;
 use Code\Models\CardModel;
 use Code\Service\CardService;
 use Code\View;
 
-class CardController 
+class CardController
 {
     public function __construct(private CardService $cardService)
-    {        
+    {
     }
 
     #[Get('/carrinho')]
@@ -20,17 +22,26 @@ class CardController
         if (empty($_SESSION['id'])) {
             return View::make('error/perfil');
         }
-        
+
         $products = $this->cardService->getProducts();
         return View::make('user/carrinho', ['products' => $products]);
     }
 
     #[Get('/remover')]
-    public function remove(){
-        if(!empty($_GET['id'])){
+    public function remove()
+    {
+        if (!empty($_GET['id'])) {
             $this->cardService->removeProduct();
         } else {
             return View::make('error/404');
         }
+    }
+
+    #[Post('/comprar')]
+    public function buy()
+    {
+        if ($this->cardService->getProductsId()) {
+            $this->cardService->buyProducts();
+        } 
     }
 }

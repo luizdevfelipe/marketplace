@@ -46,8 +46,9 @@ class ProductController
         if (isset($_SESSION['id']) && $_SESSION['id'] != $produto[0]['vendedor']) {
             $this->productService->addToCard($produto[0]['id']);
             header('Location: /carrinho');
+        } else {
+            header('Location: /login');
         }
-        header('Location: /login');
     }
 
     #[Post('/alteraproduto')]
