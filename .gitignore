@@ -1,5 +1,6 @@
 /src/.env
 /src/public/storage/users/perfil/
 /src/public/storage/users/produtos/
+/src/vendor/
 /marketplace-docker/docker-compose.yml
 /marketplace-docker/storage/mysql/
