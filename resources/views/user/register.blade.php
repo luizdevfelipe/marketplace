@@ -47,6 +47,7 @@
         <fieldset class="border border-dark rounded text-center w350">
             <legend class="mt-1 display-6" id="legenda">Registro</legend>
             <form action="<?= htmlspecialchars('/registro') ?>" method="post" autocomplete="on" id="form">
+                @csrf
                 <label for='iemail' class="lead">Email:</label><br><input type='text' name='email' id='iemail' maxlength='20' minlength='4' required><br>
                 <label for='inome' class="lead">Nome:</label><br><input type='text' name='nome' id='inome' maxlength='20' minlength='4' required><br>
                 <label for='isobrenome' class='mb-1 lead'>Sobrenome:</label><br><input type='text' name='sobrenome' id='isobrenome' maxlength='20' minlength='4' required><br>

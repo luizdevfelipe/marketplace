@@ -37,11 +37,13 @@
                         <button class="mt-3 p-1" onclick="cadastrado()">Alterar Foto</button> <br>
 
                         <form action="<?= htmlspecialchars('/sair') ?>" method="post">
+                            @csrf
                             <input type="submit" class="p-1 mt-2" value="Sair" name="sair">
                         </form>
 
                     <?php else : ?>
                         <form action="<?= htmlspecialchars('/sair') ?>" method="post">
+                            @csrf
                             <input type="submit" class="p-1 mt-2" value="Sair" name="sair">
                         </form>
                     <?php endif; ?>

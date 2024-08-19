@@ -28,7 +28,7 @@ class ProfileController
 
     public function loginPage()
     {
-        if (isset($_SESSION['id'])) {
+        if (session('id') !== null) {
             header('Location: /perfil');
         }
         return view('user/login');
@@ -45,7 +45,7 @@ class ProfileController
 
     public function perfil(): View
     {
-        if (isset($_SESSION['id'])) {
+        if (session('id') !== null) {
             $data =  $this->profileService->requestData();
             [$user, $products, $purchases] = $data;
 
@@ -64,7 +64,7 @@ class ProfileController
 
     public function sair()
     {
-        unset($_SESSION['id']);
+        session(['id' => null]);
         header('Location: /');
     }
 }

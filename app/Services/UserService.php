@@ -16,11 +16,11 @@ class UserService
 
         $result = User::select('id')
             ->where('email', $email)
-            ->where('senha', $senha)
+            ->where('password', $senha)
             ->get()->toArray();   
 
         if (!empty($result)) {
-            $_SESSION['id'] = $result[0]['id'];
+            session(['id' => $result[0]['id']]);
             header('Location: /perfil');
         } else {
             return "Usuário ou senha inválidos";
@@ -63,14 +63,14 @@ class UserService
             if (!empty($result)) {
                 return 'Usuário já cadastrado';
             } else {
-                $_SESSION['id'] = User::insertGetId([
+                session(['id' => User::insertGetId([
                     'email' => $email,
-                    'senha' => $senha1,
-                    'nome' => $nome,
-                    'sobrenome' => $sobrenome,
-                    'estado' => $estado,
-                    'cidade' => $cidade,
-                ]);             
+                    'password' => $senha1,
+                    'name' => $nome,
+                    'lastname' => $sobrenome,
+                    'state' => $estado,
+                    'city' => $cidade,
+                ])]);            
                 header('Location: /perfil');
             }
         } else {

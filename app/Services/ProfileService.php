@@ -12,18 +12,18 @@ class ProfileService
     public function requestData(): array
     {
         $user = User::select('*')
-            ->where('id', $_SESSION['id'])
+            ->where('id', session('id'))
             ->get()->toArray();
 
         $product = Product::select('*')
-            ->where('vendedor', $_SESSION['id'])
+            ->where('user_id', session('id'))
             ->get()->toArray();
 
-        $purchases = Product::select('compras.idproduto', 'produtos.nome')
-        ->join('compras', 'produtos.id', 'compras.idproduto')
-        ->where('compras.iduser', $_SESSION['id'])
-        ->get()->toArray();
-        
+        $purchases = Product::select('purchases.product_id', 'products.name')
+            ->join('purchases', 'products.id', 'purchases.product_id')
+            ->where('purchases.user_id', session('id'))
+            ->get()->toArray();
+
         return [$user, $product, $purchases];
     }
 
@@ -52,13 +52,13 @@ class ProfileService
             }
 
             if (move_uploaded_file($foto["tmp_name"], $path)) {
-                User::where('id', $_SESSION['id'])
-                ->update([
-                    'foto' => $path
-                ]);
+                User::where('id', session('id'))
+                    ->update([
+                        'foto' => $path
+                    ]);
             } else {
                 echo 'Erro ao salvar o arquivo!';
             }
-        }    
+        }
     }
 }
