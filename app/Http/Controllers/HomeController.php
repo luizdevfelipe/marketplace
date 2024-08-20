@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\View\View;
- 
+use Illuminate\Http\Response as HttpResponse;
+
 class HomeController
 {
     /**
      * Show the profile for a given user.
      */
-    public function index(): View
+    public function index(): HttpResponse
     {
         $result = Product::select('*')
             ->where('stock', '>', 0)
@@ -17,8 +17,6 @@ class HomeController
             ->limit(6)
             ->get()->toArray(); 
 
-        return view('index', [
-            'rows' => $result
-        ]);
+            return response()->view('index', ['rows' => $result]);        
     }
 }

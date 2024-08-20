@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Services\CartService;
-use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CartController
 {
@@ -13,29 +14,32 @@ class CartController
     {
     }
 
-    public function index()
+    public function index(): Response
     {
         if (empty($_SESSION['id'])) {
-            return view('error/perfil');
+            return response()->view('user.login');
         }
 
         $products = $this->cardService->getProducts();
-        return view('user/carrinho', ['products' => $products]);
+        return response()->view('user.cart', ['products' => $products]);
     }
 
-    public function remove()
+    public function remove(Request $request): Response
     {
-        if (!empty($_GET['id'])) {
-            $this->cardService->removeProduct();
+        $id = $request->input('id');
+
+        if (!empty($id)) {
+            $this->cardService->removeProduct($id);
         } else {
-            return view('error/404');
+            return response()->view('error.404');
         }
     }
 
-    public function buy()
+    public function buy(): Response
     {
         if ($this->cardService->getProductsId()) {
             $this->cardService->buyProducts();
         } 
+        return response()->view('user.cart');
     }
 }

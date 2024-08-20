@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Services\ProductService;
-use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ProductController
 {
@@ -11,44 +13,50 @@ class ProductController
     {
     }
 
-    public function index()
+    public function index(): Response
     {
         $_SESSION['p_id'] = $_GET['id'];
         $produto = $this->productService->productData();
         if (isset($_SESSION['id']) && $_SESSION['id'] == $produto[0]['vendedor']) {
-            return View('products/productOwner', ['produto' => $produto]);
+            return response()->view('products.productOwner', ['produto' => $produto]);
         }
-        return View('products/productView', ['produto' => $produto]);
+        return response()->view('products.productView', ['produto' => $produto]);
     }
 
-    public function search()
+    public function search(Request $request): Response
     {
-        $results = $this->productService->searchProduct();
-        return View('products/search', ['results' => $results]);
+        $validated = $request->validate([
+            'produto' => 'required|alpha:ascii|max:60'
+        ]);
+        $results = $this->productService->searchProduct($validated['name']);
+        
+        return response()->view('products.search', ['produto' => $results]);
     }
 
-    public function newProduct()
+    public function newProduct(Request $request): RedirectResponse
     {
-        $this->productService->insertProduct();
-        header('Location: /perfil');
+        $data = $request->input();
+        $this->productService->insertProduct($data);
+
+        return redirect('/perfil');
     }
 
-    public function buying()
+    public function buying(): RedirectResponse
     {
         $produto = $this->productService->productData();
         if (isset($_SESSION['id']) && $_SESSION['id'] != $produto[0]['vendedor']) {
             $this->productService->addToCard($produto[0]['id']);
-            header('Location: /carrinho');
+            return redirect('/carrinho');
         } else {
-            header('Location: /login');
+            return redirect('/login');
         }
     }
 
-    public function chageData()
+    public function chageData(): RedirectResponse
     {
         if (isset($_POST['nproduto']) && isset($_SESSION['p_id'])) {
             $this->productService->changeData();
         }
-        header('Location: /produto?id=' . $_SESSION['p_id']);
+        return redirect('/produto?id=' . $_SESSION['p_id']);
     }
 }

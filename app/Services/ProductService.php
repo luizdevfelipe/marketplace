@@ -9,18 +9,9 @@ use App\Models\Product;
 
 class ProductService
 {
-    protected string $name = '!*****!';
-
-    public function __construct()
+    public function searchProduct(string $name): array
     {
-        if (isset($_GET['produto']) && $_GET['produto'] != '') {
-            $this->name = $_GET['produto'];
-        }
-    }
-
-    public function searchProduct(): array
-    {
-        $product = '%' . str_replace(' ', '%', $this->name) . '%';
+        $product = '%' . str_replace(' ', '%', $name) . '%';
 
         $results = Product::select('*')
             ->where('name', 'like', $product)
@@ -31,7 +22,7 @@ class ProductService
         return $results;
     }
 
-    public function insertProduct()
+    public function insertProduct(array $data)
     {
         $nome = $_POST['nproduto'];
         $desc = $_POST['descricao'];

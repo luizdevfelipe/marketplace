@@ -30,15 +30,11 @@ class CartService
             ->get()->toArray();
     }
 
-    public function removeProduct()
+    public function removeProduct(int $id)
     {
-        if (isset($_GET['id'])) {
-            Cart::where('id', $_GET['id'])
-                ->delete();
+        Cart::where('id', $id)
+            ->delete();
             header('Location: /carrinho');
-        } else {
-            echo 'erro ao remover produto';
-        }
     }
 
     public function buyProducts()
