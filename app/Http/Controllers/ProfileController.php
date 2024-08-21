@@ -1,62 +1,65 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Services\ProfileService;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ProfileController
 {
-    public function __construct(private UserService $userService, private ProfileService $profileService)
-    {
-    }
+    public function __construct(private UserService $userService, private ProfileService $profileService) {}
 
     public function registerPage(): Response
     {
         return response()->view('user.register');
     }
 
-    public function registerValid(): Response
+    public function registerValid(Request $request): Response|RedirectResponse
     {
-        $erro = $this->userService->registerUser();
-        if (!$erro) {
-            return $this->perfil();
+        $data = $request->input();
+        $validMessage = $this->userService->registerUser($data);
+        if ($validMessage === true) {
+            return redirect('/perfil');
         }
-        return response()->view('user.register', ['erro' => $erro]);
+        return response()->view('user.register', ['erro' => $validMessage]);
     }
 
-    public function loginPage(): Response
+    public function loginPage(): Response|RedirectResponse
     {
-        if (session('id') !== null) {
-            header('Location: /perfil');
+        if (session()->has('id')) {
+            return redirect('/perfil');
         }
         return response()->view('user.login');
     }
 
-    public function loginValid(): Response
+    public function loginValid(Request $request): Response|RedirectResponse
     {
-        $erro = $this->userService->loginUser();
-        if (!$erro) {
-            $this->perfil();
+        $data = $request->input();
+        $validMessage = $this->userService->loginUser($data);
+
+        if ($validMessage === true) {
+            return redirect('/perfil');
         }
-        return response()->view('user.login', ['erro' => $erro]);
+        return response()->view('user.login', ['erro' => $validMessage]);
     }
 
     public function perfil(): Response
     {
-        if (session('id') !== null) {
-            $data =  $this->profileService->requestData();
-            [$user, $products, $purchases] = $data;
+        if (session()->has('id')) {
+            [$user, $products, $purchases] = $this->profileService->requestData();
             return response()->view('user.profile', ['user' => $user, 'products' => $products, 'purchases' => $purchases]);
         }
         return response()->view('error.profile');
     }
 
     public function newInsert(): RedirectResponse
-    {       
-        if (isset($_FILES['foto'])) {           
+    {
+        if (isset($_FILES['foto'])) {
             $this->profileService->newPhoto();
             return redirect('/perfil');
         }
@@ -64,7 +67,7 @@ class ProfileController
 
     public function sair(): RedirectResponse
     {
-        session(['id' => null]);
+        session()->remove('id');
         return redirect('/');
     }
 }

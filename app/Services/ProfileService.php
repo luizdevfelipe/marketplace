@@ -12,16 +12,16 @@ class ProfileService
     public function requestData(): array
     {
         $user = User::select('*')
-            ->where('id', session('id'))
+            ->where('id', session()->get('id'))
             ->get()->toArray();
 
         $product = Product::select('*')
-            ->where('user_id', session('id'))
+            ->where('user_id', session()->get('id'))
             ->get()->toArray();
 
         $purchases = Product::select('purchases.product_id', 'products.name')
             ->join('purchases', 'products.id', 'purchases.product_id')
-            ->where('purchases.user_id', session('id'))
+            ->where('purchases.user_id', session()->get('id'))
             ->get()->toArray();
 
         return [$user, $product, $purchases];

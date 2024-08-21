@@ -9,33 +9,33 @@ use App\Models\User;
 class UserService
 {
 
-    public function loginUser()
+    public function loginUser(array $data): bool|string
     {
-        $email = $_POST["email"];
-        $senha = $_POST["senha"];
+        $email = $data["email"];
+        $senha = $data["senha"];
 
         $result = User::select('id')
             ->where('email', $email)
             ->where('password', $senha)
-            ->get()->toArray();   
+            ->get()->toArray();
 
         if (!empty($result)) {
-            session(['id' => $result[0]['id']]);
-            header('Location: /perfil');
+            session()->put('id', $result[0]['id']);
+            return true;
         } else {
             return "Usuário ou senha inválidos";
         }
     }
 
-    public function registerUser()
+    public function registerUser(array $data)
     {
-        $email = $_POST['email'];
-        $nome = $_POST["nome"];
-        $senha1 = $_POST["senha1"];
-        $senha2 = $_POST["senha2"];
-        $sobrenome = $_POST['sobrenome'];
-        $estado = $_POST['estado'];
-        $cidade = $_POST['cidade'];
+        $email = $data['email'];
+        $nome = $data["nome"];
+        $senha1 = $data["senha1"];
+        $senha2 = $data["senha2"];
+        $sobrenome = $data['sobrenome'];
+        $estado = $data['estado'];
+        $cidade = $data['cidade'];
 
         if ($senha1 === $senha2) {
             $nomeLen = strlen($nome);
@@ -53,7 +53,7 @@ class UserService
             $testCidade = $cidadeLen > 1 && $nomeLen <= 50;
 
             if ($testNome && $testSenha && $testEmail && $testSobrenome && $testEstado && $testCidade) {
-                User::select('email')
+                $result = User::select('email')
                     ->where('email', $email)
                     ->get()->toArray();
             } else {
@@ -63,15 +63,15 @@ class UserService
             if (!empty($result)) {
                 return 'Usuário já cadastrado';
             } else {
-                session(['id' => User::insertGetId([
+                session()->put('id', User::insertGetId([
                     'email' => $email,
                     'password' => $senha1,
                     'name' => $nome,
                     'lastname' => $sobrenome,
                     'state' => $estado,
                     'city' => $cidade,
-                ])]);            
-                header('Location: /perfil');
+                ]));
+                return true;
             }
         } else {
             return 'Senhas diferentes';
