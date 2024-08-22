@@ -48,10 +48,10 @@
             <legend class="mt-1 display-6" id="legenda">Registro</legend>
             <form action="<?= htmlspecialchars('/registro') ?>" method="post" autocomplete="on" id="form">
                 @csrf
-                <label for='iemail' class="lead">Email:</label><br><input type='text' name='email' id='iemail' maxlength='20' minlength='4' required><br>
-                <label for='inome' class="lead">Nome:</label><br><input type='text' name='nome' id='inome' maxlength='20' minlength='4' required><br>
-                <label for='isobrenome' class='mb-1 lead'>Sobrenome:</label><br><input type='text' name='sobrenome' id='isobrenome' maxlength='20' minlength='4' required><br>
-                <label for='iestado' class='mb-1 lead'>Estado:</label><br><select name='estado' id='iestado' class='p-1' style='width: 199px;' required>
+                <label for='iemail' class="lead">Email:</label><br><input type='text' name='email' id='iemail' minlength='4' required><br>
+                <label for='iname' class="lead">Nome:</label><br><input type='text' name='name' id='iname' maxlength='30' minlength='4' required><br>
+                <label for='ilastname' class='mb-1 lead'>Sobrenome:</label><br><input type='text' name='lastname' id='ilastname' maxlength='30' minlength='4' required><br>
+                <label for='istate' class='mb-1 lead'>Estado:</label><br><select name='state' id='istate' class='p-1' style='width: 199px;' required>
                     <option value='AC'>Acre</option>
                     <option value='AL'>Alagoas</option>
                     <option value='AP'>Amapá</option>
@@ -80,15 +80,18 @@
                     <option value='SE'>Sergipe</option>
                     <option value='TO'>Tocantins</option>
                 </select> <br>
-                <label for='icidade' class="lead">Cidade:</label><br><input type='text' name='cidade' id='icidade' title='Somente primeira letra maiúscula mínimo de 3 caracteres' maxlength='20' required><br>
-                <label for='isenha1' class='mt-1 lead'>Insira sua Senha:</label><br><input type='password' class='p-1' name='senha1' id='isenha1' autocomplete='current-password' minlength='8' required maxlength='15' placeholder=' Senha'><br>
-                <label for='isenha2' class='mt-1 lead'>Repita a Senha:</label><br><input type='password' class='p-1' name='senha2' id='isenha2' autocomplete='current-password' required minlength='8' maxlength='15' placeholder=' Repita Senha'><br> <input class='btn btn-success my-2' type='submit' value='Entrar'>
+                <label for='icity' class="lead">Cidade:</label><br><input type='text' name='city' id='icity' title='Somente primeira letra maiúscula mínimo de 3 caracteres' maxlength='20' required><br>
+                <label for='ipass1' class='mt-1 lead'>Insira sua Senha:</label><br><input type='password' class='p-1' name='pass1' id='ipass1' autocomplete='current-password' minlength='8' required maxlength='15' placeholder=' Senha'><br>
+                <label for='ipass2' class='mt-1 lead'>Repita a Senha:</label><br><input type='password' class='p-1' name='pass2' id='ipass2' autocomplete='current-password' required minlength='8' maxlength='15' placeholder=' Repita Senha'><br> <input class='btn btn-success my-2' type='submit' value='Entrar'>
             </form>
-            <?php if (isset($erro)) : ?>
-                <div id="diverro" class="erro bg-white text-danger rounded m-2 fs-5">
-                    <?= $erro ?>
-                </div>
-            <?php endif; ?>
+            <div id="diverro" class="erro bg-white text-danger rounded m-2 fs-5">
+                <?= $error ?? '' ?>
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        {{ $error }} <br>
+                    @endforeach
+                @endif
+            </div>
         </fieldset>
     </div>
 

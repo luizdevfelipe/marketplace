@@ -21,12 +21,20 @@ class ProfileController
 
     public function registerValid(Request $request): Response|RedirectResponse
     {
-        $data = $request->input();
-        $validMessage = $this->userService->registerUser($data);
-        if ($validMessage === true) {
+        $data = $request->validate([
+            'email' => 'bail|required|email',
+            'name' => 'bail|required|min:4|max:30',
+            'lastname' => 'bail|required|min:4|max:30',
+            'state' => 'bail|required|size:2',
+            'city' => 'bail|required|min:4|max:40',
+            'pass1' => 'bail|required|min:8|max:60',
+            'pass2' => 'bail|required|min:8|max:60|same:pass1',
+        ]);
+
+        if ($this->userService->registerUser($data)) {
             return redirect('/perfil');
         }
-        return response()->view('user.register', ['erro' => $validMessage]);
+        return response()->view('user.register', ['error' => 'Email já utilizado']);
     }
 
     public function loginPage(): Response|RedirectResponse
@@ -39,13 +47,15 @@ class ProfileController
 
     public function loginValid(Request $request): Response|RedirectResponse
     {
-        $data = $request->input();
-        $validMessage = $this->userService->loginUser($data);
+        $data = $request->validate([
+            'email' => 'bail|required|email',
+            'senha' => 'bail|required|min:8|max:60',
+        ]);
 
-        if ($validMessage === true) {
+        if ($this->userService->loginUser($data)) {
             return redirect('/perfil');
         }
-        return response()->view('user.login', ['erro' => $validMessage]);
+        return response()->view('user.login', ['error' => 'Email e/ou senha inválido(s)']);
     }
 
     public function perfil(): Response
