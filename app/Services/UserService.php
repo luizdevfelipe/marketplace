@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
 
     public function loginUser(array $data): bool
     {
-        $result = User::select('id')
+        $result = User::select('id', 'password')
             ->where('email',  $data["email"])
-            ->where('password', $data["senha"])
             ->get()->toArray();
 
-        if (!empty($result)) {
+        if (!empty($result) && Hash::check($data["senha"], $result[0]['password'], ['rounds' => 12])) {
             session()->put('id', $result[0]['id']);
             return true;
         } 
@@ -26,7 +26,7 @@ class UserService
     public function registerUser(array $data): bool
     {
         $email = $data['email'];
-        $password = $data['pass1'];
+        $password = Hash::make($data['pass1'], ['rounds' => 12]);
            
         $result = User::select('email')
             ->where('email', $email)
