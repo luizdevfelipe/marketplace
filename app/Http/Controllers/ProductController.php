@@ -35,7 +35,14 @@ class ProductController
 
     public function newProduct(Request $request): RedirectResponse
     {
-        $data = $request->input();
+        $data = $request->validate([
+            'nproduto' => 'bail|required',
+            'descricao' => 'bail|required',
+            'preco' => 'bail|required',
+            'estoque' => 'bail|required',            
+            'pfoto' => 'bail|required',            
+        ]);
+
         $this->productService->insertProduct($data);
 
         return redirect('/perfil');
