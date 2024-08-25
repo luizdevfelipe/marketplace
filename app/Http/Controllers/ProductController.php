@@ -6,6 +6,7 @@ use App\Services\ProductService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rules\File;
 
 class ProductController
 {
@@ -28,9 +29,9 @@ class ProductController
         $validated = $request->validate([
             'produto' => 'required|alpha:ascii|max:60'
         ]);
-        $results = $this->productService->searchProduct($validated['name']);
+        $results = $this->productService->searchProduct($validated['produto']);
         
-        return response()->view('products.search', ['produto' => $results]);
+        return response()->view('products.search', ['results' => $results]);
     }
 
     public function newProduct(Request $request): RedirectResponse
@@ -40,7 +41,7 @@ class ProductController
             'descricao' => 'bail|required',
             'preco' => 'bail|required',
             'estoque' => 'bail|required',            
-            'pfoto' => 'bail|required',            
+            'pfoto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
         ]);
 
         $this->productService->insertProduct($data);

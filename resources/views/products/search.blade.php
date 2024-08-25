@@ -30,11 +30,11 @@
             <?php if (!empty($results) && $results !== '') : ?>
                 <?php foreach ($results as $row) : ?>
 
-                    <div class='card d-block m-auto mt-3 p-2' style='width: 18rem; height:450px'><img src='<?= $row["foto"] ?>' class='card-img-top rounded' style='height: 220px' alt='...'>
+                    <div class='card d-block m-auto mt-3 p-2' style='width: 18rem; height:450px'><img src='<?= asset('storage/'.$row['product_picture']); ?>' class='card-img-top rounded' style='height: 220px' alt='...'>
                         <div class='card-body'>
-                            <h5 class='card-title'><?= $row['nome'] ?></h5>
-                            <p class='card-text'><?= $row['descricao'] ?></p>
-                            <p class='card-text'>R$<?= $row['preco'] ?></p><a href="/produto?id=<?= $row['id'] ?>" class='btn btn-primary'>Ver Produto</a>
+                            <h5 class='card-title'><?= $row['name'] ?></h5>
+                            <p class='card-text'><?= $row['description'] ?></p>
+                            <p class='card-text'>R$<?= $row['price'] ?></p><a href="/produto?id=<?= $row['id'] ?>" class='btn btn-primary'>Ver Produto</a>
                         </div>
                     </div>
 
