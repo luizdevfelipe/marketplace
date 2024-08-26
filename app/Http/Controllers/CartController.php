@@ -24,22 +24,21 @@ class CartController
         return response()->view('user.cart', ['products' => $products]);
     }
 
-    public function remove(Request $request): Response
+    public function remove(Request $request): Response|RedirectResponse
     {
         $id = $request->input('id');
 
         if (!empty($id)) {
-            $this->cardService->removeProduct($id);
-        } else {
-            return response()->view('error.404');
-        }
+            $this->cardService->removeProduct((int) $id);           
+        } 
+        return redirect('/carrinho');
     }
 
-    public function buy(): Response
+    public function buy(): RedirectResponse
     {
-        if ($this->cardService->getProductsId()) {
-            $this->cardService->buyProducts();
+        if ($ids = $this->cardService->getProductsId()) {
+            $this->cardService->buyProducts($ids);
         } 
-        return response()->view('user.cart');
+        return redirect('/carrinho');
     }
 }

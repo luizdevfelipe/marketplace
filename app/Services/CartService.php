@@ -19,7 +19,7 @@ class CartService
 
     public function getProductsId()
     {
-        return $this->getProductsDataByUser('carrinho.idproduto');
+        return $this->getProductsDataByUser('carts.product_id');
     }
 
     public function getProductsDataByUser(string $data)
@@ -30,33 +30,28 @@ class CartService
             ->get()->toArray();
     }
 
-    public function removeProduct(int $id)
+    public function removeProduct(int $id): void
     {
         Cart::where('id', $id)
             ->delete();
-            header('Location: /carrinho');
     }
 
-    public function buyProducts()
+    public function buyProducts(array $products_ids)
     {
-        $products = $this->getProductsId();
-
-        foreach ($products as $product) {
-            $idProduto = $product['idproduto'];
-
-            $estoque = Product::select('estoque')
-                ->where('id', $idProduto)
+        foreach ($products_ids as $id) {
+            $stock = Product::select('stock')
+                ->where('id', $id['product_id'])
                 ->get()->toArray();
 
-            $estoque = $estoque[0]['estoque'] - 1;
+            $stock = $stock[0]['stock'] - 1;
 
-            Product::where('id', $idProduto)
-                ->update(['estoque' => $estoque]);
+            Product::where('id', $id['product_id'])
+                ->update(['stock' => $stock]);
 
-            Purchase::insert(['iduser' => $_SESSION['id'], 'idproduto' => $idProduto]);
-            Cart::where('idproduto', $idProduto)
+            Purchase::insert(['user_id' => session()->get('id'), 'product_id' => $id['product_id']]);
+
+            Cart::where('product_id', $id['product_id'])
                 ->delete();
-        }
-        header('Location: /carrinho');
+        }        
     }
 }
