@@ -39,9 +39,8 @@ class ProductService
         }       
     }
 
-    public function productData()
+    public function productData(int $id)
     {
-        $id = $_SESSION['p_id'];
         return Product::select('*')
             ->where('id', $id)
             ->get()->toArray();
@@ -50,7 +49,7 @@ class ProductService
     public function addToCard(int $id)
     {
         Cart::insert([
-            'id_user' => session()->get('id'),
+            'user_id' => session()->get('id'),
             'product_id' => $id
         ]);
     }

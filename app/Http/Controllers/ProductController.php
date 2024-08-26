@@ -14,14 +14,15 @@ class ProductController
     {
     }
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $_SESSION['p_id'] = $_GET['id'];
-        $produto = $this->productService->productData();
-        if (isset($_SESSION['id']) && $_SESSION['id'] == $produto[0]['vendedor']) {
+        $id = $request->query('id');
+        $produto = $this->productService->productData($id);
+
+        if (session()->has('id') && session()->get('id') == $produto[0]['user_id']) {
             return response()->view('products.productOwner', ['produto' => $produto]);
         }
-        return response()->view('products.productView', ['produto' => $produto]);
+        return response()->view('products.productView', ['produto' => $produto, 'id' => $id]);
     }
 
     public function search(Request $request): Response
@@ -49,10 +50,11 @@ class ProductController
         return redirect('/perfil');
     }
 
-    public function buying(): RedirectResponse
+    public function buying(Request $request): RedirectResponse
     {
-        $produto = $this->productService->productData();
-        if (isset($_SESSION['id']) && $_SESSION['id'] != $produto[0]['vendedor']) {
+        $produto = $this->productService->productData($request->query('id'));
+
+        if (session()->has('id') && session()->get('id') !== $produto[0]['user_id']) {
             $this->productService->addToCard($produto[0]['id']);
             return redirect('/carrinho');
         } else {
