@@ -54,15 +54,14 @@ class ProductService
         ]);
     }
 
-    public function changeData()
+    public function changeData(int $id, array $data)
     {
-        Product::where('id', $_SESSION['p_id'])
+        Product::where('id', $id)
             ->update([
-                'name' =>  $_POST["nproduto"],
-                'description' => $_POST["descricao"],
-                'price' => $_POST["preco"],
-                'stock' => $_POST['estoque'],
+                'name' =>  $data["nproduto"],
+                'description' => $data["descricao"],
+                'price' => $data["preco"],
+                'stock' => $data['estoque'],
             ]);
-       header('location: /');
     }
 }

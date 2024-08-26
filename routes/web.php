@@ -18,7 +18,6 @@ Route::post('/sair', [ProfileController::class, 'sair']);
 
 Route::get('/produto', [ProductController::class, 'index']);
 Route::get('/pesquisa', [ProductController::class, 'search']);
-Route::get('/pesquisa', [ProductController::class, 'search']);
 Route::post('/novoproduto', [ProductController::class, 'newProduct']);
 Route::post('/produto', [ProductController::class, 'buying']);
 Route::post('/alteraproduto', [ProductController::class, 'chageData']);

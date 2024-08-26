@@ -62,11 +62,20 @@ class ProductController
         }
     }
 
-    public function chageData(): RedirectResponse
+    public function chageData(Request $request): RedirectResponse
     {
-        if (isset($_POST['nproduto']) && isset($_SESSION['p_id'])) {
-            $this->productService->changeData();
+        $data = $request->validate([
+            'nproduto' => 'bail|required',
+            'descricao' => 'bail|required',
+            'preco' => 'bail|required',
+            'estoque' => 'bail|required',                       
+        ]);
+
+        $product_id = $request->query('id');
+
+        if ($product_id !== null) {
+            $this->productService->changeData($product_id, $data);
         }
-        return redirect('/produto?id=' . $_SESSION['p_id']);
+        return redirect('/produto?id=' . $product_id);
     }
 }
