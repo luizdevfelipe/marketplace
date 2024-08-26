@@ -25,8 +25,8 @@ class CartService
     public function getProductsDataByUser(string $data)
     {
         return Product::select($data)
-            ->join('carrinho', 'produtos.id', '=', 'carrinho.idproduto')
-            ->where('carrinho.iduser', '=', $_SESSION['id'])
+            ->join('carts', 'products.id', '=', 'carts.product_id')
+            ->where('carts.user_id', '=', session()->get('id'))
             ->get()->toArray();
     }
 

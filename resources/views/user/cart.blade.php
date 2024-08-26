@@ -43,16 +43,16 @@ if (empty($estoque)) {
                     <?php if (!empty($products)) : ?>
                         <?php foreach ($products as $product) : ?>
                             <?php
-                            array_push($idproduto, $product['idproduto']);
+                            array_push($idproduto, $product['product_id']);
                             array_push($idcarrinho, $product['id']);
-                            array_push($estoque, $product['estoque']);
+                            array_push($estoque, $product['stock']);
                             ?>
                             <div class='card col-3 mt-3 p-2 d-block m-auto' style='width: 18rem; height:450px'>
-                                <img src='<?= $product['foto'] ?>' class='card-img-top rounded' style='height: 220px' alt='...'>
+                                <img src='<?= asset('storage/'.$product['product_picture']); ?>' class='card-img-top rounded' style='height: 220px' alt='...'>
                                 <div class='card-body'>
-                                    <h5 class='card-title'><?= $product['nome'] ?></h5>
-                                    <p class='card-text'><?= $product['descricao'] ?></p>
-                                    <p class='card-text'>R$<?= $product['preco'] ?></p>
+                                    <h5 class='card-title'><?= $product['name'] ?></h5>
+                                    <p class='card-text'><?= $product['description'] ?></p>
+                                    <p class='card-text'>R$<?= $product['price'] ?></p>
                                     <a href='/remover?id=<?= $product['id'] ?>' class='btn btn-primary'>Remover Produto</a>
                                 </div>
                             </div>
@@ -65,7 +65,7 @@ if (empty($estoque)) {
         </div>
         <div class="container">
             <?php if (!empty($products)) : ?>
-                <form action='/comprar' method='post'><input type='submit' class='p-1 my-3' value='Finalizar Compra' name='comprou'></form>
+                <form action='/comprar' method='post'>@csrf<input type='submit' class='p-1 my-3' value='Finalizar Compra' name='comprou'></form>
             <?php endif; ?>
         </div>
 
