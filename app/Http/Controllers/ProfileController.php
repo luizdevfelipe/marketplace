@@ -9,6 +9,7 @@ use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rules\File;
 
 class ProfileController
 {
@@ -67,12 +68,15 @@ class ProfileController
         return response()->view('error.profile');
     }
 
-    public function newInsert(): RedirectResponse
+    public function newProfilePicture(Request $request): RedirectResponse
     {
-        if (isset($_FILES['foto'])) {
-            $this->profileService->newPhoto();
-            return redirect('/perfil');
-        }
+        $data = $request->validate([
+            'foto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
+        ]);
+
+        $this->profileService->newPhoto($data['foto']);
+
+        return redirect('/perfil');
     }
 
     public function sair(): RedirectResponse

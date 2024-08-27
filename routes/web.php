@@ -13,7 +13,7 @@ Route::post('/registro', [ProfileController::class, 'registerValid']);
 Route::get('/login', [ProfileController::class, 'loginPage']);
 Route::post('/login', [ProfileController::class, 'loginValid']);
 Route::get('/perfil', [ProfileController::class, 'perfil']);
-Route::post('/perfil', [ProfileController::class, 'newInsert']);
+Route::post('/perfil', [ProfileController::class, 'newProfilePicture']);
 Route::post('/sair', [ProfileController::class, 'sair']);
 
 Route::get('/produto', [ProductController::class, 'index']);

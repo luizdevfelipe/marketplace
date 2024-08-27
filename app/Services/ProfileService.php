@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileService
 {
@@ -27,38 +28,13 @@ class ProfileService
         return [$user, $product, $purchases];
     }
 
-    public function newPhoto()
+    public function newPhoto($picture)
     {
-        if (isset($_FILES["foto"])) {
-            $foto = $_FILES["foto"];
-            $pasta = "storage/users/perfil/";
+        $fileName = Storage::disk('public')->putFile('/user', $picture);
 
-            if ($foto["error"]) {
-                echo 'Erro ao enviar o arquivo!';
-            }
-
-            if ($foto["size"] > 2097152) {
-                echo 'Arquivo máximo de 2Mb, tente novamente';
-            }
-
-            $nomeOriginal = $foto["name"];
-            $nomeCodificado = uniqid();
-            $extensao = strtolower(pathinfo($nomeOriginal, PATHINFO_EXTENSION));
-
-            $path = $pasta . $nomeCodificado . '.' . $extensao;
-
-            if ($extensao != 'jpg' && $extensao != 'png') {
-                echo 'Arquivo não suportado!';
-            }
-
-            if (move_uploaded_file($foto["tmp_name"], $path)) {
-                User::where('id', session('id'))
-                    ->update([
-                        'foto' => $path
-                    ]);
-            } else {
-                echo 'Erro ao salvar o arquivo!';
-            }
-        }
+        User::where('id', session()->get('id'))
+            ->update([
+                'user_picture' => $fileName
+            ]);;
     }
 }

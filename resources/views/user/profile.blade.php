@@ -28,7 +28,11 @@
         <div class="container mt-2">
             <div class="row">
                 <div class="col-12 col-md-4 text-center text-md-start" id="foto">
-                    <img src="<?= $user[0]['user_picture'] ?? 'resources/user/profile/perfil.jpeg' ?>" alt="" class="align-center" style="width: 200px; height:200px"><br>
+                    @if (isset($user[0]['user_picture']))
+                    <img src="<?= asset('storage/' . $user[0]['user_picture']) ?>" alt="" class="align-center" style="width: 200px; height:200px">
+                    @else
+                    <img src="resources/user/profile/perfil.jpeg" alt="" class="align-center" style="width: 200px; height:200px">
+                    @endif
                 </div>
                 <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id="infouser">
                     <?php if (isset($user[0]['lastname'])) : ?>
@@ -64,25 +68,26 @@
 
                         <?php foreach ($products as $row) : ?>
                             <a style='font-size:20px;' href='/produto?id=<?= $row["id"] ?>' class='text-dark'> <?= $row["name"] ?> </a> . <br>
-                        <?php endforeach; ?>                        
+                        <?php endforeach; ?>
 
                     <?php else : ?>
                         <!-- // Se não tiver produtos -->
-                        Você não tem produtos à venda <br> 
+                        Você não tem produtos à venda <br>
                     <?php endif; ?>
                     Seus Produtos: <br>
-                        <div class="container bg-secondary rounded">
-                            <form action="<?= htmlspecialchars("/novoproduto") ?>" method="post" enctype="multipart/form-data">@csrf<label for="nproduto">Nome do produto:*</label><input type="text" title="Somente primeira letra maiúscula mínimo de 3 caracteres" name="nproduto" id="nproduto" minlength="4" maxlength="30" required class="m-1"><br><label for="descricao">Descrição do produto:*</label><br><textarea name="descricao" id="descricao" minlength="10" maxlength="200" cols="30" rows="5" required class="m-1" style="resize: none;"></textarea><br><label for="preco">Preço do produto:*</label><input type="number" name="preco" id="preco" step="0.01" required class="m-1"><br><label for="estoque">Quantidade de produtos:*</label><input type="number" name="estoque" id="estoque" min="1" required class="m-1"><br><label for="pfoto" class="p-1 border border-dark mb-1">Foto do Produto*</label><input type="file" name="pfoto" id="pfoto" style="display:none;" required><br>
+                    <div class="container bg-secondary rounded">
+                        <form action="<?= htmlspecialchars("/novoproduto") ?>" method="post" enctype="multipart/form-data">@csrf<label for="nproduto">Nome do produto:*</label><input type="text" title="Somente primeira letra maiúscula mínimo de 3 caracteres" name="nproduto" id="nproduto" minlength="4" maxlength="30" required class="m-1"><br><label for="descricao">Descrição do produto:*</label><br><textarea name="descricao" id="descricao" minlength="10" maxlength="200" cols="30" rows="5" required class="m-1" style="resize: none;"></textarea><br><label for="preco">Preço do produto:*</label><input type="number" name="preco" id="preco" step="0.01" required class="m-1"><br><label for="estoque">Quantidade de produtos:*</label><input type="number" name="estoque" id="estoque" min="1" required class="m-1"><br><label for="pfoto" class="p-1 border border-dark mb-1">Foto do Produto*</label><input type="file" name="pfoto" id="pfoto" style="display:none;" required><br>
                             <div id="diverro" class="erro bg-white text-danger rounded m-2 fs-5">
                                 <?= $error ?? '' ?>
                                 @if ($errors->any())
-                                    @foreach ($errors->all() as $error)
-                                        {{ $error }} <br>
-                                    @endforeach
+                                @foreach ($errors->all() as $error)
+                                {{ $error }} <br>
+                                @endforeach
                                 @endif
                             </div>
-            <br><input type="submit" value="Publicar Produto" class="my-1 p-1"></form>
-                        </div>
+                            <br><input type="submit" value="Publicar Produto" class="my-1 p-1">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -106,4 +111,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
+
 </html>
