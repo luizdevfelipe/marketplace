@@ -43,15 +43,23 @@ class CartService
                 ->where('id', $id['product_id'])
                 ->get()->toArray();
 
-            $stock = $stock[0]['stock'] - 1;
+            if ($stock[0]['stock'] > 0) {
+                $stock = $stock[0]['stock'] - 1;
 
-            Product::where('id', $id['product_id'])
-                ->update(['stock' => $stock]);
+                Product::where('id', $id['product_id'])
+                    ->update(['stock' => $stock]);
 
-            Purchase::insert(['user_id' => session()->get('id'), 'product_id' => $id['product_id']]);
+                Purchase::insert(['user_id' => session()->get('id'), 'product_id' => $id['product_id']]);
 
-            Cart::where('product_id', $id['product_id'])
-                ->delete();
-        }        
+                $idCart = Cart::select('id')
+                ->where('product_id', $id['product_id'])
+                ->get()->toArray();
+
+                Cart::where('id', $idCart[0]['id'])
+                    ->delete();
+            } else {
+                continue;
+            }
+        }
     }
 }

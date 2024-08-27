@@ -16,6 +16,7 @@ class ProductService
 
         $results = Product::select('*')
             ->where('name', 'like', $product)
+            ->where('stock', '>', 0)
             ->orderBy('name', 'asc')
             ->limit(6)
             ->get()->toArray();
