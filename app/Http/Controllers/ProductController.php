@@ -14,10 +14,12 @@ class ProductController
     {
     }
 
-    public function index(Request $request): Response
+    public function index(Request $request): Response|RedirectResponse
     {
         $id = $request->query('id');
-        $produto = $this->productService->productData($id);
+        $produto = $this->productService->productData((int) $id);
+        
+        if(!$produto) return redirect('/');
 
         if (session()->has('id') && session()->get('id') == $produto[0]['user_id']) {
             return response()->view('products.productOwner', ['produto' => $produto]);
