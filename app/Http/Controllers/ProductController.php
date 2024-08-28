@@ -44,7 +44,7 @@ class ProductController
         $data = $request->validate([
             'nproduto' => 'bail|required|min:4|max:30',
             'descricao' => 'bail|required|min:15|max:100',
-            'preco' => 'bail|required|decimal:2',
+            'preco' => 'bail|required|decimal:0,2',
             'estoque' => 'bail|required|integer',            
             'pfoto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
         ]);
