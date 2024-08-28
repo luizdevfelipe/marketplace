@@ -26,7 +26,7 @@ class ProductService
 
     public function insertProduct(array $data)
     {
-        $fileName = Storage::disk('public')->putFile('', $data["pfoto"]);        
+        $fileName = Storage::disk('public')->putFile('/product', $data["pfoto"]);        
        
         if($fileName !== false){
              Product::insert([
