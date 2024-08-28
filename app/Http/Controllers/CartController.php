@@ -17,28 +17,25 @@ class CartController
 
     public function index(): Response|RedirectResponse
     {
-        if (!session()->has('id')) {
-            return redirect('/login');
-        }
+        if (!session()->has('id')) return redirect('/login');
+        
         $products = $this->cardService->getProducts();
         return response()->view('user.cart', ['products' => $products]);
     }
 
-    public function remove(Request $request): Response|RedirectResponse
+    public function remove(Request $request): RedirectResponse
     {
         $id = $request->input('id');
 
-        if (!empty($id)) {
-            $this->cardService->removeProduct((int) $id);           
-        } 
+        if (!empty($id)) $this->cardService->removeProduct((int) $id);           
+        
         return redirect('/carrinho');
     }
 
     public function buy(): RedirectResponse
     {
-        if ($ids = $this->cardService->getProductsId()) {
-            $this->cardService->buyProducts($ids);
-        } 
+        if ($ids = $this->cardService->getProductsId()) $this->cardService->buyProducts($ids);
+        
         return redirect('/carrinho');
     }
 }

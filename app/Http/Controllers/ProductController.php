@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Services\ProductService;
@@ -18,7 +20,7 @@ class ProductController
     {
         $id = $request->query('id');
         $produto = $this->productService->productData((int) $id);
-        
+
         if(!$produto) return redirect('/');
 
         if (session()->has('id') && session()->get('id') == $produto[0]['user_id']) {
@@ -30,7 +32,7 @@ class ProductController
     public function search(Request $request): Response
     {
         $validated = $request->validate([
-            'produto' => 'required|alpha:ascii|max:60'
+            'produto' => 'required|max:60'
         ]);
         $results = $this->productService->searchProduct($validated['produto']);
         
@@ -40,10 +42,10 @@ class ProductController
     public function newProduct(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'nproduto' => 'bail|required',
-            'descricao' => 'bail|required',
-            'preco' => 'bail|required',
-            'estoque' => 'bail|required',            
+            'nproduto' => 'bail|required|min:4|max:30',
+            'descricao' => 'bail|required|min:15|max:100',
+            'preco' => 'bail|required|decimal:2',
+            'estoque' => 'bail|required|integer',            
             'pfoto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
         ]);
 
@@ -54,7 +56,7 @@ class ProductController
 
     public function buying(Request $request): RedirectResponse
     {
-        $produto = $this->productService->productData($request->query('id'));
+        $produto = $this->productService->productData((int) $request->query('id'));
 
         if (session()->has('id') && session()->get('id') !== $produto[0]['user_id']) {
             $this->productService->addToCard($produto[0]['id']);
@@ -73,7 +75,7 @@ class ProductController
             'estoque' => 'bail|required',                       
         ]);
 
-        $product_id = $request->query('id');
+        $product_id = (int) $request->query('id');
 
         if ($product_id !== null) {
             $this->productService->changeData($product_id, $data);

@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Http\Response;
 
 class HomeController
 {
     /**
      * Show the profile for a given user.
      */
-    public function index(): HttpResponse
+    public function index(): Response
     {
         $result = Product::select('*')
             ->where('stock', '>', 0)

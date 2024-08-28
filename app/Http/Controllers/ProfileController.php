@@ -32,17 +32,15 @@ class ProfileController
             'pass2' => 'bail|required|min:8|max:60|same:pass1',
         ]);
 
-        if ($this->userService->registerUser($data)) {
-            return redirect('/perfil');
-        }
+        if ($this->userService->registerUser($data)) return redirect('/perfil');
+        
         return response()->view('user.register', ['error' => 'Email já utilizado']);
     }
 
     public function loginPage(): Response|RedirectResponse
     {
-        if (session()->has('id')) {
-            return redirect('/perfil');
-        }
+        if (session()->has('id')) return redirect('/perfil');
+        
         return response()->view('user.login');
     }
 
@@ -53,9 +51,8 @@ class ProfileController
             'senha' => 'bail|required|min:8|max:60',
         ]);
 
-        if ($this->userService->loginUser($data)) {
-            return redirect('/perfil');
-        }
+        if ($this->userService->loginUser($data)) return redirect('/perfil');
+        
         return response()->view('user.login', ['error' => 'Email e/ou senha inválido(s)']);
     }
 
