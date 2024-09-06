@@ -1,84 +1,60 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
-use App\Services\ProfileService;
-use App\Services\UserService;
+use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
-class ProfileController
+class ProfileController extends Controller
 {
-    public function __construct(private UserService $userService, private ProfileService $profileService) {}
-
-    public function registerPage(): Response
+    /**
+     * Display the user's profile form.
+     */
+    public function edit(Request $request): View
     {
-        return response()->view('user.register');
-    }
-
-    public function registerValid(Request $request): Response|RedirectResponse
-    {
-        $data = $request->validate([
-            'email' => 'bail|required|email',
-            'name' => 'bail|required|min:4|max:30',
-            'lastname' => 'bail|required|min:4|max:30',
-            'state' => 'bail|required|size:2',
-            'city' => 'bail|required|min:4|max:40',
-            'pass1' => 'bail|required|min:8|max:60',
-            'pass2' => 'bail|required|min:8|max:60|same:pass1',
+        return view('profile.edit', [
+            'user' => $request->user(),
         ]);
-
-        if ($this->userService->registerUser($data)) return redirect('/perfil');
-        
-        return response()->view('user.register', ['error' => 'Email já utilizado']);
     }
 
-    public function loginPage(): Response|RedirectResponse
+    /**
+     * Update the user's profile information.
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        if (session()->has('id')) return redirect('/perfil');
-        
-        return response()->view('user.login');
-    }
+        $request->user()->fill($request->validated());
 
-    public function loginValid(Request $request): Response|RedirectResponse
-    {
-        $data = $request->validate([
-            'email' => 'bail|required|email',
-            'senha' => 'bail|required|min:8|max:60',
-        ]);
-
-        if ($this->userService->loginUser($data)) return redirect('/perfil');
-        
-        return response()->view('user.login', ['error' => 'Email e/ou senha inválido(s)']);
-    }
-
-    public function perfil(): Response
-    {
-        if (session()->has('id')) {
-            [$user, $products, $purchases] = $this->profileService->requestData();
-            return response()->view('user.profile', ['user' => $user, 'products' => $products, 'purchases' => $purchases]);
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
         }
-        return response()->view('error.profile');
+
+        $request->user()->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    public function newProfilePicture(Request $request): RedirectResponse
+    /**
+     * Delete the user's account.
+     */
+    public function destroy(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'foto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
         ]);
 
-        $this->profileService->newPhoto($data['foto']);
+        $user = $request->user();
 
-        return redirect('/perfil');
-    }
+        Auth::logout();
 
-    public function sair(): RedirectResponse
-    {
-        session()->remove('id');
-        return redirect('/');
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
     }
 }
