@@ -20,7 +20,7 @@
         <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise" required>
         <input type="submit" value="Buscar">
       </form>
-      <a href="/login"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
+      <a href="/perfil"><i class="bi bi-person-circle ms-1 fs-3"></i></a>
       <a href="/carrinho"><i class="bi bi-cart3 ms-1 fs-3"></i></a>
     </menu>
   </header>

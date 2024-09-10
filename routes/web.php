@@ -8,20 +8,40 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/registro', [ProfileController::class, 'registerPage']);
-Route::post('/registro', [ProfileController::class, 'registerValid']);
-Route::get('/login', [ProfileController::class, 'loginPage']);
-Route::post('/login', [ProfileController::class, 'loginValid']);
-Route::get('/perfil', [ProfileController::class, 'perfil']);
-Route::post('/perfil', [ProfileController::class, 'newProfilePicture']);
-Route::post('/sair', [ProfileController::class, 'sair']);
+/**
+ *  User Routes
+ */
+Route::controller(ProfileController::class)->group(function () {
+    Route::get('/registro', 'registerPage');
+    Route::post('/registro', 'registerValid');
+    Route::get('/login', 'loginPage');
+    Route::post('/login', 'loginValid');
 
-Route::get('/produto', [ProductController::class, 'index']);
-Route::get('/pesquisa', [ProductController::class, 'search']);
-Route::post('/novoproduto', [ProductController::class, 'newProduct']);
-Route::post('/produto', [ProductController::class, 'buying']);
-Route::post('/alteraproduto', [ProductController::class, 'chageData']);
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/perfil', 'perfil');
+        Route::post('/perfil', 'newProfilePicture');
+        Route::post('/sair', 'sair');
+    });
+});
 
-Route::get('/carrinho', [CartController::class, 'index']);
-Route::get('/remover', [CartController::class, 'remove']);
-Route::post('/comprar', [CartController::class, 'buy']);
+/**
+ *  Products Routes
+ */
+Route::controller(ProductController::class)->group(function () {
+    Route::get('/produto', 'index');
+    Route::get('/pesquisa', 'search');
+    Route::post('/novoproduto', 'newProduct');
+    Route::post('/produto', 'buying');
+    Route::post('/alteraproduto', 'chageData');
+});
+
+/**
+ *  Cart Routes
+ */
+Route::controller(CartController::class)->group(function () {
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/carrinho', 'index');
+        Route::get('/remover', 'remove');
+        Route::post('/comprar', 'buy');
+    });
+});
