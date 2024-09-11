@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController
 {
@@ -33,14 +34,14 @@ class ProfileController
         ]);
 
         if ($this->userService->registerUser($data)) return redirect('/perfil');
-        
+
         return response()->view('user.register', ['error' => 'Email já utilizado']);
     }
 
     public function loginPage(): Response|RedirectResponse
     {
         if (session()->has('id')) return redirect('/perfil');
-        
+
         return response()->view('user.login');
     }
 
@@ -48,21 +49,29 @@ class ProfileController
     {
         $data = $request->validate([
             'email' => 'bail|required|email',
-            'senha' => 'bail|required|min:8|max:60',
+            'password' => 'bail|required|min:8|max:60',
         ]);
 
-        if ($this->userService->loginUser($data)) return redirect('/perfil');
-        
+        if (Auth::attempt($data)) {
+            $request->session()->regenerate();
+            return redirect('/perfil');
+        }
+
         return response()->view('user.login', ['error' => 'Email e/ou senha inválido(s)']);
     }
 
     public function perfil(): Response
     {
-        if (session()->has('id')) {
-            [$user, $products, $purchases] = $this->profileService->requestData();
-            return response()->view('user.profile', ['user' => $user, 'products' => $products, 'purchases' => $purchases]);
-        }
-        return response()->view('error.profile');
+        [$user, $products, $purchases] = $this->profileService->requestData();
+
+        return response()->view(
+            'user.profile',
+            [
+                'user' => $user,
+                'products' => $products,
+                'purchases' => $purchases
+            ]
+        );
     }
 
     public function newProfilePicture(Request $request): RedirectResponse
@@ -76,9 +85,14 @@ class ProfileController
         return redirect('/perfil');
     }
 
-    public function sair(): RedirectResponse
+    public function sair(Request $request): RedirectResponse
     {
-        session()->remove('id');
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

@@ -9,20 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-
-    public function loginUser(array $data): bool
-    {
-        $result = User::select('id', 'password')
-            ->where('email',  $data["email"])
-            ->get()->toArray();
-
-        if (!empty($result) && Hash::check($data["senha"], $result[0]['password'], ['rounds' => 12])) {
-            session()->put('id', $result[0]['id']);
-            return true;
-        } 
-        return false;
-    }
-
     public function registerUser(array $data): bool
     {
         $email = $data['email'];

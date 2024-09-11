@@ -14,8 +14,8 @@
                 @csrf
                 <label for="iemail" class="mt-1 lead">Email:</label><br>
                 <input type="text" class="p-1" name="email" id="iemail" autocomplete="email" required minlength="4" maxlength="50"><br>
-                <label for="isenha" class="mt-1 lead">Insira sua Senha:</label><br>
-                <input type="password" class="p-1" name="senha" id="isenha" autocomplete="current-password" minlength="8" required maxlength="60"><br>
+                <label for="ipassword" class="mt-1 lead">Insira sua Senha:</label><br>
+                <input type="password" class="p-1" name="password" id="ipassword" autocomplete="current-password" minlength="8" required maxlength="60"><br>
                 <input class="btn btn-success mt-3" type="submit" value="Entrar">
             </form>
             <div id="diverro" class="erro bg-white text-danger rounded m-2 fs-5">
