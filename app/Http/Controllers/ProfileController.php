@@ -33,7 +33,10 @@ class ProfileController
             'pass2' => 'bail|required|min:8|max:60|same:pass1',
         ]);
 
-        if ($this->userService->registerUser($data)) return redirect('/perfil');
+        if (($userId = $this->userService->registerUser($data)) !== false){
+            Auth::loginUsingId($userId);
+            return redirect('/perfil');
+        } 
 
         return response()->view('user.register', ['error' => 'Email já utilizado']);
     }

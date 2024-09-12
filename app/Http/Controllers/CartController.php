@@ -17,8 +17,6 @@ class CartController
 
     public function index(): Response|RedirectResponse
     {
-        if (!session()->has('id')) return redirect('/login');
-        
         $products = $this->cardService->getProducts();
         return response()->view('user.cart', ['products' => $products]);
     }
