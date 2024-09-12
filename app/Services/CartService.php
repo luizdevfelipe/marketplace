@@ -12,21 +12,21 @@ class CartService
 {
     protected $table = 'carrinho';
 
-    public function getProducts()
+    public function getProducts(int $userId)
     {
-        return $this->getProductsDataByUser('*');
+        return $this->getProductsDataByUser('*', $userId);
     }
 
-    public function getProductsId()
+    public function getProductsId(int $userId)
     {
-        return $this->getProductsDataByUser('carts.product_id');
+        return $this->getProductsDataByUser('carts.product_id', $userId);
     }
 
-    public function getProductsDataByUser(string $data)
+    public function getProductsDataByUser(string $data, int $userId)
     {
         return Product::select($data)
             ->join('carts', 'products.id', '=', 'carts.product_id')
-            ->where('carts.user_id', '=', session()->get('id'))
+            ->where('carts.user_id', '=', $userId)
             ->get()->toArray();
     }
 
@@ -36,7 +36,7 @@ class CartService
             ->delete();
     }
 
-    public function buyProducts(array $products_ids)
+    public function buyProducts(array $products_ids, int $userId)
     {
         foreach ($products_ids as $id) {
             $stock = Product::select('stock')
@@ -49,7 +49,7 @@ class CartService
                 Product::where('id', $id['product_id'])
                     ->update(['stock' => $stock]);
 
-                Purchase::insert(['user_id' => session()->get('id'), 'product_id' => $id['product_id']]);
+                Purchase::insert(['user_id' => $userId, 'product_id' => $id['product_id']]);
 
                 $idCart = Cart::select('id')
                 ->where('product_id', $id['product_id'])

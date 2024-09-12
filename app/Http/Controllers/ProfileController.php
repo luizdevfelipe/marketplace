@@ -65,7 +65,7 @@ class ProfileController
 
     public function perfil(): Response
     {
-        [$user, $products, $purchases] = $this->profileService->requestData();
+        [$user, $products, $purchases] = $this->profileService->requestData(Auth::id());
 
         return response()->view(
             'user.profile',
@@ -83,7 +83,7 @@ class ProfileController
             'foto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
         ]);
 
-        $this->profileService->newPhoto($data['foto']);
+        $this->profileService->newPhoto($data['foto'], Auth::id());
 
         return redirect('/perfil');
     }

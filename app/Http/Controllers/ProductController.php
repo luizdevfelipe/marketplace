@@ -24,7 +24,7 @@ class ProductController
 
         if(!$produto) return redirect('/');
 
-        if (Auth::check() && session()->get('id') == $produto[0]['user_id']) {
+        if (Auth::check() && Auth::id() == $produto[0]['user_id']) {
             return response()->view('products.productOwner', ['produto' => $produto]);
         }
         return response()->view('products.productView', ['produto' => $produto, 'id' => $id]);
@@ -50,7 +50,7 @@ class ProductController
             'pfoto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
         ]);
 
-        $this->productService->insertProduct($data);
+        $this->productService->insertProduct($data, Auth::id());
 
         return redirect('/perfil');
     }
@@ -59,8 +59,8 @@ class ProductController
     {
         $produto = $this->productService->productData((int) $request->query('id'));
 
-        if (Auth::check() && session()->get('id') !== $produto[0]['user_id']) {
-            $this->productService->addToCard($produto[0]['id']);
+        if (Auth::check() && Auth::id() !== $produto[0]['user_id']) {
+            $this->productService->addToCard($produto[0]['id'], Auth::id());
             return redirect('/carrinho');
         } else {
             return redirect('/login');

@@ -24,7 +24,7 @@ class ProductService
         return $results;
     }
 
-    public function insertProduct(array $data)
+    public function insertProduct(array $data, int $userId)
     {
         $fileName = Storage::disk('public')->putFile('/product', $data["pfoto"]);        
        
@@ -35,7 +35,7 @@ class ProductService
             'price' => $data['preco'],
             'stock' => $data['estoque'],
             'product_picture' => $fileName,
-            'user_id' => session()->get('id')
+            'user_id' => $userId
         ]);
         }       
     }
@@ -47,10 +47,10 @@ class ProductService
             ->get()->toArray();
     }
 
-    public function addToCard(int $id)
+    public function addToCard(int $id, int $userId)
     {
         Cart::insert([
-            'user_id' => session()->get('id'),
+            'user_id' => $userId,
             'product_id' => $id
         ]);
     }

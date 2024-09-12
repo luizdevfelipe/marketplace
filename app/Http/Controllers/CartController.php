@@ -8,6 +8,7 @@ use App\Services\CartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CartController
 {
@@ -17,7 +18,7 @@ class CartController
 
     public function index(): Response|RedirectResponse
     {
-        $products = $this->cardService->getProducts();
+        $products = $this->cardService->getProducts(Auth::id());
         return response()->view('user.cart', ['products' => $products]);
     }
 
@@ -32,7 +33,7 @@ class CartController
 
     public function buy(): RedirectResponse
     {
-        if ($ids = $this->cardService->getProductsId()) $this->cardService->buyProducts($ids);
+        if ($ids = $this->cardService->getProductsId(Auth::id())) $this->cardService->buyProducts($ids, Auth::id());
         
         return redirect('/carrinho');
     }
