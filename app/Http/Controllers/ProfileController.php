@@ -43,7 +43,7 @@ class ProfileController
 
     public function loginPage(): Response|RedirectResponse
     {
-        if (session()->has('id')) return redirect('/perfil');
+        if (Auth::check()) return redirect('/perfil');
 
         return response()->view('user.login');
     }

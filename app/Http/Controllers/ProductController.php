@@ -8,6 +8,7 @@ use App\Services\ProductService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 
 class ProductController
@@ -23,7 +24,7 @@ class ProductController
 
         if(!$produto) return redirect('/');
 
-        if (session()->has('id') && session()->get('id') == $produto[0]['user_id']) {
+        if (Auth::check() && session()->get('id') == $produto[0]['user_id']) {
             return response()->view('products.productOwner', ['produto' => $produto]);
         }
         return response()->view('products.productView', ['produto' => $produto, 'id' => $id]);
@@ -58,7 +59,7 @@ class ProductController
     {
         $produto = $this->productService->productData((int) $request->query('id'));
 
-        if (session()->has('id') && session()->get('id') !== $produto[0]['user_id']) {
+        if (Auth::check() && session()->get('id') !== $produto[0]['user_id']) {
             $this->productService->addToCard($produto[0]['id']);
             return redirect('/carrinho');
         } else {
