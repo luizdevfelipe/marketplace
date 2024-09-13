@@ -28,11 +28,19 @@ class ProfileService
         return [$user, $product, $purchases];
     }
 
-    public function newPhoto($picture, int $id)
+    public function newPhoto($picture, int $userId): void
     {
         $fileName = Storage::disk('public')->putFile('/user', $picture);
 
-        User::where('id', $id)
+        $actualPicture = User::select('user_picture')
+            ->where('id', $userId)
+            ->get()->toArray();
+
+        if ($actualPicture !== null) {
+            Storage::disk('public')->delete($actualPicture[0]['user_picture']);
+        }
+
+        User::where('id', $userId)
             ->update([
                 'user_picture' => $fileName
             ]);;
