@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('state');
             $table->string('city');
             $table->string('email')->unique();
-            $table->string('user_picture');
+            $table->string('user_picture')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
