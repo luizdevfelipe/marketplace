@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ProfileController
 {
@@ -55,7 +56,9 @@ class ProfileController
             'password' => 'bail|required|min:8|max:60',
         ]);
 
-        if (Auth::attempt($data)) {
+        $remember = ($request->validate(['remember' => 'bail', Rule::in(['on'])])) == 'on' ? true : false;    
+                        
+        if (Auth::attempt($data, $remember)) {
             $request->session()->regenerate();
             return redirect('/perfil');
         }
