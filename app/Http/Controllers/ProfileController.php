@@ -34,17 +34,17 @@ class ProfileController
             'pass2' => 'bail|required|min:8|max:60|same:pass1',
         ]);
 
-        if (($userId = $this->userService->registerUser($data)) !== false){
+        if (($userId = $this->userService->registerUser($data)) !== false) {
             Auth::loginUsingId($userId);
             return redirect('/perfil');
-        } 
+        }
 
         return response()->view('user.register', ['error' => 'Email já utilizado']);
     }
 
     public function loginPage(): Response|RedirectResponse
     {
-        if (Auth::check()) return redirect('/perfil');
+        if (Auth::viaRemember() || Auth::check()) return redirect('/perfil');
 
         return response()->view('user.login');
     }
@@ -56,8 +56,8 @@ class ProfileController
             'password' => 'bail|required|min:8|max:60',
         ]);
 
-        $remember = ($request->validate(['remember' => 'bail', Rule::in(['on'])])) == 'on' ? true : false;    
-                        
+        $remember = ($request->validate(['remember' => Rule::in(['on'])])['remember'] ?? null) == 'on' ? true : false;
+
         if (Auth::attempt($data, $remember)) {
             $request->session()->regenerate();
             return redirect('/perfil');
