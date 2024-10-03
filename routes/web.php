@@ -1,12 +1,35 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index']);
+/**
+ *  Home Routes
+ */
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index');
+});
+
+/**
+ *  Auth Routes
+ */
+Route::controller(AuthController::class)->group(function () {
+    Route::middleware(['auth'])->group(function () {
+
+        Route::get('/email-verify', 'emailVerifyView')
+            ->name('verification.notice');
+
+        Route::get('/email-verify/{id}/{hash}', 'verifyEmail')
+            ->middleware('signed')->name('verification.verify');
+
+        Route::post('/email/verification-resent', 'resentVerificationEmail')
+            ->middleware('throttle:6,1')->name('verification.send');
+    });
+});
 
 /**
  *  User Routes
@@ -14,10 +37,10 @@ Route::get('/', [HomeController::class, 'index']);
 Route::controller(ProfileController::class)->group(function () {
     Route::get('/registro', 'registerPage');
     Route::post('/registro', 'registerValid');
-    Route::get('/login', 'loginPage');
+    Route::get('/login', 'loginPage')->name('login');
     Route::post('/login', 'loginValid');
 
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/perfil', 'perfil');
         Route::post('/perfil', 'newProfilePicture');
         Route::post('/sair', 'sair');

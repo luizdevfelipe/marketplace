@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Auth\Events\Registered;
 
 class ProfileController
 {
@@ -34,9 +35,8 @@ class ProfileController
             'pass2' => 'bail|required|min:8|max:60|same:pass1',
         ]);
 
-        if (($userId = $this->userService->registerUser($data)) !== false) {
-            Auth::loginUsingId($userId);
-            return redirect('/perfil');
+        if (($user = $this->userService->registerUser($data)) !== false) {
+            event(new Registered($user));
         }
 
         return response()->view('user.register', ['error' => 'Email já utilizado']);
