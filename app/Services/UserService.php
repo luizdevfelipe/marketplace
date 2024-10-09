@@ -9,25 +9,24 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    public function registerUser(array $data): bool|int
+    public function registerUser(array $data): bool|User
     {
-        $user = User::select('email')
-            ->where('email', $data['email'])
-            ->get();    
+        $exists =  User::where('email', $data['email'])
+            ->exists();          
 
-        if (!empty($user)) {
+        if ($exists) {
             return false;
         }
 
-        User::insert([
+       $user = User::create([
             'email' => $data['email'],
             'password' => Hash::make($data['pass1'], ['rounds' => 12]),
             'name' => $data['name'],
             'lastname' => $data['lastname'],
-            'state' =>  $data['state'],
+            'state' => $data['state'],
             'city' => $data['city'],
         ]);
-
+        
         return $user;
     }
 }
