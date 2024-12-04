@@ -18,7 +18,7 @@ Route::controller(HomeController::class)->group(function () {
  *  Auth Routes
  */
 Route::controller(AuthController::class)->group(function () {
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'alreadyVerified'])->group(function () {
 
         Route::get('/email-verify', 'emailVerifyView')
             ->name('verification.notice');
