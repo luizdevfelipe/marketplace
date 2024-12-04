@@ -37,6 +37,12 @@ class ProfileController
 
         if (($user = $this->userService->registerUser($data)) !== false) {
             event(new Registered($user));
+
+            if (Auth::attempt(['email' => $data['email'], 'password' => $data['pass1']], false)) {
+                $request->session()->regenerate();
+            }
+
+            return redirect('/email-verify');
         }
 
         return response()->view('user.register', ['error' => 'Email já utilizado']);

@@ -27,7 +27,7 @@ Route::controller(AuthController::class)->group(function () {
             ->middleware('signed')->name('verification.verify');
 
         Route::post('/email/verification-resent', 'resentVerificationEmail')
-            ->middleware('throttle:6,1')->name('verification.send');
+            ->middleware('throttle:3,2')->name('verification.send');
     });
 });
 
@@ -62,7 +62,7 @@ Route::controller(ProductController::class)->group(function () {
  *  Cart Routes
  */
 Route::controller(CartController::class)->group(function () {
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/carrinho', 'index');
         Route::get('/remover', 'remove');
         Route::post('/comprar', 'buy');
