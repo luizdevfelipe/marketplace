@@ -12,29 +12,29 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController
 {
-    public function __construct(private CartService $cardService)
-    {
-    }
+    public function __construct(private CartService $cardService) {}
 
     public function index(): Response|RedirectResponse
     {
         $products = $this->cardService->getProducts(Auth::id());
-        return response()->view('user.cart', ['products' => $products]);
+        return response()->view('cart.index', ['products' => $products]);
     }
 
     public function remove(Request $request): RedirectResponse
     {
         $id = $request->input('id');
 
-        if (!empty($id)) $this->cardService->removeProduct((int) $id);           
-        
+        if (!empty($id)) $this->cardService->removeProduct((int) $id);
+
         return redirect('/carrinho');
     }
 
-    public function buy(): RedirectResponse
+    public function buy(): Response|RedirectResponse
     {
-        if ($ids = $this->cardService->getProductsId(Auth::id())) $this->cardService->buyProducts($ids, Auth::id());
-        
-        return redirect('/carrinho');
+        if ($ids = $this->cardService->getProductsId(Auth::id())) {
+            $this->cardService->buyProducts($ids, Auth::id());
+            return response()->view('cart.success');
+        }
+        return response()->view('cart.error');
     }
 }
