@@ -26,18 +26,18 @@ class ProductService
 
     public function insertProduct(array $data, int $userId)
     {
-        $fileName = Storage::disk('public')->putFile('/product', $data["pfoto"]);        
-       
-        if($fileName !== false){
-             Product::insert([
-            'name' => $data['nproduto'],
-            'description' => $data['descricao'],
-            'price' => $data['preco'],
-            'stock' => $data['estoque'],
-            'product_picture' => $fileName,
-            'user_id' => $userId
-        ]);
-        }       
+        $fileName = Storage::disk('public')->putFile('/product', $data["pfoto"]);
+
+        if ($fileName !== false) {
+            Product::insert([
+                'name' => $data['nproduto'],
+                'description' => $data['descricao'],
+                'price' => $data['preco'],
+                'stock' => $data['estoque'],
+                'product_picture' => $fileName,
+                'user_id' => $userId
+            ]);
+        }
     }
 
     public function productData(int $id)
