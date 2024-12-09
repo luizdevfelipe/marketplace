@@ -34,10 +34,10 @@ class ProfileService
 
         $actualPicture = User::select('user_picture')
             ->where('id', $userId)
-            ->get()->toArray();
+            ->get()->toArray()[0]['user_picture'];
 
         if ($actualPicture !== null) {
-            Storage::disk('public')->delete($actualPicture[0]['user_picture']);
+            Storage::disk('public')->delete($actualPicture);
         }
 
         User::where('id', $userId)
