@@ -52,5 +52,10 @@ docker run --rm \
 ```cmd
 ./vendor/bin/sail artisan migrate
 ```
+<p><strong>8º</strong> Para finalizar, já com a estrutura da aplicação pronta é necessário criar um vínculo da pasta que armazena os arquivos enviados por usuários, majoritariamente imagens, com o sistema em geral para que esses possam ser carregados. Isso é feito através de um comando no container da aplicação executado pelo Sail:</p>
 
-<p><strong>8º</strong> Tudo Certo! Basta acessar <strong>http://localhost:8001/</strong> para que você possa visualizar o projeto em funcionamento. Dica! Ao se cadastrar é necessário confirmar o email, no caso dessa aplicação temos que acessar <strong>http://localhost:8025/</strong> pois é onde o serviço de email está hospedado</p>
+```cmd
+./vendor/bin/sail artisan storage:link
+```
+
+<p><strong>9º</strong> Tudo Certo! Basta acessar <strong>http://localhost:8001/</strong> para que você possa visualizar o projeto em funcionamento. Dica! Ao se cadastrar é necessário confirmar o email, no caso dessa aplicação temos que acessar <strong>http://localhost:8025/</strong> pois é onde o serviço de email está hospedado</p>
