@@ -13,21 +13,18 @@ use Illuminate\Validation\Rules\File;
 
 class ProductController
 {
-    public function __construct(private ProductService $productService)
-    {
-    }
+    public function __construct(private ProductService $productService) {}
 
-    public function index(Request $request): Response|RedirectResponse
+    public function index(int $productId): Response|RedirectResponse
     {
-        $id = $request->query('id');
-        $produto = $this->productService->productData((int) $id);
+        $produto = $this->productService->productData((int) $productId);
 
-        if(!$produto) return redirect('/');
+        if (!$produto) return redirect('/');
 
         if (Auth::check() && Auth::id() == $produto[0]['user_id']) {
             return response()->view('products.productOwner', ['produto' => $produto]);
         }
-        return response()->view('products.productView', ['produto' => $produto, 'id' => $id]);
+        return response()->view('products.productView', ['produto' => $produto, 'id' => $productId]);
     }
 
     public function search(Request $request): Response
@@ -36,7 +33,7 @@ class ProductController
             'produto' => 'required|max:60'
         ]);
         $results = $this->productService->searchProduct($validated['produto']);
-        
+
         return response()->view('products.search', ['results' => $results]);
     }
 
@@ -46,7 +43,7 @@ class ProductController
             'nproduto' => 'bail|required|min:4|max:30',
             'descricao' => 'bail|required|min:15|max:100',
             'preco' => 'bail|required|decimal:0,2',
-            'estoque' => 'bail|required|integer',            
+            'estoque' => 'bail|required|integer',
             'pfoto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
         ]);
 
@@ -55,9 +52,9 @@ class ProductController
         return redirect('/perfil');
     }
 
-    public function buying(Request $request): RedirectResponse
+    public function buying(Request $request, int $productId): RedirectResponse
     {
-        $produto = $this->productService->productData((int) $request->query('id'));
+        $produto = $this->productService->productData((int) $productId);
 
         if (Auth::check() && Auth::id() !== $produto[0]['user_id']) {
             $this->productService->addToCard($produto[0]['id'], Auth::id());
@@ -67,20 +64,18 @@ class ProductController
         }
     }
 
-    public function chageData(Request $request): RedirectResponse
+    public function chageData(Request $request, int $requestId): RedirectResponse
     {
         $data = $request->validate([
             'nproduto' => 'bail|required',
             'descricao' => 'bail|required',
             'preco' => 'bail|required',
-            'estoque' => 'bail|required',                       
+            'estoque' => 'bail|required',
         ]);
 
-        $product_id = (int) $request->query('id');
-
-        if ($product_id !== null) {
-            $this->productService->changeData($product_id, $data);
+        if ($requestId !== null) {
+            $this->productService->changeData($requestId, $data);
         }
-        return redirect('/produto?id=' . $product_id);
+        return redirect('/produto/' . $requestId);
     }
 }

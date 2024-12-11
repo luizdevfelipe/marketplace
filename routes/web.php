@@ -50,12 +50,14 @@ Route::controller(ProfileController::class)->group(function () {
 /**
  *  Products Routes
  */
-Route::controller(ProductController::class)->group(function () {
-    Route::get('/produto', 'index');
-    Route::get('/pesquisa', 'search');
-    Route::post('/novoproduto', 'newProduct');
-    Route::post('/produto', 'buying');
-    Route::post('/alteraproduto', 'chageData');
+Route::name('produto.')->prefix('produto')->group(function () {
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/{productId}', 'index')->whereNumber('productId')->name('index');
+        Route::get('/search', 'search')->name('search');
+        Route::post('/new', 'newProduct')->name('new');
+        Route::post('/{productId}/buy', 'buying')->whereNumber('productId')->name('buy');
+        Route::post('/{productId}/modify', 'chageData')->whereNumber('productId')->name('modify');
+    });
 });
 
 /**

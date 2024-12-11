@@ -16,7 +16,7 @@
   <header>
     <menu class="pt-1">
       <p class="p-0 m-0"><a href="/" class="text-decoration-none fs-5">MarketPlace</a></p>
-      <form action="/pesquisa" method="get" autocomplete="on">
+      <form action="/produto/search" method="get" autocomplete="on">
         <input type="text" name="produto" id="ipesquisa" placeholder="Pesquise" required>
         <input type="submit" value="Buscar">
       </form>

@@ -24,7 +24,7 @@
             <h5 class='card-title'> <?= $row['name'] ?> </h5>
             <p class='card-text'><?= $row['description'] ?></p>
             <p class='card-text'>R$ <?= $row['price'] ?></p>
-            <a href='/produto?id=<?= $row['id'] ?>' class='btn btn-primary'>Ver Produto</a>
+            <a href='/produto/<?= $row['id'] ?>' class='btn btn-primary'>Ver Produto</a>
           </div>
         </div>
 

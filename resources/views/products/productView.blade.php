@@ -16,7 +16,7 @@
                 <p class="text-success fs-5">R$<?= $produto[0]['price'] ?></p>
 
                 @if ($produto[0]['stock'] > 0)
-                <form action='/produto?id=<?= $id ?>' method='post'>
+                <form action='/produto/<?= $id ?>/buy' method='post'>
                     @csrf
                     <input type='submit' class='btn btn-success' value='Adicionar ao carrinho' name='comprar'>
                 </form>
