@@ -32,7 +32,11 @@ if (empty($estoque)) {
                                 <h5 class='card-title'><?= $product['name'] ?></h5>
                                 <p class='card-text'><?= $product['description'] ?></p>
                                 <p class='card-text'>R$<?= $product['price'] ?></p>
-                                <a href='/remover?id=<?= $product['id'] ?>' class='btn btn-primary'>Remover Produto</a>
+                                <form action="/carrinho/<?= $product['id'] ?>" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="submit" class='btn btn-primary' value="Remover Produto">
+                                </form>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -44,7 +48,7 @@ if (empty($estoque)) {
     </div>
     <div class="container">
         <?php if (!empty($products)) : ?>
-            <form action='/comprar' method='post'>@csrf<input type='submit' class='p-1 my-3' value='Finalizar Compra' name='comprou'></form>
+            <form action='/carrinho' method='post'>@csrf<input type='submit' class='p-1 my-3' value='Finalizar Compra' name='comprou'></form>
         <?php endif; ?>
     </div>
 

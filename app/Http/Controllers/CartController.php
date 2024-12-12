@@ -20,10 +20,8 @@ class CartController
         return response()->view('cart.index', ['products' => $products]);
     }
 
-    public function remove(Request $request): RedirectResponse
+    public function remove(Request $request, int $id): RedirectResponse
     {
-        $id = $request->input('id');
-
         if (!empty($id)) $this->cardService->removeProduct((int) $id);
 
         return redirect('/carrinho');
