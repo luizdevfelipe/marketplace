@@ -49,6 +49,10 @@ Route::controller(ProfileController::class)->middleware(['auth', 'verified'])
         Route::post('/sair', 'sair');
     });
 
+    Route::get('/perfil/two-factor-manage', function () {
+        return view('user.manage2fa');
+    });
+
 /**
  *  Products Routes
  */

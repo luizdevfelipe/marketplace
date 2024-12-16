@@ -18,7 +18,11 @@
                     Bem vindo <?= $user[0]['name'] . ' ' . $user[0]['lastname'] ?>, você mora em <?= $user[0]['city'] . ' ' . $user[0]['state'] ?>
                     <br>
 
-                    <form action="/perfil" enctype="multipart/form-data" method="post">@csrf<label for="ifoto" class="border border-dark rounded p-1 mt-1 text-center" style="width: 200px; cursor:pointer;">Clique e envie a Imagem</label><input type="file" name="foto" id="ifoto" style="display: none;"> <br> <input type="submit" class="border border-dark rounded p-1 mt-1 text-center" value="Salvar Imagem"></form> <br>
+                    <form action="/perfil" enctype="multipart/form-data" method="post">@csrf<label for="ifoto" class="border border-dark rounded p-1 mt-1 text-center" style="width: 200px; cursor:pointer;">Clique e envie a Imagem</label><input type="file" name="foto" id="ifoto" style="display: none;"> <br> <input type="submit" class="border border-dark rounded p-1 my-1 text-center" value="Salvar Imagem"></form> 
+                    
+                    <a href="perfil/two-factor-manage" class="border border-dark rounded text-dark text-end fs-5 p-1">Gerenciar autenticação em dois fatores (2FA)</a>
+
+                    <br>
 
                     <form action="<?= htmlspecialchars('/sair') ?>" method="post">
                         @csrf
