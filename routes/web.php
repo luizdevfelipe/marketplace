@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
 
 /**
  *  Home Routes
@@ -46,11 +47,10 @@ Route::controller(ProfileController::class)->middleware(['auth', 'verified'])
     ->group(function () {
         Route::get('/perfil', 'perfil');
         Route::post('/perfil', 'newProfilePicture');
+        Route::get('/perfil/two-factor-manage', function () {
+            return view('user.manage2fa');
+        });
         Route::post('/sair', 'sair');
-    });
-
-    Route::get('/perfil/two-factor-manage', function () {
-        return view('user.manage2fa');
     });
 
 /**

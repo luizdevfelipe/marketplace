@@ -6,6 +6,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Fortify Route Paths
+    |--------------------------------------------------------------------------
+    |
+    | Here you can redefine the routes that are used by Fortify. 
+    | The replacement is done through the relationship of the route name with its 
+    | path that can be seen in the laravel/fortify/routes/route.php file.
+    |
+    */
+
+    'paths' => [
+        'two-factor' => [
+            'enable' => '/perfil/enable-2fa'
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Fortify Guard
     |--------------------------------------------------------------------------
     |
@@ -73,7 +90,7 @@ return [
     |
     */
 
-    'home' => '/home',
+    'home' => '/',
 
     /*
     |--------------------------------------------------------------------------
