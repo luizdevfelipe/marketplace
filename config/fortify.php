@@ -19,6 +19,9 @@ return [
         'two-factor' => [
             'enable' => '/perfil/enable-2fa'
         ],
+        'password' => [
+            'confirm' => '/confirm-password'
+        ]
     ],
 
     /*
@@ -90,7 +93,7 @@ return [
     |
     */
 
-    'home' => '/',
+    'home' => '/perfil',
 
     /*
     |--------------------------------------------------------------------------

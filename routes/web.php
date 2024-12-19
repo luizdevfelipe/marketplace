@@ -7,7 +7,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
 
 /**
  *  Home Routes
@@ -39,8 +38,6 @@ Route::controller(EmailVerificationController::class)->group(function () {
 Route::controller(AuthController::class)->group(function () {
     Route::get('/registro', 'registerPage');
     Route::post('/registro', 'registerValid');
-    Route::get('/login', 'loginPage')->name('login');
-    Route::post('/login', 'loginValid');
 });
 
 Route::controller(ProfileController::class)->middleware(['auth', 'verified'])

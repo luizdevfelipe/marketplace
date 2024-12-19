@@ -6,7 +6,6 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Illuminate\Validation\Rule;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,29 +41,5 @@ class AuthController
         }
 
         return response()->view('user.register', ['error' => 'Email já utilizado']);
-    }
-
-    public function loginPage(): Response|RedirectResponse
-    {
-        if (Auth::viaRemember() || Auth::check()) return redirect('/perfil');
-
-        return response()->view('user.login');
-    }
-
-    public function loginValid(Request $request): Response|RedirectResponse
-    {
-        $data = $request->validate([
-            'email' => 'bail|required|email',
-            'password' => 'bail|required|min:8|max:60',
-        ]);
-
-        $remember = ($request->validate(['remember' => Rule::in(['on'])])['remember'] ?? null) == 'on' ? true : false;
-
-        if (Auth::attempt($data, $remember)) {
-            $request->session()->regenerate();
-            return redirect('/perfil');
-        }
-
-        return response()->view('user.login', ['error' => 'Email e/ou senha inválido(s)']);
-    }
+    }    
 }

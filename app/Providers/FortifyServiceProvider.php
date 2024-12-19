@@ -32,8 +32,16 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
         Fortify::confirmPasswordView(function () {
-            return view('auth/confirm-password');
+            return view('auth.confirm-password');
+        });
+        Fortify::twoFactorChallengeView(function () {
+            return view('auth.two-factor-challenge');
+        });
+
+        Fortify::loginView(function () {
+            return view('auth.login');
         });
 
         RateLimiter::for('login', function (Request $request) {

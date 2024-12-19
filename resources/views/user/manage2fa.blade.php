@@ -41,7 +41,13 @@
 
         <ul class="list-group m-2" style="width: 350px;" id='codes'></ul>
 
+        @if (!session()->has('auth.password_confirmed_at') || 
+        time() - session('auth.password_confirmed_at') > config('auth.password_timeout', 10800))
+
+        <a href="http://localhost/confirm-password" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fs-4">Confirme a senha para ver seus códigos de autenticação</a>
+        @else
         <button id="getCodes" class="btn btn-primary">Visualizar códigos de recuperação</button>
+        @endif
 
         @else
         <form action="/perfil/enable-2fa" method="post">
