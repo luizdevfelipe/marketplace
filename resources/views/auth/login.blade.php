@@ -4,6 +4,10 @@
 
 @section('body')
 
+<div class="lead text-center rounded p-1" id="registro" style="background-color: #ffffff9d; ">
+    <p>Não tem cadastro? <br><a class="btn bg-success border border-dark p-1 text-white" href="/registro">Registre-se</a> agora</p>
+</div>
+
 @section('legend', 'Login')
 
 <form action="/login" method="post" autocomplete="on" id="form">
