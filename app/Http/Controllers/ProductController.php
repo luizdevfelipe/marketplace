@@ -52,11 +52,11 @@ class ProductController
         return redirect('/perfil');
     }
 
-    public function buying(Request $request, int $productId): RedirectResponse
+    public function buying(int $productId): RedirectResponse
     {
         $produto = $this->productService->productData((int) $productId);
 
-        if (Auth::check() && Auth::id() !== $produto[0]['user_id']) {
+        if (Auth::check() && Auth::user()->hasVerifiedEmail() && Auth::id() !== $produto[0]['user_id']) {
             $this->productService->addToCard($produto[0]['id'], Auth::id());
             return redirect('/carrinho');
         } else {
