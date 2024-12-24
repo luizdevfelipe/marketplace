@@ -6,11 +6,12 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\Product;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
-    public function searchProduct(string $name): array
+    public function searchProduct(string $name): Paginator
     {
         $product = '%' . str_replace(' ', '%', $name) . '%';
 
@@ -18,8 +19,7 @@ class ProductService
             ->where('name', 'like', $product)
             ->where('stock', '>', 0)
             ->orderBy('name', 'asc')
-            ->limit(6)
-            ->get()->toArray();
+            ->simplePaginate(1);
 
         return $results;
     }

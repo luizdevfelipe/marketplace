@@ -16,6 +16,8 @@
                         </div>
                     </div>
                 @endforeach
+
+                {{ $results->links() }}
             @else
                 <div class="container border border-dark rounded mt-5 d-block m-auto">
                     <h1 class="text-center p-5"> Produto não encontrado &#x1F641;<br>Tente utilizar palavras mais curtas como: pipoca, prato ou panela.</h1>
