@@ -56,7 +56,7 @@ Route::controller(ProfileController::class)->middleware(['auth', 'verified'])
 Route::name('produto.')->prefix('produto')->group(function () {
     Route::controller(ProductController::class)->group(function () {
         Route::get('/{productId}', 'index')->whereNumber('productId')->name('index');
-        Route::get('/search', 'search')->name('search');
+        Route::get('/search/{query}', 'search')->whereAlphaNumeric('query')->name('search');
         Route::post('/new', 'newProduct')->name('new');
         Route::post('/{productId}/buy', 'buying')->whereNumber('productId')->name('buy');
         Route::post('/{productId}/modify', 'chageData')->whereNumber('productId')->name('modify');

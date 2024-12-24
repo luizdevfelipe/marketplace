@@ -20,16 +20,11 @@ menu>p {
     float: left;
 }
 
-menu>form {
+.menuForm {
     width: 80%;
     float: left;
     text-align: center;
     margin-top: 5px;
-}
-
-menu>form>input[type=submit] {
-    border-radius: 4px;
-    padding: 1px;
 }
 
 #ipesquisa {

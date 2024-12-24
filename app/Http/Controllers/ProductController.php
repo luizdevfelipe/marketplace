@@ -27,14 +27,14 @@ class ProductController
         return response()->view('products.productView', ['produto' => $produto, 'id' => $productId]);
     }
 
-    public function search(Request $request): Response
+    public function search(string $query): Response|RedirectResponse
     {
-        $validated = $request->validate([
-            'produto' => 'required|max:60'
-        ]);
-        $results = $this->productService->searchProduct($validated['produto']);
-
-        return response()->view('products.search', ['results' => $results]);
+        if ($query) {
+            $results = $this->productService->searchProduct($query);
+            return response()->view('products.search', ['results' => $results]);
+        }
+        
+        return redirect('/');
     }
 
     public function newProduct(Request $request): RedirectResponse
