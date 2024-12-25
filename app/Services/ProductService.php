@@ -19,7 +19,7 @@ class ProductService
             ->where('name', 'like', $product)
             ->where('stock', '>', 0)
             ->orderBy('name', 'asc')
-            ->simplePaginate(1);
+            ->simplePaginate(9);
 
         return $results;
     }
