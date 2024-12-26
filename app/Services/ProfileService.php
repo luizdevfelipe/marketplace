@@ -18,12 +18,14 @@ class ProfileService
 
         $product = Product::select('*')
             ->where('user_id', $id)
-            ->get()->toArray();
+            ->orderBy('created_at', 'desc')
+            ->paginate(4, ['*'], 'products');
 
         $purchases = Product::select('purchases.product_id', 'products.name')
             ->join('purchases', 'products.id', 'purchases.product_id')
             ->where('purchases.user_id', $id)
-            ->get()->toArray();
+            ->orderBy('purchases.created_at', 'desc')
+            ->paginate(4, ['*'], 'purchases');
 
         return [$user, $product, $purchases];
     }

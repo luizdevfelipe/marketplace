@@ -35,7 +35,9 @@ class ProductService
                 'price' => $data['preco'],
                 'stock' => $data['estoque'],
                 'product_picture' => $fileName,
-                'user_id' => $userId
+                'user_id' => $userId,
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
         }
     }
