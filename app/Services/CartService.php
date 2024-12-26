@@ -49,11 +49,16 @@ class CartService
                 Product::where('id', $id['product_id'])
                     ->update(['stock' => $stock]);
 
-                Purchase::insert(['user_id' => $userId, 'product_id' => $id['product_id']]);
+                Purchase::insert([
+                    'user_id' => $userId, 
+                    'product_id' => $id['product_id'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
 
                 $idCart = Cart::select('id')
-                ->where('product_id', $id['product_id'])
-                ->get()->toArray();
+                    ->where('product_id', $id['product_id'])
+                    ->get()->toArray();
 
                 Cart::where('id', $idCart[0]['id'])
                     ->delete();
