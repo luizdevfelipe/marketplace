@@ -10,7 +10,7 @@
                 <img src="<?= asset('storage/' . $produto[0]['product_picture']); ?>" alt="produto" class="rounded" width="90%" height="400px">
             </div>
             <div class="col-12 col-md-5 border border-dark rounded" id="edita">
-                <h1 class="display-5 text-center"><?= $produto[0]['name'] ?></h1>
+                <h1 class="text-center text-break"><?= $produto[0]['name'] ?></h1>
                 <p class="mt-5 fs-5"><?= $produto[0]['description'] ?></p>
                 <p class="mb-0">Produtos Disponíveis: <?= $produto[0]['stock'] ?></p>
                 <p class="text-success fs-5">R$<?= $produto[0]['price'] ?></p>
