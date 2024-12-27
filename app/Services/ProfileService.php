@@ -10,24 +10,35 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileService
 {
-    public function requestData(int $id): array
+    public function getUserData(int $id): array
     {
         $user = User::select('*')
             ->where('id', $id)
             ->get()->toArray();
 
-        $product = Product::select('*')
+
+        return $user;
+    }
+
+    public function getPaginatedProducts(int $id)
+    {
+        $products = Product::select('*')
             ->where('user_id', $id)
             ->orderBy('created_at', 'desc')
             ->paginate(4, ['*'], 'products');
 
+        return $products;
+    }
+
+    public function getPaginatedPurchases(int $id)
+    {
         $purchases = Product::select('purchases.product_id', 'products.name')
             ->join('purchases', 'products.id', 'purchases.product_id')
             ->where('purchases.user_id', $id)
             ->orderBy('purchases.created_at', 'desc')
             ->paginate(4, ['*'], 'purchases');
 
-        return [$user, $product, $purchases];
+        return $purchases;
     }
 
     public function newPhoto($picture, int $userId): void
