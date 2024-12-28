@@ -16,7 +16,8 @@ class ProfileController
     public function __construct
     (
         private ProfileService $profileService,
-        private AuthManager $auth
+        private AuthManager $auth,
+        private Request $request
     ) 
     {}
 
@@ -29,6 +30,18 @@ class ProfileController
 
     public function load()
     {
+        if ($this->request->has('products')) {
+            $products = $this->profileService->getPaginatedProducts($this->auth->id());
+
+            return response()->json($products);
+        } 
+
+        if ($this->request->has('purchases')) {
+            $purchases = $this->profileService->getPaginatedPurchases($this->auth->id());
+
+            return response()->json($purchases);
+        }        
+        
         $purchases = $this->profileService->getPaginatedPurchases($this->auth->id());
         $products = $this->profileService->getPaginatedProducts($this->auth->id());
 
@@ -38,9 +51,9 @@ class ProfileController
         ];
     }
 
-    public function newProfilePicture(Request $request): RedirectResponse
+    public function newProfilePicture(): RedirectResponse
     {
-        $data = $request->validate([
+        $data = $this->request->validate([
             'foto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
         ]);
 
@@ -49,13 +62,13 @@ class ProfileController
         return redirect('/perfil');
     }
 
-    public function sair(Request $request): RedirectResponse
+    public function sair(): RedirectResponse
     {
         $this->auth->logout();
 
-        $request->session()->invalidate();
+        $this->request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+        $this->request->session()->regenerateToken();
 
         return redirect('/');
     }
