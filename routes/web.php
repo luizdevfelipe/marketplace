@@ -42,6 +42,7 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::controller(ProfileController::class)->middleware(['auth', 'verified'])
     ->group(function () {
+        Route::get('/perfil/load', 'load');
         Route::get('/perfil', 'perfil');
         Route::post('/perfil', 'newProfilePicture');
         Route::get('/perfil/two-factor-manage', function () {

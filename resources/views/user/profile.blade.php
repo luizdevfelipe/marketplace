@@ -2,6 +2,10 @@
 
 @section('title', "Olá, Bem Vindo")
 
+@section('head')
+<script src="resources/js/profile/load-paginate.js"></script>
+@endsection
+
 @section('body')
 <main>
     <div class="container mt-2">
@@ -36,14 +40,10 @@
             </div>
             <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id='produtos'>
                 Seus Produtos:<br>
-                @if ($products->count() > 0)
-                @foreach ($products as $row)
-                <a style='font-size:20px;' href='/produto/{{ $row["id"] }}' class='text-dark'> {{ $row["name"] }} </a> . <br>
-                @endforeach
-                {{ $products->links() }}
-                @else
-                Você não tem produtos à venda <br>
-                @endif
+                <section id="products">
+
+                </section>
+               
                 <div class="rounded text-center border border-dark m-auto" style="max-width: 350px;">
                     <legend>Adicionar Produto</legend>
                     <form action="/produto/new" method="post" enctype="multipart/form-data">@csrf<label for="nproduto">Nome do produto:*</label><input type="text" title="Somente primeira letra maiúscula mínimo de 3 caracteres" name="nproduto" id="nproduto" minlength="4" maxlength="30" required class="m-1"><br><label for="descricao">Descrição do produto:*</label><br><textarea name="descricao" id="descricao" minlength="10" maxlength="200" cols="30" rows="5" required class="m-1" style="resize: none;"></textarea><br><label for="preco">Preço do produto:*</label><input type="number" name="preco" id="preco" step="0.01" required class="m-1"><br><label for="estoque">Quantidade de produtos:*</label><input type="number" name="estoque" id="estoque" min="1" required class="m-1"><br><label for="pfoto" class="p-1 border border-dark mb-1">Foto do Produto*</label><input type="file" name="pfoto" id="pfoto" style="display:none;" required><br>
@@ -69,15 +69,10 @@
             </div>
             <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id='produtos'>
                 Compras Feitas:<br>
-                @if ($purchases->count() > 0)
-                @foreach ($purchases as $row)
-                <a style='font-size:20px;' href="/produto/{{ $row['product_id'] }}" class='text-dark'> {{ $row['name'] }}</a> <br>
-                @endforeach
-                @else
-                Você não tem compras feitas <br>
-                @endif
+                <section id="purchases">
 
-                {{ $purchases->links() }}
+                </section>
+                
             </div>
         </div>
     </div>
