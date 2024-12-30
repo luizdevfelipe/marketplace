@@ -18,8 +18,10 @@ document.addEventListener('DOMContentLoaded', async function (event) {
                     let section = document.querySelector(`section#${data_pag}`);
                     section.innerHTML = '';
 
+                    id = data_pag === 'products' ? 'id' : 'product_id';
+
                     data['data'].forEach(item => {
-                        section.innerHTML += `<a style='font-size:20px;' href='/produto/${item['id']}' class='text-dark'>${item['name']}</a><br>`;
+                        section.innerHTML += `<a style='font-size:20px;' href='/produto/${item[`${id}`]}' class='text-dark'>${item['name']}</a><br>`;
                     });
 
                     section.innerHTML += paginateButtons(data, data_pag);
@@ -34,20 +36,27 @@ async function loadPaginate() {
     })
         .then(response => response.json())
         .then(function (data) {
-
+            text = '<p>Nenhum resultado encontrado</p>'
             let sectionProducts = document.querySelector('section#products');
             let sectionPurchases = document.querySelector('section#purchases');
 
-            data['products']['data'].forEach(product => {
-                sectionProducts.innerHTML += `<a style='font-size:20px;' href='/produto/${product['id']}' class='text-dark'>${product['name']}</a><br>`;
-            });
+            if (data['purchases'] !== null) {
+                data['purchases']['data'].forEach(purchases => {
+                    sectionPurchases.innerHTML += `<a style='font-size:20px;' href='/produto/${purchases['product_id']}' class='text-dark'>${purchases['name']}</a><br>`;
+                })
+                sectionPurchases.innerHTML += paginateButtons(data['purchases'], 'purchases');
+            } else {
+                sectionPurchases.innerHTML = text;
+            }
 
-            data['purchases']['data'].forEach(purchases => {
-                sectionPurchases.innerHTML += `<a style='font-size:20px;' href='/produto/${purchases['product_id']}' class='text-dark'>${purchases['name']}</a><br>`;
-            });
-
-            sectionProducts.innerHTML += paginateButtons(data['products'], 'products');
-            sectionPurchases.innerHTML += paginateButtons(data['purchases'], 'purchases');
+            if (data['products'] !== null) {
+                data['products']['data'].forEach(product => {
+                    sectionProducts.innerHTML += `<a style='font-size:20px;' href='/produto/${product['id']}' class='text-dark'>${product['name']}</a><br>`;
+                });
+                sectionProducts.innerHTML += paginateButtons(data['products'], 'products');
+            } else {
+                sectionProducts.innerHTML = text;
+            }
         })
 }
 
@@ -79,12 +88,11 @@ function paginateButtons(data, paginateFor) {
         }
 
         html += '</ul ></div ><div class="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-between"><div><p class="small text-muted">'
-            
+
         html += `Mostrando <span class="fw-semibold">${data['from']}</span> a <span class="fw-semibold">${data['to']}</span> de <span class="fw-semibold">${data['total']}</span> resultados</p></div>`
 
         html += '</div></nav >'
 
         return html;
     }
-
 }

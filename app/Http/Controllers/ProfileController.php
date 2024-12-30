@@ -13,17 +13,21 @@ use Illuminate\Validation\Rules\File;
 
 class ProfileController
 {
+    private int $userId;
+
     public function __construct
     (
         private ProfileService $profileService,
         private AuthManager $auth,
         private Request $request
     ) 
-    {}
+    {
+        $this->userId = $this->auth->id();
+    }
 
     public function perfil(): Response
     {
-        $user = $this->profileService->getUserData($this->auth->id());
+        $user = $this->profileService->getUserData($this->userId);
 
         return response()->view('user.profile', ['user' => $user]);
     }
@@ -31,19 +35,26 @@ class ProfileController
     public function load()
     {
         if ($this->request->has('products')) {
-            $products = $this->profileService->getPaginatedProducts($this->auth->id());
+            $products = $this->profileService->getPaginatedProducts($this->userId);
+
+            if ($products->total() === 0) $products = null;
 
             return response()->json($products);
         } 
 
         if ($this->request->has('purchases')) {
-            $purchases = $this->profileService->getPaginatedPurchases($this->auth->id());
+            $purchases = $this->profileService->getPaginatedPurchases($this->userId);
+
+            if ($purchases->total() === 0) $purchases = null;
 
             return response()->json($purchases);
         }        
         
-        $purchases = $this->profileService->getPaginatedPurchases($this->auth->id());
-        $products = $this->profileService->getPaginatedProducts($this->auth->id());
+        $purchases = $this->profileService->getPaginatedPurchases($this->userId);
+        $products = $this->profileService->getPaginatedProducts($this->userId);
+
+        if ($products->total() === 0) $products = null;
+        if ($purchases->total() === 0) $purchases = null;
 
         return [
             'purchases' => $purchases,
@@ -57,7 +68,7 @@ class ProfileController
             'foto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
         ]);
 
-        $this->profileService->newPhoto($data['foto'], $this->auth->id());
+        $this->profileService->newPhoto($data['foto'], $this->userId);
 
         return redirect('/perfil');
     }
