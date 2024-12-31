@@ -193,6 +193,7 @@ return [
         'pass1' => 'Senha',
         'pass2' => 'Repita Senha',
         'pfoto' => 'Foto',
+        'password' => 'Senha',
     ],
 
 ];

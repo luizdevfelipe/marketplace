@@ -23,4 +23,7 @@
     <input class="btn btn-success mt-1" type="submit" value="Entrar">
 </form>
 
+<div class="lead text-center rounded p-1" id="registro" style="background-color: #ffffff9d; ">
+    <p>Esqueceu a senha? <br><a class="btn bg-success border border-dark p-1 text-white" href="/forgot-password">Redefinir</a> agora</p>
+</div>
 @endsection
