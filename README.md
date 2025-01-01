@@ -22,7 +22,7 @@
 <p><strong>2º</strong> Instale também esse respositório, através do botão <i>Download Zip</i> ou clonando na sua máquina. A pasta do projeto deve ficar dentro do subsistema, para que o projeto rode com maior eficiência através do Docker, 
     o diretório será algo semelhante a este: \\wsl.localhost\Ubuntu\home\your_user\marketplace
 </p>
-<p><strong>3º</strong> Renomeie o arquivo <strong>.env.example</strong> para <strong>.env</strong> e certifique-se que as portas definidas no arquivo não estão sendo usadas pelo seu computador, caso contrário edite-o alterando as portas conforme necessidade.</p>
+<p><strong>3º</strong> Renomeie o arquivo <strong>.env.example</strong> para <strong>.env</strong> e certifique-se que as portas definidas no arquivo não estão sendo usadas pelo seu computador, caso contrário edite-o alterando as portas conforme necessidade. Também é necessário definir uma senha para o banco de dado no parâmetro <strong>DB_PASSWORD</strong></p>
 
 <p><strong>4º</strong> Para que o container seja criado, antes, é necessário, baixar as dependências que não são enviadas para o GitHub com um container temporário através de um terminal WSL rodando no diretório da pasta <strong>luizdevfelipe@PC:~/marketplace$</strong>, digitando o comando<br>
 
@@ -59,3 +59,5 @@ docker run --rm \
 ```
 
 <p><strong>9º</strong> Tudo Certo! Basta acessar <strong>http://localhost:8001/</strong> para que você possa visualizar o projeto em funcionamento. Dica! Ao se cadastrar é necessário confirmar o email, no caso dessa aplicação temos que acessar <strong>http://localhost:8025/</strong> pois é onde o serviço de email está hospedado</p>
+
+<p><strong>Em casos de erro 500:</strong> Esse erro está muito relacionado ao arquivo <strong>mysql.sock.lock</strong> presente dentro do volume <strong>marketplace_sail-mysql</strong> que pode ser visto no aplicativo do Docker. Para solucionar o problema basta apagar esse arquivo e reiniciar o container para que um novo arquivo seja criado de maneira adequada. Em casos de dúvidas basta trocar o parâmetro <strong>APP_DEBUG=true</strong> para que mensagens de erros sejam exibidas.</p>
