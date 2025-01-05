@@ -24,7 +24,30 @@
 <script>
     function edita_produto() {
         div = document.getElementById('edita')
-        form = '<br><form class="border border-success mb-3 m-1 p-2" action="<?= htmlspecialchars("/produto/".$produto[0]['id']."/modify") ?>" method="post">@csrf<label for="nproduto">Nome do produto:*</label><input type="text" name="nproduto" id="nproduto" minlength="4" maxlength="30" required class="m-1"><br><label for="descricao">Descrição do produto:*</label><br><textarea name="descricao" id="descricao" minlength="10" maxlength="200" cols="28" rows="5" required class="m-1" style="resize: none;"></textarea><br><label for="preco">Preço do produto:*</label><input type="number" name="preco" id="preco" step="0.01" required class="m-1"><br><label for="estoque">Quantidade de produtos:*</label><input type="number" name="estoque" id="estoque" min="1" required class="m-1"><br><input type="submit" value="Alterar Produto" class="my-1 p-1"></form>';
+        form = `
+            <br>
+            <form class="border border-success mb-3 m-1 p-2 rounded" action="/produto/{{ $produto[0]['id'] }}/modify" method="post">
+            @csrf
+            <div class="mb-3">
+            <label for="nproduto" class="form-label">Nome do produto:*</label>
+            <input type="text" name="nproduto" id="nproduto" minlength="4" maxlength="30" required class="form-control">
+            </div>
+            <div class="mb-3">
+            <label for="descricao" class="form-label">Descrição do produto:*</label>
+            <textarea name="descricao" id="descricao" minlength="10" maxlength="200" cols="28" rows="5" required class="form-control" style="resize: none;"></textarea>
+            </div>
+            <div class="mb-3">
+            <label for="preco" class="form-label">Preço do produto:*</label>
+            <input type="number" name="preco" id="preco" step="0.01" required class="form-control">
+            </div>
+            <div class="mb-3">
+            <label for="estoque" class="form-label">Quantidade de produtos:*</label>
+            <input type="number" name="estoque" id="estoque" min="1" required class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Alterar Produto</button>
+            </form>
+        `;
+        
         div.innerHTML = form;
     }
 </script>
