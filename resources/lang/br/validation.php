@@ -194,6 +194,7 @@ return [
         'pass2' => 'Repita Senha',
         'pfoto' => 'Foto',
         'password' => 'Senha',
+        'preco' => 'Preço',
     ],
 
 ];
