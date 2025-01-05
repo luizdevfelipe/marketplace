@@ -67,4 +67,11 @@ class ProductService
                 'stock' => $data['estoque'],
             ]);
     }
+
+    public function userHasProduct(int $userId, int $productId): bool
+    {
+        return Product::where('user_id', $userId)
+            ->where('id', $productId)
+            ->exists();
+    }
 }

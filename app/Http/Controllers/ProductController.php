@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Services\ProductService;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 
 class ProductController
 {
-    public function __construct(private ProductService $productService) {}
+    private int $userId;
+
+    public function __construct(
+        private ProductService $productService,
+        private AuthManager $auth
+    ) {
+        $this->userId = $this->auth->id();
+    }
 
     public function index(int $productId): Response|RedirectResponse
     {
@@ -21,7 +28,7 @@ class ProductController
 
         if (!$produto) return redirect('/');
 
-        if (Auth::check() && Auth::id() == $produto[0]['user_id']) {
+        if ($this->auth->check() && $this->userId == $produto[0]['user_id']) {
             return response()->view('products.productOwner', ['produto' => $produto]);
         }
         return response()->view('products.productView', ['produto' => $produto, 'id' => $productId]);
@@ -33,7 +40,7 @@ class ProductController
             $results = $this->productService->searchProduct($query);
             return response()->view('products.search', ['results' => $results]);
         }
-        
+
         return redirect('/');
     }
 
@@ -47,7 +54,7 @@ class ProductController
             'pfoto' => ['bail', 'required', File::types(['jpg', 'jpeg', 'png'])->max('5mb')],
         ]);
 
-        $this->productService->insertProduct($data, Auth::id());
+        $this->productService->insertProduct($data, $this->userId);
 
         return redirect('/perfil');
     }
@@ -56,15 +63,19 @@ class ProductController
     {
         $produto = $this->productService->productData((int) $productId);
 
-        if (Auth::check() && Auth::user()->hasVerifiedEmail() && Auth::id() !== $produto[0]['user_id']) {
-            $this->productService->addToCard($produto[0]['id'], Auth::id());
+        if (
+            $this->auth->check()
+            && $this->auth->user()->hasVerifiedEmail()
+            && $this->userId !== $produto[0]['user_id']
+        ) {
+            $this->productService->addToCard($produto[0]['id'], $this->userId);
             return redirect('/carrinho');
         } else {
             return redirect('/login');
         }
     }
 
-    public function chageData(Request $request, int $requestId): RedirectResponse
+    public function chageData(Request $request, int $productId): RedirectResponse
     {
         $data = $request->validate([
             'nproduto' => 'bail|required',
@@ -73,9 +84,12 @@ class ProductController
             'estoque' => 'bail|required',
         ]);
 
-        if ($requestId !== null) {
-            $this->productService->changeData($requestId, $data);
+        if ($productId !== null && $this->productService->userHasProduct($this->userId, $productId)) {
+            $this->productService->changeData($productId, $data);
+        } else {
+            return redirect('/');
         }
-        return redirect('/produto/' . $requestId);
+
+        return redirect('/produto/' . $productId);
     }
 }
