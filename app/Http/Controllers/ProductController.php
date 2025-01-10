@@ -13,7 +13,7 @@ use Illuminate\Validation\Rules\File;
 
 class ProductController
 {
-    private int $userId;
+    private ?int $userId;
 
     public function __construct(
         private ProductService $productService,
