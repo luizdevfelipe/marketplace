@@ -7,7 +7,7 @@
     <div class="container py-2">
         <div class="row">
             <div class="col-12 col-md-7 text-center ">
-                <img src="<?= asset('storage/' . $produto[0]['product_picture']); ?>" alt="produto" class="rounded" width="90%" height="400px">
+                <img src="<?= asset('storage/' . $produto[0]['product_picture']); ?>" alt="produto" class="rounded" style="max-width: 90%; max-height: 400px">
             </div>
             <div class="col-12 col-md-5 border border-dark rounded" id="edita">
                 <h1 class="text-center text-break"><?= $produto[0]['name'] ?></h1>

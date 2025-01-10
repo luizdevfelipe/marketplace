@@ -18,8 +18,8 @@
     <div class="d-flex justify-content-evenly flex-wrap">
 
       <?php foreach ($rows as $row) : ?>
-        <div class='card mt-3 p-2' style='width: 18rem; height:450px'>
-          <img src='<?= asset('storage/' . $row['product_picture']); ?>' class='card-img-top rounded' style='height: 220px' alt='...'>
+        <div class='card mt-3 p-2' style='max-width:300px; max-height:450px'>
+          <img src='<?= asset('storage/' . $row['product_picture']); ?>' class='card-img-top rounded' style='max-height: 220px' alt='...'>
           <div class='card-body'>
             <h5 class='card-title'> <?= $row['name'] ?> </h5>
             <p class='card-text'><?= $row['description'] ?></p>
