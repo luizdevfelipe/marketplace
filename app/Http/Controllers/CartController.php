@@ -31,14 +31,11 @@ class CartController
         return redirect('/carrinho');
     }
 
-    public function buy(): Response|RedirectResponse
+    public function generatePayment(): Response|RedirectResponse
     {
-        if ($ids = $this->cardService->getProductsId(Auth::id())) {
-            // $this->cardService->buyProducts($ids, Auth::id());
-
-            $this->mercadoPagoService->authenticate();
-
-            $preference = $this->mercadoPagoService->createPaymentPreference() ;
+        if ($ids = $this->cardService->getProducts(Auth::id())) {
+            
+                        $preference = $this->mercadoPagoService->createPaymentPreference();
 
             return redirect($preference->sandbox_init_point);
         }

@@ -71,7 +71,7 @@ Route::controller(CartController::class)->group(function () {
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/carrinho', 'index');
         Route::delete('/carrinho/{id}', 'remove')->whereNumber('id')->name('remove');
-        Route::post('/carrinho', 'buy');
+        Route::post('/carrinho', 'generatePayment');
 
         Route::get('/carrinho/success', 'success')->name('mercadopago.success');
         Route::get('/carrinho/fail', 'fail')->name('mercadopago.failed');
