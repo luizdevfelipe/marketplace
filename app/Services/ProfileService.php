@@ -22,7 +22,7 @@ class ProfileService
 
     public function getPaginatedProducts(int $id)
     {
-        $products = Product::select('*')
+        $products = Product::select('id', 'name')
             ->where('user_id', $id)
             ->orderBy('created_at', 'desc')
             ->paginate(4, ['*'], 'products');
@@ -32,7 +32,7 @@ class ProfileService
 
     public function getPaginatedPurchases(int $id)
     {
-        $purchases = Product::select('purchases.product_id', 'products.name')
+        $purchases = Product::select('purchases.product_id', 'products.name', 'purchases.status')
             ->join('purchases', 'products.id', 'purchases.product_id')
             ->where('purchases.user_id', $id)
             ->orderBy('purchases.created_at', 'desc')

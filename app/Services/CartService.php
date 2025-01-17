@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\PaymentStatusEnum;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Purchase;
@@ -36,35 +37,58 @@ class CartService
             ->delete();
     }
 
-    public function buyProducts(array $products_ids, int $userId)
+    public function updatePurchaseStatus(string $purchaseId, PaymentStatusEnum $status)
     {
-        foreach ($products_ids as $id) {
+        Purchase::where('purchase_id', $purchaseId)
+            ->update(['status' => $status]);
+    }
+
+    public function createNewPurchase(string $purchaseId, array $products, int $userId)
+    {
+        foreach ($products as $product) {
             $stock = Product::select('stock')
-                ->where('id', $id['product_id'])
+                ->where('id', $product['product_id'])
                 ->get()->toArray();
 
             if ($stock[0]['stock'] > 0) {
-                $stock = $stock[0]['stock'] - 1;
-
-                Product::where('id', $id['product_id'])
-                    ->update(['stock' => $stock]);
 
                 Purchase::insert([
-                    'user_id' => $userId, 
-                    'product_id' => $id['product_id'],
+                    'purchase_id' => $purchaseId,
+                    'user_id' => $userId,
+                    'product_id' => $product['product_id'],
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
+                    'status' => PaymentStatusEnum::PENDING,
                 ]);
 
                 $idCart = Cart::select('id')
-                    ->where('product_id', $id['product_id'])
+                    ->where('product_id', $product['product_id'])
                     ->get()->toArray();
 
-                Cart::where('id', $idCart[0]['id'])
-                    ->delete();
+                $this->removeProduct($idCart[0]['id']);
             } else {
                 continue;
             }
+        }
+    }
+
+    public function buyProducts(string $purchaseId)
+    {
+        $this->updatePurchaseStatus($purchaseId, PaymentStatusEnum::APPROVED);
+
+        $productsId = Purchase::select('product_id')
+            ->where('purchase_id', $purchaseId)
+            ->get()->toArray();
+
+        foreach ($productsId as $productId) {
+            $stock = Product::select('stock')
+                ->where('id', $productId['product_id'])
+                ->get()->toArray();
+
+            $stock = $stock[0]['stock'] - 1;
+
+            Product::where('id', $productId['product_id'])
+                ->update(['stock' => $stock]);
         }
     }
 }
