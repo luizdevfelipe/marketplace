@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
-class MercadoPagoServiceProvider extends ServiceProvider
+class MercadoPagoServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
      * Register services.
@@ -16,11 +17,9 @@ class MercadoPagoServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
+    public function provides(): array
     {
-        $this->app->get('MercadoPagoService')->authenticate();
+        return ['MercadoPagoService'];
     }
-}
+
+}   
