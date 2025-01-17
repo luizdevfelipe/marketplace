@@ -10,7 +10,7 @@ use MercadoPago\Resources\Preference;
 
 class MercadoPagoService
 {
-    function authenticate()
+    public function __construct()
     {
         // Getting the access token from .env file
         $mpAccessToken = config('mercadopago.access_token');
@@ -42,35 +42,24 @@ class MercadoPagoService
             "statement_descriptor" => config('app.name'),
             "external_reference" => "1234567890",
             "expires" => false,
-            "auto_return" => 'approved',
+            "auto_return" => 'all',
         ];
 
         return $request;
     }
 
-    public function createPaymentPreference(): ?Preference
+    public function createPaymentPreference(array $products): ?Preference
     {
-        // Fill the data about the product(s) being purchased
-        $product1 = array(
-            "id" => "1234567890",
-            "title" => "Product 1 Title",
-            "description" => "Product 1 Description",
-            "currency_id" => "BRL",
-            "quantity" => 12,
-            "unit_price" => 9.90
-        );
-
-        $product2 = array(
-            "id" => "9012345678",
-            "title" => "Product 2 Title",
-            "description" => "Product 2 Description",
-            "currency_id" => "BRL",
-            "quantity" => 5,
-            "unit_price" => 19.90
-        );
-
-        // Mount the array of products that will integrate the purchase amount
-        $items = array($product1, $product2);
+        foreach ($products as $product) {
+            $items[] = [
+                "id" => $product['id'],
+                "title" => $product['name'],
+                "description" => $product['description'],
+                "currency_id" => "BRL",
+                "quantity" => 1,
+                "unit_price" => $product['price']
+            ];
+        }
 
         // Retrieve information about the user
         $user = Auth::user();
