@@ -26,7 +26,7 @@ if (empty($estoque)) {
                         array_push($idcarrinho, $product['id']);
                         array_push($estoque, $product['stock']);
                         ?>
-                        <div class='card col-3 mt-3 p-2 d-block m-auto' style='max-width: 450px; max-height:450px'>
+                        <div class='card col-3 mt-3 p-2 d-block m-auto' style='min-width: 250px; min-height:450px'>
                             <img src='<?= asset('storage/' . $product['product_picture']); ?>' class='card-img-top rounded' style='max-height: 220px; max-width: 280px;' alt='...'>
                             <div class='card-body'>
                                 <h5 class='card-title'><?= $product['name'] ?></h5>
