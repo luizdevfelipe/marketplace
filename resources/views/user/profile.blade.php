@@ -38,7 +38,7 @@
         <div class="row">
             <div class="col-12 col-md-4">
             </div>
-            <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id='produtos'>
+            <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded">
                 Seus Produtos:<br>
                 <section id="products">
                 </section>
@@ -92,7 +92,7 @@
         <div class="row">
             <div class="col-12 col-md-4">
             </div>
-            <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id='produtos'>
+            <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" style="min-height: 216px;">
                 Compras Feitas:<br>
                 <section id="purchases">
 

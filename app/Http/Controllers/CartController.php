@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\AppEnvironmentEnum;
 use App\Enums\MercadoPagoEnum;
-use App\Enums\PaymentStatusEnum;
+use App\Enums\Payment\PaymentStatusEnum;
 use App\Services\CartService;
 use App\Services\MercadoPagoService;
 use Illuminate\Http\RedirectResponse;
@@ -41,6 +42,10 @@ class CartController
 
             if ($preference) {
                 $this->cardService->createNewPurchase($preference->id, $products, Auth::id());
+
+                if (config('app.env') === AppEnvironmentEnum::PRODUCTION->value) {
+                    return redirect($preference->init_point);
+                }
                 return redirect($preference->sandbox_init_point);
             }
             
@@ -60,8 +65,14 @@ class CartController
         return response()->view('cart.success');
     }
 
-    public function fail(): Response
+    public function fail(Request $request): Response
     {
-        return response()->view('cart.error');
-    }
+        $purchaseId = $request->query('preference_id');
+
+        if ($purchaseId) {
+            $this->cardService->updatePurchaseStatus($purchaseId, PaymentStatusEnum::REJECTED);
+        }
+
+        return response()->view('cart.error');        
+    }    
 }

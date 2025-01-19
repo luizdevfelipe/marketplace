@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Enums\PaymentStatusEnum;
+use App\Enums\Payment\PaymentStatusEnum;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Purchase;
