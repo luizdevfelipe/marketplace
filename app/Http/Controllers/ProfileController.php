@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\AppEnvironmentEnum;
 use App\Services\ProfileService;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\RedirectResponse;
@@ -28,8 +29,15 @@ class ProfileController
     public function perfil(): Response
     {
         $user = $this->profileService->getUserData($this->userId);
+        $pendentPurchases = $this->profileService->getPendentPurchases($this->userId);
+        
+        if ($pendentPurchases) {
+            $link = config('app.env') === AppEnvironmentEnum::PRODUCTION->value ?
+                'https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=' :
+                'https://sandbox.mercadopago.com.br/checkout/v1/redirect?pref_id=';            
+        }
 
-        return response()->view('user.profile', ['user' => $user]);
+        return response()->view('user.profile', ['user' => $user, 'pendentPurchases' => $pendentPurchases, 'link' => $link ?? null]);
     }
 
     public function load()
