@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\Payment\PaymentStatusEnum;
 use App\Models\Product;
+use App\Models\Purchase;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,6 +22,16 @@ class ProfileService
         return $user;
     }
 
+    public function getPendentPurchases(int $userId)
+    {
+        return Purchase::select('purchases.purchase_id', 'products.name')
+            ->join('products', 'purchases.product_id', 'products.id')
+            ->where('purchases.user_id', $userId)
+            ->where('purchases.status', PaymentStatusEnum::PENDING)
+            ->orderBy('purchases.created_at', 'desc')
+            ->get()->toArray();
+    }
+
     public function getPaginatedProducts(int $id)
     {
         $products = Product::select('id', 'name')
@@ -32,9 +44,10 @@ class ProfileService
 
     public function getPaginatedPurchases(int $id)
     {
-        $purchases = Product::select('purchases.product_id', 'products.name', 'purchases.status')
+        $purchases = Product::select('purchases.product_id', 'products.name')
             ->join('purchases', 'products.id', 'purchases.product_id')
             ->where('purchases.user_id', $id)
+            ->where('purchases.status', PaymentStatusEnum::APPROVED)
             ->orderBy('purchases.created_at', 'desc')
             ->paginate(4, ['*'], 'purchases');
 
