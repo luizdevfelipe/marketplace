@@ -42,6 +42,19 @@
                 Seus Produtos:<br>
                 <section id="products">
                 </section>
+
+                @if (!empty($pendentPurchases))
+                <div class="container rounded border border-dark m-2">
+                    <legend class="text-center m-0">Compras Pendentes</legend>
+                    <p class="fs-6 text-center m-0">Antes de realizar um novo pagamento verifique seu email.</p>
+                    <ul>
+                    @foreach ($pendentPurchases as $purchases)
+                    <li> <a class="fs-5" href="{{ $link }}{{ $purchases['purchase_id'] }}">{{ $purchases['name'] }}</a> </li>
+                    @endforeach
+                    </ul>
+                </div>
+                @endif
+
                 <div class="rounded text-center border border-dark m-auto" style="max-width: 350px;">
                     <legend class="text-center mb-3">Adicionar Produto</legend>
 
@@ -95,9 +108,7 @@
             <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" style="min-height: 216px;">
                 Compras Feitas:<br>
                 <section id="purchases">
-
                 </section>
-
             </div>
         </div>
     </div>
