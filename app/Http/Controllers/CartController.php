@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Enums\AppEnvironmentEnum;
-use App\Enums\MercadoPagoEnum;
+use App\Enums\Payment\MercadoPagoEnum;
 use App\Enums\Payment\PaymentStatusEnum;
 use App\Services\CartService;
 use App\Services\MercadoPagoService;
