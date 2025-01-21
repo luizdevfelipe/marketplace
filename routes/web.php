@@ -16,6 +16,13 @@ Route::controller(HomeController::class)->group(function () {
 });
 
 /**
+ *  Fallback Route (404)
+ */
+Route::fallback(function () {
+    return redirect('/');
+});
+
+/**
  *  Auth Routes
  */
 Route::controller(EmailVerificationController::class)->group(function () {
