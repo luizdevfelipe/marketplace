@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('purchases:delete', function() {
     Purchase::where('created_at', '<=', now()->subDays(1))
         ->where('status', PaymentStatusEnum::PENDING->value)
+        ->orWhere('status', PaymentStatusEnum::REJECTED->value)
         ->delete();
-})->purpose('Delete pending purchases older than 1 day')->daily();
+})->purpose('Delete pending or rejected purchases older than 1 day')->daily();
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
