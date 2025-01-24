@@ -13,6 +13,15 @@ class CartService
 {
     protected $table = 'carrinho';
 
+    public function getMultipleProductsByUserAndCartId(array $productOnCartsIds, int $userId)
+    {
+        return Product::select('*')
+            ->join('carts', 'products.id', '=', 'carts.product_id')
+            ->where('carts.user_id', '=', $userId)
+            ->whereIn('carts.id', $productOnCartsIds)
+            ->get()->toArray();        
+    }
+
     public function getProducts(int $userId)
     {
         return $this->getProductsDataByUser('*', $userId);
