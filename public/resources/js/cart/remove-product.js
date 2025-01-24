@@ -5,7 +5,7 @@ window.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('button.removeProduct').forEach(function (button) {
         count++;
         button.addEventListener('click', function (event) {
-            let product_id = event.currentTarget.getAttribute('data-id')
+            var product_id = event.currentTarget.getAttribute('data-id')
 
             fetch(`/carrinho/${product_id}`, {
                 method: 'POST',
@@ -18,12 +18,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 })
             }).then(response => {
                 if (response.ok) {
-                    document.querySelector(`div.product${product_id}`).remove()
-                    if (count == 1) {
-                        document.querySelector("input[name='comprou']").remove()
-                        document.querySelector("div.container").innerHTML = "<p>Nenhum produto encontrado</p>"
-                    }
-                    count--;
+                    count = removeProductDiv(product_id, count)
                 }
             })
         })
@@ -60,9 +55,27 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
             }).then(data => {
                 if (data && data.mercado_pago_url) {
+                    count = removeProductDiv(selectedProductsCartIds, count)
                     window.location.href = data.mercado_pago_url;
                 }
             });
         }
     })
 })
+
+function removeProductDiv(product_id, count) {
+    if (typeof product_id === "object") {
+        product_id.forEach(id => {
+            document.querySelector(`div.product${id}`).remove()
+            count--;
+        })
+    } else {
+        document.querySelector(`div.product${product_id}`).remove()
+        count--;
+    }
+    if (count < 1) {
+        document.querySelector("input[name='comprou']").remove()
+        document.querySelector("div.container").innerHTML = "<p>Nenhum produto encontrado</p>"
+    }
+    return count;
+}
