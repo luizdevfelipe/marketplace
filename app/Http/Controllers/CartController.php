@@ -11,6 +11,7 @@ use App\Services\CartService;
 use App\Services\MercadoPagoService;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -36,7 +37,7 @@ class CartController
         return redirect('/carrinho');
     }
 
-    public function generatePayment(): Response|RedirectResponse
+    public function generatePayment(): Response|RedirectResponse|JsonResponse
     {
         $validatedData = $this->request->validate([
             'selectedProductsCartIds' => 'required|array',
