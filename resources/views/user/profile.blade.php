@@ -43,17 +43,7 @@
                 <section id="products">
                 </section>
 
-                @if (!empty($pendentPurchases))
-                <div class="container rounded border border-dark m-2">
-                    <legend class="text-center m-0">Compras Pendentes</legend>
-                    <p class="fs-6 text-center m-0">Antes de realizar um novo pagamento verifique seu email.</p>
-                    <ul>
-                    @foreach ($pendentPurchases as $purchases)
-                    <li> <a class="fs-5" href="{{ $link }}{{ $purchases['purchase_id'] }}">{{ $purchases['name'] }}</a> </li>
-                    @endforeach
-                    </ul>
-                </div>
-                @endif
+                <x-profile.pendent-products :pendentPurchases="$pendentPurchases" :link="$link" />
 
                 <div class="rounded text-center border border-dark m-auto" style="max-width: 350px;">
                     <legend class="text-center mb-3">Adicionar Produto</legend>

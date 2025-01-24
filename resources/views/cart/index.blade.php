@@ -12,10 +12,11 @@
         <?php if (!empty($products)) : ?>
             <?php foreach ($products as $product) : ?>
                 <div class="product{{ $product['id'] }}">
-                    <input type="checkbox" name="produto[]" class="selectedProduct" value="{{ $product['id'] }}">
                     <div class='card col-3 mt-3 p-2 d-block m-auto' style='min-width: 250px; min-height:450px'>
                         <img src='<?= asset('storage/' . $product['product_picture']); ?>' class='card-img-top rounded d-block m-auto' style='max-height: 220px; max-width: 280px;' alt='...'>
                         <div class='card-body'>
+                            <input type="checkbox" name="produto[]" id="iselectProduct{{ $product['id'] }}" class="selectedProduct" value="{{ $product['id'] }}">
+                            <label for="iselectProduct{{ $product['id'] }}" class="fw-bold">Selecionar</label>
                             <h5 class='card-title'><?= $product['name'] ?></h5>
                             <p class='card-text'><?= $product['description'] ?></p>
                             <p class='card-text'>R$<?= $product['price'] ?></p>
