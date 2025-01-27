@@ -15,7 +15,7 @@
                 <p class="mb-0">Produtos Disponíveis: <?= $produto[0]['stock'] ?></p>
                 <p class="text-success fs-5">R$<?= $produto[0]['price'] ?></p>
 
-                @if ($produto[0]['stock'] > 0)
+                @if ($produto[0]['stock'] > 0 && !$userHasProduct)
                 <form action='/produto/<?= $id ?>/buy' method='post'>
                     @csrf
                     <input type='submit' class='btn btn-success' value='Adicionar ao carrinho' name='comprar'>
