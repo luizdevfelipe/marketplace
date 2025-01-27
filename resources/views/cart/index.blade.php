@@ -5,6 +5,7 @@
 @section('head')
 <script src="resources/js/cart/remove-product.js"></script>
 <script src="resources/js/cart/quantitySetter.js"></script>
+<script src="resources/js/cart/checkout-cart.js"></script>
 @endsection
 
 @section('body')
@@ -23,7 +24,7 @@
                             <p class='card-text'>R$<?= $product['price'] ?></p>
                             <div class="text-center" style="font-size: 1.2em;user-select: none;">
                                 <i class="bi bi-plus-circle quantitySetter"></i> 
-                                <span class="quantity">1</span> 
+                                <span class="quantity">{{ $product['quantity'] }}</span> 
                                 <i class="bi bi-dash-circle quantitySetter"></i>
                             </div>
                             <button data-id="{{ $product['id'] }}" class='btn btn-primary removeProduct d-block m-auto'>Remover Produto</button>
