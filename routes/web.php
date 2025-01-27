@@ -79,6 +79,7 @@ Route::controller(CartController::class)->group(function () {
         Route::get('/carrinho', 'index');
         Route::delete('/carrinho/{id}', 'remove')->whereNumber('id')->name('remove');
         Route::post('/carrinho', 'generatePayment');
+        Route::put('/carrinho/{id}', 'changeQuantity')->whereNumber('id')->name('changeQuantity');
 
         Route::get('/carrinho/success', 'success')->name('mercadopago.success');
         Route::get('/carrinho/fail', 'fail')->name('mercadopago.failed');

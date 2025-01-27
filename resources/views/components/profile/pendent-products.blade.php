@@ -6,10 +6,10 @@ if (!empty($pendentPurchases)) {
 
     foreach ($pendentPurchases as $purchases) {
         if (array_key_exists($purchases['purchase_id'], $pedidos)) {
-            $pedidos[$purchases['purchase_id']][] = $purchases['name'];
+            $pedidos[$purchases['purchase_id']][] = $purchases['name'] . ' (' . $purchases['quantity'] . ') ';
         } else {
             $pedidos[$purchases['purchase_id']] = [];
-            $pedidos[$purchases['purchase_id']][] = $purchases['name'];
+            $pedidos[$purchases['purchase_id']][] = $purchases['name']. ' (' . $purchases['quantity'] . ') ';
         }
     }
 

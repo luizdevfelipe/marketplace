@@ -18,11 +18,15 @@ document.addEventListener('DOMContentLoaded', async function (event) {
                     let section = document.querySelector(`section#${data_pag}`);
                     section.innerHTML = '';
 
-                    id = data_pag === 'products' ? 'id' : 'product_id';
-
-                    data['data'].forEach(item => {
-                        section.innerHTML += `<a style='font-size:20px;' href='/produto/${item[`${id}`]}' class='text-dark'>${item['name']}</a><br>`;
-                    });
+                    if (data_pag === 'products') {
+                        data['data'].forEach(item => {
+                            section.innerHTML += `<a style='font-size:20px;' href='/produto/${item['id']}' class='text-dark'>${item['name']}</a><br>`;
+                        });
+                    } else {
+                        data['data'].forEach(item => {
+                            section.innerHTML += `<a style='font-size:20px;' href='/produto/${item['product_id']}' class='text-dark'>${item['name']} (${item['quantity']})</a><br>`;
+                        });
+                    }
 
                     section.innerHTML += paginateButtons(data, data_pag);
                 });
@@ -42,7 +46,7 @@ async function loadPaginate() {
 
             if (data['purchases'] !== null) {
                 data['purchases']['data'].forEach(purchases => {
-                    sectionPurchases.innerHTML += `<a style='font-size:20px;' href='/produto/${purchases['product_id']}' class='text-dark'>${purchases['name']}</a><br>`;
+                    sectionPurchases.innerHTML += `<a style='font-size:20px;' href='/produto/${purchases['product_id']}' class='text-dark'>${purchases['name']} (${purchases['quantity']})</a><br>`;
                 })
                 sectionPurchases.innerHTML += paginateButtons(data['purchases'], 'purchases');
             } else {

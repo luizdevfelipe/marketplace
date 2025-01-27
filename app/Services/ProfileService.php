@@ -24,7 +24,7 @@ class ProfileService
 
     public function getPendentPurchases(int $userId)
     {
-        return Purchase::select('purchases.purchase_id', 'products.name')
+        return Purchase::select('purchases.purchase_id', 'products.name', 'purchases.quantity')
             ->join('products', 'purchases.product_id', 'products.id')
             ->where('purchases.user_id', $userId)
             ->where('purchases.status', PaymentStatusEnum::PENDING)
@@ -44,7 +44,7 @@ class ProfileService
 
     public function getPaginatedPurchases(int $id)
     {
-        $purchases = Product::select('purchases.product_id', 'products.name')
+        $purchases = Product::select('purchases.product_id', 'products.name', 'purchases.quantity')
             ->join('purchases', 'products.id', 'purchases.product_id')
             ->where('purchases.user_id', $id)
             ->where('purchases.status', PaymentStatusEnum::APPROVED)

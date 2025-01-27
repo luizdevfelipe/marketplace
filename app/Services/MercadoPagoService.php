@@ -56,7 +56,7 @@ class MercadoPagoService
                 "title" => $product['name'],
                 "description" => $product['description'],
                 "currency_id" => "BRL",
-                "quantity" => 1,
+                "quantity" => $product['quantity'],
                 "unit_price" => $product['price']
             ];
         }

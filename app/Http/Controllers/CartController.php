@@ -18,7 +18,7 @@ use Illuminate\Http\Response;
 class CartController
 {
     public function __construct(
-        private CartService $cardService,
+        private CartService $cartService,
         private MercadoPagoService $mercadoPagoService,
         private Request $request,
         private AuthManager $auth
@@ -26,15 +26,26 @@ class CartController
 
     public function index(): Response|RedirectResponse
     {
-        $products = $this->cardService->getProducts($this->auth->id());
+        $products = $this->cartService->getProducts($this->auth->id());
         return response()->view('cart.index', ['products' => $products]);
     }
 
     public function remove(int $id): RedirectResponse
     {
-        if (!empty($id)) $this->cardService->removeProduct((int) $id);
+        if (!empty($id)) $this->cartService->removeProduct((int) $id);
 
         return redirect('/carrinho');
+    }
+
+    public function changeQuantity(int $id)
+    {
+        $quantity = $this->request->validate([
+            'quantity' => 'required|integer|min:1|max:10',
+        ])['quantity'];
+        
+        if (!empty($id) && !empty($quantity)) {
+            $this->cartService->changeProductQuantity((int) $id, $quantity);
+        }
     }
 
     public function generatePayment(): Response|RedirectResponse|JsonResponse
@@ -43,7 +54,7 @@ class CartController
             'selectedProductsCartIds' => 'required|array',
         ]);
 
-        $products = $this->cardService->getMultipleProductsByUserAndCartId(
+        $products = $this->cartService->getMultipleProductsByUserAndCartId(
             $validatedData['selectedProductsCartIds'],
             $this->auth->id()
         );
@@ -55,7 +66,7 @@ class CartController
         $preference = $this->mercadoPagoService->createPaymentPreference($products);
 
         if ($preference) {
-            $this->cardService->createNewPurchase($preference->id, $products, $this->auth->id());
+            $this->cartService->createNewPurchase($preference->id, $products, $this->auth->id());
 
             if (config('app.env') === AppEnvironmentEnum::PRODUCTION->value) {
                 return response()->json(['mercado_pago_url' => $preference->init_point]);
@@ -72,7 +83,7 @@ class CartController
         $purchaseId = $this->request->query('preference_id');
 
         if ($status === MercadoPagoEnum::APPROVED->value && $purchaseId) {
-            $this->cardService->buyProducts($purchaseId);
+            $this->cartService->updatePurchaseStatus($purchaseId, PaymentStatusEnum::APPROVED);;
         }
 
         return response()->view('cart.success');
@@ -83,7 +94,7 @@ class CartController
         $purchaseId = $this->request->query('preference_id');
 
         if ($purchaseId) {
-            $this->cardService->updatePurchaseStatus($purchaseId, PaymentStatusEnum::REJECTED);
+            $this->cartService->updatePurchaseStatus($purchaseId, PaymentStatusEnum::REJECTED);
         }
 
         return response()->view('cart.error');
