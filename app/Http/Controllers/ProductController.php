@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Services\CartService;
 use App\Services\ProductService;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +23,7 @@ class ProductController
         $this->userId = $this->auth->id();
     }
 
-    public function index(int $productId): Response|RedirectResponse
+    public function index(CartService $cartService, int $productId): Response|RedirectResponse
     {
         $produto = $this->productService->productData((int) $productId);
 
@@ -31,7 +32,11 @@ class ProductController
         if ($this->auth->check() && $this->userId == $produto[0]['user_id']) {
             return response()->view('products.productOwner', ['produto' => $produto]);
         }
-        return response()->view('products.productView', ['produto' => $produto, 'id' => $productId]);
+        return response()->view('products.productView', [
+            'produto' => $produto, 
+            'id' => $productId,
+            'userHasProduct' => $cartService->userHasProductOnCart($productId, $this->userId)
+        ]);
     }
 
     public function search(string $query): Response|RedirectResponse
