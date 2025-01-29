@@ -3,9 +3,13 @@
 @section('title', 'Carrinho')
 
 @section('head')
-<script src="resources/js/cart/remove-product.js"></script>
-<script src="resources/js/cart/quantitySetter.js"></script>
-<script src="resources/js/cart/checkout-cart.js"></script>
+
+@vite([
+    'resources/js/cart/remove-product.js', 
+    'resources/js/cart/quantitySetter.js', 
+    'resources/js/cart/checkout-cart.js'
+])
+
 @endsection
 
 @section('body')
@@ -23,8 +27,8 @@
                             <p class='card-text'><?= $product['description'] ?></p>
                             <p class='card-text'>R$<?= $product['price'] ?></p>
                             <div class="text-center" style="font-size: 1.2em;user-select: none;">
-                                <i class="bi bi-plus-circle quantitySetter"></i> 
-                                <span class="quantity">{{ $product['quantity'] }}</span> 
+                                <i class="bi bi-plus-circle quantitySetter"></i>
+                                <span class="quantity">{{ $product['quantity'] }}</span>
                                 <i class="bi bi-dash-circle quantitySetter"></i>
                             </div>
                             <button data-id="{{ $product['id'] }}" class='btn btn-primary removeProduct d-block m-auto'>Remover Produto</button>

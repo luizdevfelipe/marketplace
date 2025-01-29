@@ -3,7 +3,9 @@
 @section('title', "Gerenciar 2FA")
 
 @section('head')
-<script src="/resources/js/two-factor/two-factor-code.js"></script>
+
+@vite(['resources/js/two-factor/two-factor-code.js'])
+
 @endsection
 
 @section('body')

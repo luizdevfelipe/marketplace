@@ -3,7 +3,9 @@
 @section('title', 'Confirmar Senha')
 
 @section('head')
-<script src="/resources/js/two-factor/two-factor-challenge.js"></script>
+
+@vite(['resources/js/two-factor/two-factor-challenge.js'])
+
 @endsection
 
 @section('body')
