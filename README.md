@@ -76,5 +76,5 @@ docker run --rm \
             crontab -e
             ```
         -  ```cmd
-             * * * * * cd /home/luizdevfelipe/marketplace && ./vendor/bin/sail artisan schedule:run >> /dev/null 2>&1
+             * * * * * cd /home/<user>/marketplace && ./vendor/bin/sail artisan schedule:run >> /dev/null 2>&1
            ```
