@@ -14,7 +14,7 @@
                 @if (isset($user[0]['user_picture']))
                 <img src="<?= asset('storage/' . $user[0]['user_picture']) ?>" alt="" class="align-center" style="width: 200px; height:200px">
                 @else
-                <img src="resources/user/profile/perfil.jpeg" alt="" class="align-center" style="width: 200px; height:200px">
+                <img src="{{ Vite::asset('resources/images/user/profile/perfil.jpeg') }}" alt="Imagem de perfil" class="align-center" style="width: 200px; height:200px">
                 @endif
             </div>
             <div class="col-12 col-md-8 text-center text-md-start pt-3 mt-3 mt-md-0 border border-dark rounded" id="infouser">
