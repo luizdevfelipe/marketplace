@@ -3,7 +3,7 @@ window.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         let produto = document.querySelector('input#ipesquisa').value;
         if (produto) {
-            window.location.href = `http://localhost/produto/search/${produto}`;
+            window.location.href = `/produto/search/${produto}`;
         }
     });
 });
