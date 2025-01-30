@@ -47,17 +47,34 @@ docker run --rm \
 ./vendor/bin/sail php artisan key:generate
 ```
 
-<p><strong>Talvez Opcional</strong> Ao usar o comando Sail Up que é responsável por criar um container Docker da aplicação através do serviço Sail implementado pelo Laravel talvez as migrações do banco de dados ocorram imediatamente, entretanto é frequente a necessidade de migrar o banco manualmente. Caso necessário, basta executar o comando abaixo, que também pode ser executado em caso de dúvidas sem problemas:<br>
+<p><strong>7º</strong> Ao usar o comando Sail Up que é responsável por criar um container Docker da aplicação através do serviço Sail implementado pelo Laravel talvez as migrações do banco de dados ocorram imediatamente, entretanto é frequente a necessidade de migrar o banco manualmente. Caso necessário, basta executar o comando abaixo, que também pode ser executado em caso de dúvidas sem problemas:<br>
 
 ```cmd
 ./vendor/bin/sail artisan migrate
 ```
-<p><strong>8º</strong> Para finalizar, já com a estrutura da aplicação pronta é necessário criar um vínculo da pasta que armazena os arquivos enviados por usuários, majoritariamente imagens, com o sistema em geral para que esses possam ser carregados. Isso é feito através de um comando no container da aplicação executado pelo Sail:</p>
+<p><strong>8º</strong> Agora, já com a estrutura da aplicação pronta é necessário criar um vínculo da pasta que armazena os arquivos enviados por usuários, majoritariamente imagens, com o sistema em geral para que esses possam ser carregados. Isso é feito através de um comando no container da aplicação executado pelo Sail:</p>
 
 ```cmd
 ./vendor/bin/sail artisan storage:link
 ```
 
-<p><strong>9º</strong> Tudo Certo! Basta acessar <strong>http://localhost:8001/</strong> para que você possa visualizar o projeto em funcionamento. Dica! Ao se cadastrar é necessário confirmar o email, no caso dessa aplicação temos que acessar <strong>http://localhost:8025/</strong> pois é onde o serviço de email está hospedado</p>
+<p><strong>9º</strong> Para finalizar, dois comandos precisam ser executados, um para instalar os pacotos provenientes do <strong>npm</strong> e outro para processar os arquivos estáticos da aplicação utilizando o asset bundle <strong>Vite</strong>:</p>
+
+```cmd
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run build
+```
+
+<p><strong>10º</strong> Tudo Certo! Basta acessar <strong>http://localhost:8001/</strong> para que você possa visualizar o projeto em funcionamento. Dica! Ao se cadastrar é necessário confirmar o email, no caso dessa aplicação temos que acessar <strong>http://localhost:8025/</strong> pois é onde o serviço de email está hospedado</p>
 
 <p><strong>Em casos de erro 500:</strong> Esse erro está muito relacionado ao arquivo <strong>mysql.sock.lock</strong> presente dentro do volume <strong>marketplace_sail-mysql</strong> que pode ser visto no aplicativo do Docker. Para solucionar o problema basta apagar esse arquivo e reiniciar o container para que um novo arquivo seja criado de maneira adequada. Em casos de dúvidas basta trocar o parâmetro <strong>APP_DEBUG=true</strong> para que mensagens de erros sejam exibidas.</p>
+
+* Laravel Schedule e API do Mercado Pago 
+    - Para que a integração com API do mercado pago funcione é necessário preencher a chave <strong>MERCADO_PAGO_TOKEN=</strong> do arquivo .env com uma chave válida criada no site [Mercado Pago Developers](https://www.mercadopago.com.br/developers/pt) seguindo os passos descritos após criar uma conta.
+    - Nessa aplicação existem algumas tarefas agendadas através de comandos Artisan que são também executados periodicamente pelo serviço Schedule do Laravel, como esse serviço é baseado em CRON, é necessário adicioar o comando a baixo dentro do arquivo <strong>crontab</strong>através de:
+        - ```cmd
+            crontab -e
+            ```
+        -  ```cmd
+             * * * * * cd /home/luizdevfelipe/marketplace && ./vendor/bin/sail artisan schedule:run >> /dev/null 2>&1
+           ```
