@@ -2,14 +2,14 @@
 
 <h2 align="center">🔸 <a href='#Sobre'>Sobre</a> 🔸 <a href='#Motivo'>Motivação</a> 🔸 <a href='#Experimente'>Experimente</a></h2>
 
-<h2 id='Sobre' align="center">Um site onde um usúario pode se cadastrar e comprar ou vender produtos 💳</h2>
-<p>Aqui é possível cadastrar um novo produto, adicioná-lo ao carrinho e finalizar a comprar via Mercado Pago</p>
+<h2 id='Sobre' align="center">Um site onde um usuário pode se cadastrar e comprar ou vender produtos 💳</h2>
+<p>Aqui é possível cadastrar um novo produto, adicioná-lo ao carrinho e finalizar a compra via Mercado Pago</p>
 
 <hr>
 <h3>Tecnologias: 📑 Laravel 📑 Docker 📑 WSL2 📑 CRON 📑 Vite 📑 Bootstrap 📑 Mercado Pago</h3>
 
 <h3 id='Motivo'>Motivação:</h3>
-<p> ▫️ Projeto realizado com a finalizade de aprender a estruturar projetos com Laravel </p> 
+<p> ▫️ Projeto realizado com a finalidade de aprender a estruturar projetos com Laravel </p> 
 <p> ▫️ Utilizar o conceito de container disponível através do Laravel Sail</p> 
 <p> ▫️ E subsistemas Linux no Windows</p> 
 
@@ -22,7 +22,7 @@
 <p><strong>2º</strong> Instale também esse respositório, através do botão <i>Download Zip</i> ou clonando na sua máquina. A pasta do projeto deve ficar dentro do subsistema, para que o projeto rode com maior eficiência através do Docker, 
     o diretório será algo semelhante a este: <strong>\\wsl.localhost\Ubuntu\home\your_user\marketplace</strong>
 </p>
-<p><strong>3º</strong> Renomeie o arquivo <strong>.env.example</strong> para <strong>.env</strong> e certifique-se que as portas definidas no arquivo não estão sendo usadas pelo seu computador, caso contrário edite-o alterando as portas conforme necessidade. Também é necessário definir uma senha para o banco de dado no parâmetro <strong>DB_PASSWORD</strong></p>
+<p><strong>3º</strong> Renomeie o arquivo <strong>.env.example</strong> para <strong>.env</strong> e certifique-se que as portas definidas no arquivo não estão sendo usadas pelo seu computador, caso contrário edite-o alterando as portas conforme necessidade. Também é necessário definir uma senha para o banco de dados no parâmetro <strong>DB_PASSWORD</strong></p>
 
 <p><strong>4º</strong> Para que o container seja criado, antes, é necessário, baixar as dependências que não são enviadas para o GitHub com um container temporário através de um terminal WSL rodando no diretório da pasta <strong>luizdevfelipe@PC:~/marketplace$</strong>, digitando o comando:<br>
 
@@ -58,20 +58,20 @@ docker run --rm \
 ./vendor/bin/sail artisan storage:link
 ```
 
-<p><strong>9º</strong> Para finalizar, dois comandos precisam ser executados, um para instalar os pacotos provenientes do <strong>npm</strong> e outro para processar os arquivos estáticos da aplicação utilizando o asset bundle <strong>Vite</strong>:</p>
+<p><strong>9º</strong> Para finalizar, dois comandos precisam ser executados, um para instalar os pacotes provenientes do <strong>npm</strong> e outro para processar os arquivos estáticos da aplicação utilizando o asset bundle <strong>Vite</strong>:</p>
 
 ```cmd
 ./vendor/bin/sail npm install
 ./vendor/bin/sail npm run build
 ```
 
-<p><strong>10º</strong> Tudo Certo! Basta acessar <strong>http://localhost:8001/</strong> para que você possa visualizar o projeto em funcionamento. Dica! Ao se cadastrar é necessário confirmar o email, no caso dessa aplicação temos que acessar <strong>http://localhost:8025/</strong> pois é onde o serviço de email está hospedado</p>
+<p><strong>10º</strong> Tudo Certo! Basta acessar <strong>http://localhost:8001/</strong> para que você possa visualizar o projeto em funcionamento. Dica: Ao se cadastrar, é necessário confirmar o e-mail, no caso dessa aplicação temos que acessar <strong>http://localhost:8025/</strong> pois é onde o serviço de email está hospedado</p>
 
 <p><strong>Em casos de erro 500:</strong> Esse erro está muito relacionado ao arquivo <strong>mysql.sock.lock</strong> presente dentro do volume <strong>marketplace_sail-mysql</strong> que pode ser visto no aplicativo do Docker. Para solucionar o problema basta apagar esse arquivo e reiniciar o container para que um novo arquivo seja criado de maneira adequada. Em casos de dúvidas basta trocar o parâmetro <strong>APP_DEBUG=true</strong> para que mensagens de erros sejam exibidas.</p>
 
 * Laravel Schedule e API do Mercado Pago 
     - Para que a integração com API do mercado pago funcione é necessário preencher a chave <strong>MERCADO_PAGO_TOKEN=</strong> do arquivo .env com uma chave válida criada no site [Mercado Pago Developers](https://www.mercadopago.com.br/developers/pt) seguindo os passos descritos após criar uma conta.
-    - Nessa aplicação existem algumas tarefas agendadas através de comandos Artisan que são executados periodicamente pelo serviço Schedule do Laravel, como esse serviço é baseado em CRON, é necessário adicionar o comando a baixo dentro do arquivo <strong>crontab</strong> do seu WSL2 através de:
+    - Nessa aplicação existem algumas tarefas agendadas através de comandos Artisan que são executados periodicamente pelo serviço Schedule do Laravel, como esse serviço é baseado em CRON, sendo necessário adicionar o comando abaixo dentro do arquivo <strong>crontab</strong> do seu WSL2 através de:
         - ```cmd
             crontab -e
             ```
