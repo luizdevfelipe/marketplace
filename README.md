@@ -3,8 +3,11 @@
 <h2 align="center">🔸 <a href='#Sobre'>Sobre</a> 🔸 <a href='#Motivo'>Motivação</a> 🔸 <a href='#Experimente'>Experimente</a></h2>
 
 <h2 id='Sobre' align="center">Um site onde um usuário pode se cadastrar e comprar ou vender produtos 💳</h2>
-<p>Aqui é possível cadastrar um novo produto, adicioná-lo ao carrinho e finalizar a compra via Mercado Pago</p>
 
+<p align="center">
+ <img width="460" height="300" src="assets/perfil.gif">
+</p>
+<p align="center">Aqui é possível cadastrar um novo produto, adicioná-lo ao carrinho e finalizar a compra via Mercado Pago</p>
 <hr>
 <h3>Tecnologias: 📑 Laravel 📑 Docker 📑 WSL2 📑 CRON 📑 Vite 📑 Bootstrap 📑 Mercado Pago</h3>
 
